@@ -476,6 +476,12 @@ document.querySelectorAll('nav.tabs button').forEach(function(btn){
     btn.classList.add('active');
     document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active');});
     document.getElementById('panel-'+btn.dataset.tab).classList.add('active');
+    // Re-render this tab's charts now that its container is visible —
+    // Chart.js sizes canvases from the container's rendered box, which is
+    // wrong (0/auto) while the panel is display:none.
+    if(btn.dataset.tab==='cumplimiento') renderCumplimiento();
+    else if(btn.dataset.tab==='stock') renderStock();
+    else if(btn.dataset.tab==='vidautil') renderVidaUtil();
   });
 });
 document.getElementById('btn-semana').addEventListener('click', function(){
