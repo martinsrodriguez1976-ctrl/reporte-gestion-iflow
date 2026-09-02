@@ -8,247 +8,267 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=Libre+Franklin:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --bg:#0d1210;
-    --panel:#161d19;
-    --panel-2:#1b2420;
-    --border:#28322c;
-    --text:#eef2ef;
-    --muted:#8fa199;
-    --accent:#7fae86;
-    --accent-2:#4f7d5c;
-    --sage:#a9c2a7;
-    --amber:#d1a53d;
-    --red:#c65b5b;
-    --green-line:#6fae8a;
-  }
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:'IBM Plex Sans',sans-serif;}
-  .wrap{max-width:1240px;margin:0 auto;padding:28px 24px 60px;}
-  .top{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:1px solid var(--border);padding-bottom:16px;margin-bottom:22px;flex-wrap:wrap;gap:12px;}
-  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;color:var(--accent);text-transform:uppercase;margin-bottom:6px;}
-  h1{font-family:'Libre Franklin',sans-serif;font-weight:800;font-size:26px;margin:0;letter-spacing:-.01em;}
-  .meta{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);text-align:right;}
-  nav.tabs{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;}
-  nav.tabs button{font-family:'IBM Plex Mono',monospace;font-size:12.5px;letter-spacing:.04em;text-transform:uppercase;background:var(--panel);border:1px solid var(--border);color:var(--muted);padding:10px 18px;border-radius:6px;cursor:pointer;transition:.15s;}
-  nav.tabs button:hover{color:var(--text);border-color:var(--accent-2);}
-  nav.tabs button.active{background:var(--accent-2);color:#0d1210;border-color:var(--accent-2);font-weight:600;}
-  .panel{display:none;}
-  .panel.active{display:block;}
-  .toggle{display:flex;gap:8px;}
-  .toggle button{font-family:'IBM Plex Mono',monospace;font-size:11.5px;background:var(--panel);border:1px solid var(--border);color:var(--muted);padding:7px 14px;border-radius:5px;cursor:pointer;}
-  .toggle button.active{background:var(--accent-2);color:#0d1210;border-color:var(--accent-2);}
-  .section-head{display:flex;justify-content:space-between;align-items:baseline;margin:26px 0 12px;flex-wrap:wrap;gap:10px;}
-  .section-head h2{font-family:'Libre Franklin',sans-serif;font-size:19px;font-weight:700;margin:0;}
-  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:20px;}
-  .kpi{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:14px 16px;}
-  .kpi .lbl{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
-  .kpi .val{font-family:'IBM Plex Mono',monospace;font-size:26px;font-weight:600;}
-  .val.amber{color:var(--amber);}
-  .val.green{color:var(--accent);}
-  .val.red{color:var(--red);}
-  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
-  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px;}
-  @media(max-width:860px){.grid2,.grid3{grid-template-columns:1fr;}}
-  .card{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:16px;}
-  .card h3{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin:0 0 12px;font-weight:500;}
-  .card.tall canvas{max-height:340px;}
-  table{width:100%;border-collapse:collapse;font-family:'IBM Plex Mono',monospace;font-size:12.5px;}
-  th{text-align:left;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;padding:8px 10px;border-bottom:1px solid var(--border);}
-  td{padding:9px 10px;border-bottom:1px solid #202a25;}
-  tr:hover td{background:#1a2420;}
-  .pill{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;background:#1d3324;color:#8fd6a4;border:1px solid #2c4a37;}
-  .pill.warn{background:#3a2f16;color:#e0b45a;border-color:#54431f;}
-  .cap{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--muted);margin-top:8px;}
-  .drill{cursor:pointer;}
-  .drill-row td{background:#0f1613;padding:0;border-bottom:1px solid #202a25;}
-  .drill-inner{padding:12px 16px;display:none;}
-  .drill-inner.open{display:block;}
-  .drill-inner table{margin-top:4px;}
-  .foot{margin-top:36px;padding-top:14px;border-top:1px solid var(--border);font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+:root{
+--bg:#0d1210;
+--panel:#161d19;
+--panel-2:#1b2420;
+--border:#28322c;
+--text:#eef2ef;
+--muted:#8fa199;
+--accent:#7fae86;
+--accent-2:#4f7d5c;
+--sage:#a9c2a7;
+--amber:#d1a53d;
+--red:#c65b5b;
+--green-line:#6fae8a;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:'IBM Plex Sans',sans-serif;}
+.wrap{max-width:1240px;margin:0 auto;padding:28px 24px 60px;}
+.top{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:1px solid var(--border);padding-bottom:16px;margin-bottom:22px;flex-wrap:wrap;gap:12px;}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;color:var(--accent);text-transform:uppercase;margin-bottom:6px;}
+h1{font-family:'Libre Franklin',sans-serif;font-weight:800;font-size:26px;margin:0;letter-spacing:-.01em;}
+.meta{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);text-align:right;}
+nav.tabs{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;}
+nav.tabs button{font-family:'IBM Plex Mono',monospace;font-size:12.5px;letter-spacing:.04em;text-transform:uppercase;background:var(--panel);border:1px solid var(--border);color:var(--muted);padding:10px 18px;border-radius:6px;cursor:pointer;transition:.15s;}
+nav.tabs button:hover{color:var(--text);border-color:var(--accent-2);}
+nav.tabs button.active{background:var(--accent-2);color:#0d1210;border-color:var(--accent-2);font-weight:600;}
+.panel{display:none;}
+.panel.active{display:block;}
+.toggle{display:flex;gap:8px;}
+.toggle button{font-family:'IBM Plex Mono',monospace;font-size:11.5px;background:var(--panel);border:1px solid var(--border);color:var(--muted);padding:7px 14px;border-radius:5px;cursor:pointer;}
+.toggle button.active{background:var(--accent-2);color:#0d1210;border-color:var(--accent-2);}
+.section-head{display:flex;justify-content:space-between;align-items:baseline;margin:26px 0 12px;flex-wrap:wrap;gap:10px;}
+.section-head h2{font-family:'Libre Franklin',sans-serif;font-size:19px;font-weight:700;margin:0;}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:20px;}
+.kpi{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:14px 16px;}
+.kpi .lbl{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+.kpi .val{font-family:'IBM Plex Mono',monospace;font-size:26px;font-weight:600;}
+.val.amber{color:var(--amber);}
+.val.green{color:var(--accent);}
+.val.red{color:var(--red);}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px;}
+@media(max-width:860px){.grid2,.grid3{grid-template-columns:1fr;}}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:16px;}
+.card h3{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin:0 0 12px;font-weight:500;}
+.card.tall canvas{max-height:340px;}
+table{width:100%;border-collapse:collapse;font-family:'IBM Plex Mono',monospace;font-size:12.5px;}
+th{text-align:left;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;padding:8px 10px;border-bottom:1px solid var(--border);}
+td{padding:9px 10px;border-bottom:1px solid #202a25;}
+tr:hover td{background:#1a2420;}
+.pill{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;background:#1d3324;color:#8fd6a4;border:1px solid #2c4a37;}
+.pill.warn{background:#3a2f16;color:#e0b45a;border-color:#54431f;}
+.cap{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--muted);margin-top:8px;}
+.drill{cursor:pointer;}
+.drill-row td{background:#0f1613;padding:0;border-bottom:1px solid #202a25;}
+.drill-inner{padding:12px 16px;display:none;}
+.drill-inner.open{display:block;}
+.drill-inner table{margin-top:4px;}
+.foot{margin-top:36px;padding-top:14px;border-top:1px solid var(--border);font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="top">
-    <div>
-      <div class="eyebrow">Refinería del Centro · iFlow BI</div>
-      <h1>Reporte de Gestión iFlow</h1>
-    </div>
-    <div class="meta">Cumplimiento: semana 25/08–31/08/2026<br>Stock / Vida útil: corte 26/08/2026 07:40</div>
-  </div>
+<div class="top">
+<div>
+<div class="eyebrow">Refinería del Centro · iFlow BI</div>
+<h1>Reporte de Gestión iFlow</h1>
+</div>
+<div class="meta">Cumplimiento: semana 26/08–01/09/2026<br>Stock / Vida útil: corte 26/08/2026 07:40</div>
+</div>
 
-  <nav class="tabs">
-    <button class="active" data-tab="cumplimiento">Cumplimiento</button>
-    <button data-tab="stock">Stock</button>
-    <button data-tab="vidautil">Vida útil</button>
-  </nav>
+<nav class="tabs">
+<button class="active" data-tab="cumplimiento">Cumplimiento</button>
+<button data-tab="stock">Stock</button>
+<button data-tab="vidautil">Vida útil</button>
+</nav>
 
-  <!-- ===================== TAB 1: CUMPLIMIENTO ===================== -->
-  <section class="panel active" id="panel-cumplimiento">
-    <div class="section-head">
-      <h2 id="cumpl-title">Cumplimiento — semana 25/08 al 31/08</h2>
-      <div class="toggle">
-        <button class="active" id="btn-semana">Semana</button>
-        <button id="btn-dia">Último día</button>
-      </div>
-    </div>
+<!-- ===================== TAB 1: CUMPLIMIENTO ===================== -->
+<section class="panel active" id="panel-cumplimiento">
+<div class="section-head">
+<h2 id="cumpl-title">Cumplimiento — semana 26/08 al 01/09</h2>
+<div class="toggle">
+<button class="active" id="btn-semana">Semana</button>
+<button id="btn-dia">Último día</button>
+</div>
+</div>
 
-    <div class="kpis" id="cumpl-kpis"></div>
+<div class="kpis" id="cumpl-kpis"></div>
 
-    <div class="grid2">
-      <div class="card tall"><h3 id="lbl-chart-kg">Kg despachados vs. entregados por día</h3><canvas id="chartKg"></canvas></div>
-      <div class="card tall"><h3 id="lbl-chart-pct">% cumplimiento distribución vs. % OTIF</h3><canvas id="chartPct"></canvas></div>
-    </div>
-    <div class="grid2">
-      <div class="card tall"><h3 id="lbl-chart-embudo">Embudo (semana, kg)</h3><canvas id="chartEmbudo"></canvas></div>
-      <div class="card tall"><h3 id="lbl-chart-motivos">Motivos de devolución</h3><canvas id="chartMotivos"></canvas></div>
-    </div>
+<div class="grid2">
+<div class="card tall"><h3 id="lbl-chart-kg">Kg despachados vs. entregados por día</h3><canvas id="chartKg"></canvas></div>
+<div class="card tall"><h3 id="lbl-chart-pct">% cumplimiento distribución vs. % OTIF</h3><canvas id="chartPct"></canvas></div>
+</div>
+<div class="grid2">
+<div class="card tall"><h3 id="lbl-chart-embudo">Embudo (semana, kg)</h3><canvas id="chartEmbudo"></canvas></div>
+<div class="card tall"><h3 id="lbl-chart-motivos">Motivos de devolución</h3><canvas id="chartMotivos"></canvas></div>
+</div>
 
-    <div class="card">
-      <h3>Detalle diario — clic en una fila para ver motivos de no cumplimiento</h3>
-      <table id="dailyTable">
-        <thead><tr><th>Fecha</th><th>Pedidos</th><th>Kg pedidos</th><th>Kg despachados</th><th>Kg entregados</th><th>% distrib.</th><th>% OTIF</th></tr></thead>
-        <tbody></tbody>
-      </table>
-      <div class="cap">Pedidos y kg pedidos por día: estimados a partir del embudo semanal (no discriminados en el dossier fuente).</div>
-    </div>
-  </section>
+<div class="card">
+<h3>Detalle diario — clic en una fila para ver motivos de no cumplimiento</h3>
+<table id="dailyTable">
+<thead><tr><th>Fecha</th><th>Pedidos</th><th>Kg pedidos</th><th>Kg despachados</th><th>Kg entregados</th><th>% distrib.</th><th>% OTIF</th></tr></thead>
+<tbody></tbody>
+</table>
+<div class="cap">Pedidos y kg pedidos por día: estimados a partir del embudo semanal (no discriminados en el dossier fuente).</div>
+</div>
+</section>
 
-  <!-- ===================== TAB 2: STOCK ===================== -->
-  <section class="panel" id="panel-stock">
-    <div class="section-head"><h2>Stock en depósito — Planta CDN</h2></div>
-    <div class="kpis" id="stock-kpis"></div>
-    <div class="grid3">
-      <div class="card tall"><h3>Posiciones por producto (top 10 muestra)</h3><canvas id="chartProd"></canvas></div>
-      <div class="card tall"><h3>Por sector de depósito</h3><canvas id="chartSector"></canvas></div>
-      <div class="card tall"><h3>Estado de posición</h3><canvas id="chartEstado"></canvas></div>
-    </div>
-    <div class="card">
-      <h3>Detalle por producto (muestra relevada)</h3>
-      <table id="stockTable">
-        <thead><tr><th>Producto</th><th>Posiciones</th><th>Bultos</th><th>Unidades</th><th>Estado</th></tr></thead>
-        <tbody></tbody>
-      </table>
-      <div class="cap">Muestra parcial relevada sobre el total del sistema (ver KPI "Muestra relevada").</div>
-    </div>
-  </section>
+<!-- ===================== TAB 2: STOCK ===================== -->
+<section class="panel" id="panel-stock">
+<div class="section-head"><h2>Stock en depósito — Planta CDN</h2></div>
+<div class="kpis" id="stock-kpis"></div>
+<div class="grid3">
+<div class="card tall"><h3>Posiciones por producto (top 10 muestra)</h3><canvas id="chartProd"></canvas></div>
+<div class="card tall"><h3>Por sector de depósito</h3><canvas id="chartSector"></canvas></div>
+<div class="card tall"><h3>Estado de posición</h3><canvas id="chartEstado"></canvas></div>
+</div>
+<div class="card">
+<h3>Detalle por producto (muestra relevada)</h3>
+<table id="stockTable">
+<thead><tr><th>Producto</th><th>Posiciones</th><th>Bultos</th><th>Unidades</th><th>Estado</th></tr></thead>
+<tbody></tbody>
+</table>
+<div class="cap">Muestra parcial relevada sobre el total del sistema (ver KPI "Muestra relevada").</div>
+</div>
+</section>
 
-  <!-- ===================== TAB 3: VIDA ÚTIL ===================== -->
-  <section class="panel" id="panel-vidautil">
-    <div class="section-head"><h2>Vida útil — lotes en depósito CDN</h2></div>
-    <div class="kpis" id="vu-kpis"></div>
-    <div class="grid2">
-      <div class="card tall"><h3>Lotes por rango de días a vencer</h3><canvas id="chartBuckets"></canvas></div>
-      <div class="card tall"><h3>Días a vencer más próximos por producto (mínimo detectado)</h3><canvas id="chartProdMin"></canvas></div>
-    </div>
-    <div class="card">
-      <h3>Lotes con vencimiento más próximo</h3>
-      <table id="soonTable">
-        <thead><tr><th>Producto</th><th>Lote</th><th>Pallet</th><th>Vencimiento</th><th>Días</th><th>Estado</th></tr></thead>
-        <tbody></tbody>
-      </table>
-      <div class="cap">Muestra parcial — ranking completo por producto en el gráfico de la derecha.</div>
-    </div>
-  </section>
+<!-- ===================== TAB 3: VIDA ÚTIL ===================== -->
+<section class="panel" id="panel-vidautil">
+<div class="section-head"><h2>Vida útil — lotes en depósito CDN</h2></div>
+<div class="kpis" id="vu-kpis"></div>
+<div class="grid2">
+<div class="card tall"><h3>Lotes por rango de días a vencer</h3><canvas id="chartBuckets"></canvas></div>
+<div class="card tall"><h3>Días a vencer más próximos por producto (mínimo detectado)</h3><canvas id="chartProdMin"></canvas></div>
+</div>
+<div class="card">
+<h3>Lotes con vencimiento más próximo</h3>
+<table id="soonTable">
+<thead><tr><th>Producto</th><th>Lote</th><th>Pallet</th><th>Vencimiento</th><th>Días</th><th>Estado</th></tr></thead>
+<tbody></tbody>
+</table>
+<div class="cap">Muestra parcial — ranking completo por producto en el gráfico de la derecha.</div>
+</div>
+</section>
 
-  <div class="foot">
-    <span>Refinería del Centro · iFlow BI · Dossier Performance / Dashboard Stock (MicroStrategy)</span>
-    <span>Reporte unificado generado 02/09/2026</span>
-  </div>
+<div class="foot">
+<span>Refinería del Centro · iFlow BI · Dossier Performance / Dashboard Stock (MicroStrategy)</span>
+<span>Reporte unificado generado 02/09/2026</span>
+</div>
 </div>
 
 <script>
 window.__loadChart = function(cb){
-  var s1 = document.createElement('script');
-  s1.src = 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js';
-  s1.onload = cb;
-  s1.onerror = function(){
-    var s2 = document.createElement('script');
-    s2.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js';
-    s2.onload = cb;
-    document.head.appendChild(s2);
-  };
-  document.head.appendChild(s1);
+var s1 = document.createElement('script');
+s1.src = 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js';
+s1.onload = cb;
+s1.onerror = function(){
+var s2 = document.createElement('script');
+s2.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js';
+s2.onload = cb;
+document.head.appendChild(s2);
+};
+document.head.appendChild(s1);
 };
 </script>
 
 <script>
 /* ================= DATOS — CUMPLIMIENTO ================= */
 var DAILY = [
-  {fecha:'25/08', pedidos:5, kgPedidos:8400,  kgDespachados:8300,  kgEntregados:8300,  pctDistrib:100.0, otif:100.0, motivos:null},
-  {fecha:'26/08', pedidos:5, kgPedidos:8100,  kgDespachados:7900,  kgEntregados:7500,  pctDistrib:94.9,  otif:65.0,  motivos:null},
-  {fecha:'27/08', pedidos:6, kgPedidos:10450, kgDespachados:10300, kgEntregados:10300, pctDistrib:100.0, otif:95.0,  motivos:null},
-  {fecha:'28/08', pedidos:7, kgPedidos:6550,  kgDespachados:6301,  kgEntregados:5900,  pctDistrib:93.6,  otif:10.0,  motivos:null},
-  {fecha:'31/08', pedidos:6, kgPedidos:13800, kgDespachados:13761, kgEntregados:0,     pctDistrib:0.0,   otif:0.0,   motivos:[]}
+{fecha:'26/08', pedidos:3, kgPedidos:7876.11, kgDespachados:7876.11, kgEntregados:7816.11, pctDistrib:99.24, otif:66.67, motivos:[{motivo:'Sin Cargar', kg:60, pctPeso:100.0}]},
+{fecha:'27/08', pedidos:7, kgPedidos:10590.88, kgDespachados:10442.93, kgEntregados:10442.93, pctDistrib:100.0, otif:100.0, motivos:[]},
+{fecha:'28/08', pedidos:5, kgPedidos:5952.79, kgDespachados:5952.79, kgEntregados:5706.79, pctDistrib:95.87, otif:40.0, motivos:[{motivo:'Fecha Corta', kg:33, pctPeso:100.0}]},
+{fecha:'31/08', pedidos:6, kgPedidos:13761.20, kgDespachados:13761.20, kgEntregados:13761.20, pctDistrib:100.0, otif:100.0, motivos:[]},
+{fecha:'01/09', pedidos:11, kgPedidos:149359.90, kgDespachados:29359.90, kgEntregados:1854.00, pctDistrib:6.31, otif:9.09, motivos:[]}
 ];
 var WEEK_TOTALS = {
-  pedidos:29, kgPedidos:47300, kgDespachados:46562, kgEntregados:32000, kgDevueltos:93,
-  pctDistrib:69.02, otif:58.62,
-  motivos:[
-    {motivo:'Sin cargar', kg:60, pctPeso:64.5},
-    {motivo:'Fecha corta', kg:33, pctPeso:35.5}
-  ]
+pedidos:32, kgPedidos:187540.88, kgDespachados:67392.93, kgEntregados:39581.03, kgDevueltos:93,
+pctDistrib:58.73, otif:56.25,
+motivos:[
+{motivo:'Sin Cargar', kg:60, pctPeso:64.52},
+{motivo:'Fecha Corta', kg:33, pctPeso:35.48}
+]
 };
 
 /* ================= DATOS — STOCK ================= */
 var PRODUCTS = [
-  {producto:"Mayonesa D'Fiesta 24x250ml", posiciones:14},
-  {producto:"Mayonesa D'Fiesta 8x1000ml", posiciones:11},
-  {producto:"Danica Dor Cremosa Pote 24x210g", posiciones:9},
-  {producto:"Ketchup Danica 192x8g", posiciones:6},
-  {producto:"Margadán Marg. Pan 12x500g", posiciones:5},
-  {producto:"Danica Marg. Pan 30x200g", posiciones:4},
-  {producto:"Mostaza Danica 4x3000g", posiciones:3},
-  {producto:"Mayo Red Lip D'Fiesta 20x100cc", posiciones:2},
-  {producto:"Mostaza Danica 192x8g", posiciones:1},
-  {producto:"Salsa Golf Danica 4x2900cc", posiciones:1}
+{producto:"Mayonesa D'Fiesta 24x250ml", posiciones:14},
+{producto:"Ketchup D'Fiesta 12x220gr", posiciones:13},
+{producto:"Mayonesa D'Fiesta 24x500ml", posiciones:11},
+{producto:"Mayonesa D'Fiesta 8x1000ml", posiciones:11},
+{producto:"Mostaza Danica 24x220g", posiciones:9},
+{producto:"Mayonesa Danica 24x500ml", posiciones:9},
+{producto:"Danica Soft Marg. Pote 24x200g", posiciones:8},
+{producto:"Danica Dor Cremosa Pote 24x210g", posiciones:8},
+{producto:"Manty Pan Untar y Cocinar 30x200", posiciones:8},
+{producto:"Ketchup Danica 192x8g", posiciones:6}
 ];
 var SECTORS = [
-  {sector:'Ambiente', n:49}, {sector:'T. Controlada', n:39},
-  {sector:'PK Ambiente', n:10}, {sector:'PK T. Controlada', n:8}, {sector:'Rotura', n:1}
+{sector:'Ambiente', n:100}, {sector:'T. Controlada', n:39},
+{sector:'PK Ambiente', n:25}, {sector:'PK T. Controlada', n:8}, {sector:'Rotura', n:3}
 ];
-var STATUS = [{estado:'Available', n:106}, {estado:'Rotura', n:1}];
+var STATUS = [{estado:'Available', n:172}, {estado:'Rotura', n:3}];
 var TOTAL_SISTEMA = 175;
-var MUESTRA = {n:107, pct:61, productosDistintos:20, posicionesRotura:1, corte:'26/08/2026 07:40'};
+var MUESTRA = {n:175, pct:100, productosDistintos:37, posicionesRotura:3, corte:'26/08/2026 07:40'};
 var STOCK_DETALLE = [
-  {producto:"Mayonesa D'Fiesta 24x250ml", posiciones:14, bultos:1755, unidades:1755, estado:'Available'},
-  {producto:"Mayonesa D'Fiesta 24x500ml", posiciones:11, bultos:null, unidades:null, estado:'Available'},
-  {producto:"Mayonesa D'Fiesta 8x1000ml", posiciones:11, bultos:1080, unidades:1080, estado:'Available'},
-  {producto:"Danica Soft Marg. Pote 24x200g", posiciones:8, bultos:784, unidades:784, estado:'Available'}
+{producto:"Mayonesa D'Fiesta 24x250ml", posiciones:14, bultos:1755, unidades:1755, estado:'Available'},
+{producto:"Ketchup D'Fiesta 12x220gr", posiciones:13, bultos:1620, unidades:1620, estado:'Available'},
+{producto:"Mayonesa D'Fiesta 24x500ml", posiciones:11, bultos:null, unidades:null, estado:'Available'},
+{producto:"Mayonesa D'Fiesta 8x1000ml", posiciones:11, bultos:1080, unidades:1080, estado:'Available'},
+{producto:"Mostaza Danica 24x220g", posiciones:9, bultos:1080, unidades:1080, estado:'Available'},
+{producto:"Mayonesa Danica 24x500ml", posiciones:9, bultos:null, unidades:null, estado:'Available'}
 ];
 
 /* ================= DATOS — VIDA ÚTIL ================= */
 var BUCKETS = [
-  {rango:'<30 días', n:0}, {rango:'30-89 días', n:0}, {rango:'90-179 días', n:4},
-  {rango:'180-269 días', n:54}, {rango:'270+ días', n:49}
+{rango:'<30 días', n:0}, {rango:'30-89 días', n:0}, {rango:'90-179 días', n:12},
+{rango:'180-269 días', n:71}, {rango:'270+ días', n:92}
 ];
 var PRODUCT_MIN = [
-  {producto:'Salsa Golf Danica 4x2900cc', dias:143},
-  {producto:'Danica Marg. Pan 30x200g', dias:169},
-  {producto:'Danica Soft Marg. Pote 24x200g', dias:180},
-  {producto:'Danica Dor Cremosa Pote 24x210g', dias:190},
-  {producto:'Manty Pan Untar y Cocinar 30x200', dias:195},
-  {producto:'Mayonesa Mayodán 24x500cc', dias:198},
-  {producto:'Mayo Red Cal Mayodán 4x2900cc', dias:215},
-  {producto:'Danica Equilibrio Pote 24x220g', dias:220},
-  {producto:'Margadán Marg. Pan 12x500g', dias:225},
-  {producto:"Mayonesa D'Fiesta 8x1000ml", dias:228},
-  {producto:'Danica Marg. Pan 12x500g', dias:230},
-  {producto:'Margadán Marg. Pan 30x200g', dias:235},
-  {producto:"Mayonesa D'Fiesta 24x500ml", dias:240},
-  {producto:'Mostaza Danica 192x8g', dias:250},
-  {producto:'Ketchup Danica 192x8g', dias:258},
-  {producto:"Mayo Red Lip D'Fiesta 20x100cc", dias:270},
-  {producto:"Mayonesa D'Fiesta 24x250ml", dias:285},
-  {producto:'Ketchup Danica 24x50g', dias:300},
-  {producto:'Mostaza Danica 24x60g', dias:308},
-  {producto:'Mostaza Danica 4x3000g', dias:320}
+{producto:'Salsa Golf Danica 4x2900cc', dias:143},
+{producto:'Salsa Golf Danica 12x220ml', dias:144},
+{producto:'Danica Marg. Pan 30x200g', dias:169},
+{producto:'Danica Soft Marg. Pote 24x200g', dias:171},
+{producto:'Cheddar Danica 24x220ml', dias:176},
+{producto:'Cheddar Danica 8x1000ml', dias:179},
+{producto:'Mayonesa Danica 24x500ml', dias:180},
+{producto:'Danica Dor Cremosa Pote 24x210g', dias:186},
+{producto:'Manty Pan Untar y Cocinar 30x200', dias:187},
+{producto:'Mayonesa Mayodán 24x500cc', dias:190},
+{producto:'Mayonesa Danica 24x250ml', dias:203},
+{producto:'Mayo Red Cal Mayodán 4x2900cc', dias:218},
+{producto:'Danica Equilibrio Pote 24x220g', dias:220},
+{producto:'Margadán Marg. Pan 12x500g', dias:221},
+{producto:"Mayonesa D'Fiesta 8x1000ml", dias:225},
+{producto:'Danica Marg. Pan 12x500g', dias:228},
+{producto:'Margadán Marg. Pan 30x200g', dias:229},
+{producto:'Mayonesa Danica Nueva 20x100cc', dias:231},
+{producto:"Mayonesa D'Fiesta 24x500ml", dias:238},
+{producto:'Mostaza Danica 192x8g', dias:247},
+{producto:'Ketchup Danica 192x8g', dias:254},
+{producto:'Ketchup Danica 24x475g', dias:261},
+{producto:'Mayonesa Danica 8x1000ml', dias:263},
+{producto:"Mayo Red Lip D'Fiesta 20x100cc", dias:274},
+{producto:'Ketchup Danica 4x3000g', dias:274},
+{producto:"Mostaza D'Fiesta 12x220gr", dias:274},
+{producto:'Mayonesa Danica Nueva 4x2900cc', dias:274},
+{producto:"Mayonesa D'Fiesta 24x250ml", dias:277},
+{producto:'Mayonesa Danica Equilibrio 24x500cc', dias:284},
+{producto:"Ketchup D'Fiesta 12x220gr", dias:294},
+{producto:'Ketchup Danica 24x50g', dias:303},
+{producto:'Mostaza Danica 24x220g', dias:304},
+{producto:"Barbacoa D'Fiesta 12x220gr", dias:304},
+{producto:"Ketchup D'Fiesta 24x220g", dias:310},
+{producto:'Mostaza Americana Danica 24x475g', dias:310},
+{producto:'Mostaza Danica 24x60g', dias:317},
+{producto:'Mostaza Danica 4x3000g', dias:321}
 ];
-var VU_KPIS = {lotesMuestra:107, diasMasProximo:143, lotesCriticos:0, productosDistintos:20, corte:'26/08/2026 07:40'};
+var VU_KPIS = {lotesMuestra:175, diasMasProximo:143, lotesCriticos:0, productosDistintos:37, corte:'26/08/2026 07:40'};
 var SOON = [
-  {producto:'Salsa Golf Danica 4x2900cc', lote:'630240702', pallet:'424967', vencimiento:'16/01/2027', dias:143, estado:'OK'},
-  {producto:'Danica Marg. Pan 30x200g', lote:'625300702', pallet:'L000021012', vencimiento:'11/02/2027', dias:169, estado:'OK'}
+{producto:'Salsa Golf Danica 4x2900cc', lote:'630240702', pallet:'424967', vencimiento:'16/01/2027', dias:143, estado:'OK'},
+{producto:'Salsa Golf Danica 12x220ml', lote:'630342301', pallet:'425148', vencimiento:'17/01/2027', dias:144, estado:'OK'},
+{producto:'Danica Marg. Pan 30x200g', lote:'625300702', pallet:'L000021012', vencimiento:'11/02/2027', dias:169, estado:'OK'}
 ];
 
 /* ================= HELPERS ================= */
@@ -263,236 +283,236 @@ function destroy(id){ if(charts[id]){ charts[id].destroy(); delete charts[id]; }
 var cumplMode = 'semana';
 
 function cumplKpis(){
-  var el = document.getElementById('cumpl-kpis');
-  if(cumplMode==='semana'){
-    el.innerHTML =
-      kpi('Pedidos semana', WEEK_TOTALS.pedidos) +
-      kpi('Kg despachados', fmt(WEEK_TOTALS.kgDespachados)) +
-      kpi('% Cumpl. distribución', pct(WEEK_TOTALS.pctDistrib), 'red') +
-      kpi('% OTIF semana', pct(WEEK_TOTALS.otif), 'amber') +
-      kpi('Kg devueltos', WEEK_TOTALS.kgDevueltos, 'green');
-  } else {
-    var d = DAILY[DAILY.length-1];
-    el.innerHTML =
-      kpi('Pedidos del día', d.pedidos) +
-      kpi('Kg despachados', fmt(d.kgDespachados)) +
-      kpi('% Cumpl. distribución', pct(d.pctDistrib), 'red') +
-      kpi('% OTIF del día', pct(d.otif), 'amber') +
-      kpi('Kg devueltos', 0, 'green');
-  }
+var el = document.getElementById('cumpl-kpis');
+if(cumplMode==='semana'){
+el.innerHTML =
+kpi('Pedidos semana', WEEK_TOTALS.pedidos) +
+kpi('Kg despachados', fmt(WEEK_TOTALS.kgDespachados)) +
+kpi('% Cumpl. distribución', pct(WEEK_TOTALS.pctDistrib), 'red') +
+kpi('% OTIF semana', pct(WEEK_TOTALS.otif), 'amber') +
+kpi('Kg devueltos', WEEK_TOTALS.kgDevueltos, 'green');
+} else {
+var d = DAILY[DAILY.length-1];
+el.innerHTML =
+kpi('Pedidos del día', d.pedidos) +
+kpi('Kg despachados', fmt(d.kgDespachados)) +
+kpi('% Cumpl. distribución', pct(d.pctDistrib), 'red') +
+kpi('% OTIF del día', pct(d.otif), 'amber') +
+kpi('Kg devueltos', 0, 'green');
+}
 }
 function kpi(lbl,val,cls){
-  return '<div class="kpi"><div class="lbl">'+lbl+'</div><div class="val'+(cls?' '+cls:'')+'">'+val+'</div></div>';
+return '<div class="kpi"><div class="lbl">'+lbl+'</div><div class="val'+(cls?' '+cls:'')+'">'+val+'</div></div>';
 }
 
 function renderCumplimiento(){
-  cumplKpis();
-  document.getElementById('cumpl-title').textContent = cumplMode==='semana'
-    ? 'Cumplimiento — semana 25/08 al 31/08' : 'Cumplimiento — día 31/08';
-  document.getElementById('lbl-chart-kg').textContent = cumplMode==='semana'
-    ? 'Kg despachados vs. entregados por día' : 'Kg despachados vs. entregados — 31/08';
-  document.getElementById('lbl-chart-pct').textContent = cumplMode==='semana'
-    ? '% cumplimiento distribución vs. % OTIF' : '% distribución vs. % OTIF — 31/08';
+cumplKpis();
+document.getElementById('cumpl-title').textContent = cumplMode==='semana'
+? 'Cumplimiento — semana 26/08 al 01/09' : 'Cumplimiento — día 01/09';
+document.getElementById('lbl-chart-kg').textContent = cumplMode==='semana'
+? 'Kg despachados vs. entregados por día' : 'Kg despachados vs. entregados — 01/09';
+document.getElementById('lbl-chart-pct').textContent = cumplMode==='semana'
+? '% cumplimiento distribución vs. % OTIF' : '% distribución vs. % OTIF — 01/09';
 
-  var rows = cumplMode==='semana' ? DAILY : [DAILY[DAILY.length-1]];
-  var labels = rows.map(function(r){return r.fecha;});
+var rows = cumplMode==='semana' ? DAILY : [DAILY[DAILY.length-1]];
+var labels = rows.map(function(r){return r.fecha;});
 
-  destroy('kg');
-  charts.kg = new Chart(document.getElementById('chartKg'), {
-    type:'bar',
-    data:{labels:labels, datasets:[
-      {label:'Despachado', data:rows.map(function(r){return r.kgDespachados;}), backgroundColor:PALETTE.sage},
-      {label:'Entregado', data:rows.map(function(r){return r.kgEntregados;}), backgroundColor:PALETTE.green}
-    ]},
-    options:{responsive:true, plugins:{legend:{labels:{color:PALETTE.text}}}, scales:{
-      x:{ticks:{color:PALETTE.text}, grid:{color:PALETTE.grid}},
-      y:{ticks:{color:PALETTE.text}, grid:{color:PALETTE.grid}}
-    }}
-  });
+destroy('kg');
+charts.kg = new Chart(document.getElementById('chartKg'), {
+type:'bar',
+data:{labels:labels, datasets:[
+{label:'Despachado', data:rows.map(function(r){return r.kgDespachados;}), backgroundColor:PALETTE.sage},
+{label:'Entregado', data:rows.map(function(r){return r.kgEntregados;}), backgroundColor:PALETTE.green}
+]},
+options:{responsive:true, plugins:{legend:{labels:{color:PALETTE.text}}}, scales:{
+x:{ticks:{color:PALETTE.text}, grid:{color:PALETTE.grid}},
+y:{ticks:{color:PALETTE.text}, grid:{color:PALETTE.grid}}
+}}
+});
 
-  destroy('pctc');
-  charts.pctc = new Chart(document.getElementById('chartPct'), {
-    type:'line',
-    data:{labels:labels, datasets:[
-      {label:'% Distribución', data:rows.map(function(r){return r.pctDistrib;}), borderColor:PALETTE.line, backgroundColor:PALETTE.line, tension:.3},
-      {label:'% OTIF', data:rows.map(function(r){return r.otif;}), borderColor:PALETTE.amber, backgroundColor:PALETTE.amber, borderDash:[4,3], tension:.3}
-    ]},
-    options:{responsive:true, plugins:{legend:{labels:{color:PALETTE.text}}}, scales:{
-      x:{ticks:{color:PALETTE.text}, grid:{color:PALETTE.grid}},
-      y:{min:0,max:100, ticks:{color:PALETTE.text, callback:function(v){return v+'%';}}, grid:{color:PALETTE.grid}}
-    }}
-  });
+destroy('pctc');
+charts.pctc = new Chart(document.getElementById('chartPct'), {
+type:'line',
+data:{labels:labels, datasets:[
+{label:'% Distribución', data:rows.map(function(r){return r.pctDistrib;}), borderColor:PALETTE.line, backgroundColor:PALETTE.line, tension:.3},
+{label:'% OTIF', data:rows.map(function(r){return r.otif;}), borderColor:PALETTE.amber, backgroundColor:PALETTE.amber, borderDash:[4,3], tension:.3}
+]},
+options:{responsive:true, plugins:{legend:{labels:{color:PALETTE.text}}}, scales:{
+x:{ticks:{color:PALETTE.text}, grid:{color:PALETTE.grid}},
+y:{min:0,max:100, ticks:{color:PALETTE.text, callback:function(v){return v+'%';}}, grid:{color:PALETTE.grid}}
+}}
+});
 
-  destroy('embudo');
-  var embudoLabels, embudoData;
-  if(cumplMode==='semana'){
-    embudoLabels = ['Pedidos','Ruteados','Preparados','Despachados','Entregados'];
-    embudoData = [WEEK_TOTALS.kgPedidos, Math.round(WEEK_TOTALS.kgPedidos*0.975), Math.round(WEEK_TOTALS.kgPedidos*0.955), WEEK_TOTALS.kgDespachados, WEEK_TOTALS.kgEntregados];
-  } else {
-    var d = DAILY[DAILY.length-1];
-    embudoLabels = ['Pedidos','Despachados','Entregados'];
-    embudoData = [d.kgPedidos, d.kgDespachados, d.kgEntregados];
-  }
-  charts.embudo = new Chart(document.getElementById('chartEmbudo'), {
-    type:'bar',
-    data:{labels:embudoLabels, datasets:[{data:embudoData, backgroundColor:[PALETTE.sage,PALETTE.sage,PALETTE.sage,PALETTE.green,PALETTE.green]}]},
-    options:{indexAxis:'y', responsive:true, plugins:{legend:{display:false}}, scales:{
-      x:{ticks:{color:PALETTE.text}, grid:{color:PALETTE.grid}},
-      y:{ticks:{color:PALETTE.text}, grid:{color:PALETTE.grid}}
-    }}
-  });
+destroy('embudo');
+var embudoLabels, embudoData;
+if(cumplMode==='semana'){
+embudoLabels = ['Pedidos','Ruteados','Preparados','Despachados','Entregados'];
+embudoData = [WEEK_TOTALS.kgPedidos, Math.round(WEEK_TOTALS.kgPedidos*0.975), Math.round(WEEK_TOTALS.kgPedidos*0.955), WEEK_TOTALS.kgDespachados, WEEK_TOTALS.kgEntregados];
+} else {
+var d = DAILY[DAILY.length-1];
+embudoLabels = ['Pedidos','Despachados','Entregados'];
+embudoData = [d.kgPedidos, d.kgDespachados, d.kgEntregados];
+}
+charts.embudo = new Chart(document.getElementById('chartEmbudo'), {
+type:'bar',
+data:{labels:embudoLabels, datasets:[{data:embudoData, backgroundColor:[PALETTE.sage,PALETTE.sage,PALETTE.sage,PALETTE.green,PALETTE.green]}]},
+options:{indexAxis:'y', responsive:true, plugins:{legend:{display:false}}, scales:{
+x:{ticks:{color:PALETTE.text}, grid:{color:PALETTE.grid}},
+y:{ticks:{color:PALETTE.text}, grid:{color:PALETTE.grid}}
+}}
+});
 
-  destroy('motivos');
-  var motivosSrc = cumplMode==='semana' ? WEEK_TOTALS.motivos : (DAILY[DAILY.length-1].motivos||[]);
-  var mCanvas = document.getElementById('chartMotivos');
-  if(motivosSrc.length===0){
-    mCanvas.style.display='none';
-    var msg = mCanvas.parentElement.querySelector('.cap-empty');
-    if(!msg){ msg = document.createElement('div'); msg.className='cap-empty'; msg.style.cssText='padding:40px 0;text-align:center;color:var(--muted);font-family:\'IBM Plex Mono\',monospace;font-size:12px;'; msg.textContent='Sin motivos de devolución registrados en este período.'; mCanvas.parentElement.appendChild(msg); }
-  } else {
-    mCanvas.style.display='block';
-    var msg2 = mCanvas.parentElement.querySelector('.cap-empty'); if(msg2) msg2.remove();
-    charts.motivos = new Chart(mCanvas, {
-      type:'doughnut',
-      data:{labels:motivosSrc.map(function(m){return m.motivo+' ('+m.kg+' kg)';}), datasets:[{data:motivosSrc.map(function(m){return m.kg;}), backgroundColor:[PALETTE.amber,PALETTE.red,PALETTE.sage]}]},
-      options:{responsive:true, plugins:{legend:{position:'bottom', labels:{color:PALETTE.text}}}}
-    });
-  }
+destroy('motivos');
+var motivosSrc = cumplMode==='semana' ? WEEK_TOTALS.motivos : (DAILY[DAILY.length-1].motivos||[]);
+var mCanvas = document.getElementById('chartMotivos');
+if(motivosSrc.length===0){
+mCanvas.style.display='none';
+var msg = mCanvas.parentElement.querySelector('.cap-empty');
+if(!msg){ msg = document.createElement('div'); msg.className='cap-empty'; msg.style.cssText='padding:40px 0;text-align:center;color:var(--muted);font-family:\'IBM Plex Mono\',monospace;font-size:12px;'; msg.textContent='Sin motivos de devolución registrados en este período.'; mCanvas.parentElement.appendChild(msg); }
+} else {
+mCanvas.style.display='block';
+var msg2 = mCanvas.parentElement.querySelector('.cap-empty'); if(msg2) msg2.remove();
+charts.motivos = new Chart(mCanvas, {
+type:'doughnut',
+data:{labels:motivosSrc.map(function(m){return m.motivo+' ('+m.kg+' kg)';}), datasets:[{data:motivosSrc.map(function(m){return m.kg;}), backgroundColor:[PALETTE.amber,PALETTE.red,PALETTE.sage]}]},
+options:{responsive:true, plugins:{legend:{position:'bottom', labels:{color:PALETTE.text}}}}
+});
+}
 
-  buildDailyTable();
+buildDailyTable();
 }
 
 function buildDailyTable(){
-  var tbody = document.querySelector('#dailyTable tbody');
-  tbody.innerHTML='';
-  DAILY.forEach(function(d, idx){
-    var tr = document.createElement('tr');
-    tr.className='drill';
-    tr.innerHTML = '<td>'+d.fecha+'</td><td>'+d.pedidos+'</td><td>'+fmt(d.kgPedidos)+'</td><td>'+fmt(d.kgDespachados)+'</td><td>'+fmt(d.kgEntregados)+'</td><td>'+pct(d.pctDistrib)+'</td><td>'+pct(d.otif)+'</td>';
-    tbody.appendChild(tr);
-    var trDrill = document.createElement('tr');
-    trDrill.className='drill-row';
-    var td = document.createElement('td'); td.colSpan=7;
-    var inner = document.createElement('div'); inner.className='drill-inner';
-    if(d.motivos===null){
-      inner.innerHTML = '<span class="cap">Detalle de motivos no discriminado por día en este snapshot — ver agregado semanal en "Motivos de devolución".</span>';
-    } else if(d.motivos.length===0){
-      inner.innerHTML = '<span class="cap">Sin motivos de devolución registrados este día.</span>';
-    } else {
-      inner.innerHTML = '<table><thead><tr><th>Motivo</th><th>Kg</th><th>% peso</th></tr></thead><tbody>'+
-        d.motivos.map(function(m){return '<tr><td>'+m.motivo+'</td><td>'+fmt(m.kg)+'</td><td>'+pct(m.pctPeso)+'</td></tr>';}).join('')+
-        '</tbody></table>';
-    }
-    td.appendChild(inner); trDrill.appendChild(td); tbody.appendChild(trDrill);
-    tr.addEventListener('click', function(){ inner.classList.toggle('open'); });
-  });
+var tbody = document.querySelector('#dailyTable tbody');
+tbody.innerHTML='';
+DAILY.forEach(function(d, idx){
+var tr = document.createElement('tr');
+tr.className='drill';
+tr.innerHTML = '<td>'+d.fecha+'</td><td>'+d.pedidos+'</td><td>'+fmt(d.kgPedidos)+'</td><td>'+fmt(d.kgDespachados)+'</td><td>'+fmt(d.kgEntregados)+'</td><td>'+pct(d.pctDistrib)+'</td><td>'+pct(d.otif)+'</td>';
+tbody.appendChild(tr);
+var trDrill = document.createElement('tr');
+trDrill.className='drill-row';
+var td = document.createElement('td'); td.colSpan=7;
+var inner = document.createElement('div'); inner.className='drill-inner';
+if(d.motivos===null){
+inner.innerHTML = '<span class="cap">Detalle de motivos no discriminado por día en este snapshot — ver agregado semanal en "Motivos de devolución".</span>';
+} else if(d.motivos.length===0){
+inner.innerHTML = '<span class="cap">Sin motivos de devolución registrados este día.</span>';
+} else {
+inner.innerHTML = '<table><thead><tr><th>Motivo</th><th>Kg</th><th>% peso</th></tr></thead><tbody>'+
+d.motivos.map(function(m){return '<tr><td>'+m.motivo+'</td><td>'+fmt(m.kg)+'</td><td>'+pct(m.pctPeso)+'</td></tr>';}).join('')+
+'</tbody></table>';
+}
+td.appendChild(inner); trDrill.appendChild(td); tbody.appendChild(trDrill);
+tr.addEventListener('click', function(){ inner.classList.toggle('open'); });
+});
 }
 
 /* ================= STOCK ================= */
 function renderStock(){
-  var el = document.getElementById('stock-kpis');
-  el.innerHTML =
-    kpi('Posiciones (sistema)', TOTAL_SISTEMA) +
-    kpi('Muestra relevada', MUESTRA.n+' ('+MUESTRA.pct+'%)', 'amber') +
-    kpi('Productos distintos', MUESTRA.productosDistintos) +
-    kpi('Posiciones en rotura', MUESTRA.posicionesRotura, 'red');
+var el = document.getElementById('stock-kpis');
+el.innerHTML =
+kpi('Posiciones (sistema)', TOTAL_SISTEMA) +
+kpi('Muestra relevada', MUESTRA.n+' ('+MUESTRA.pct+'%)', 'amber') +
+kpi('Productos distintos', MUESTRA.productosDistintos) +
+kpi('Posiciones en rotura', MUESTRA.posicionesRotura, 'red');
 
-  destroy('prod');
-  charts.prod = new Chart(document.getElementById('chartProd'), {
-    type:'bar',
-    data:{labels:PRODUCTS.map(function(p){return p.producto;}), datasets:[{data:PRODUCTS.map(function(p){return p.posiciones;}), backgroundColor:PALETTE.green}]},
-    options:{indexAxis:'y', responsive:true, plugins:{legend:{display:false}}, scales:{
-      x:{ticks:{color:PALETTE.text}, grid:{color:PALETTE.grid}},
-      y:{ticks:{color:PALETTE.text, font:{size:10}}, grid:{color:PALETTE.grid}}
-    }}
-  });
-  destroy('sector');
-  charts.sector = new Chart(document.getElementById('chartSector'), {
-    type:'doughnut',
-    data:{labels:SECTORS.map(function(s){return s.sector+' ('+s.n+')';}), datasets:[{data:SECTORS.map(function(s){return s.n;}), backgroundColor:[PALETTE.green,PALETTE.sage,'#c9d8c6','#e7ece5',PALETTE.red]}]},
-    options:{responsive:true, plugins:{legend:{position:'bottom', labels:{color:PALETTE.text, font:{size:10}}}}}
-  });
-  destroy('estado');
-  charts.estado = new Chart(document.getElementById('chartEstado'), {
-    type:'doughnut',
-    data:{labels:STATUS.map(function(s){return s.estado+' ('+s.n+')';}), datasets:[{data:STATUS.map(function(s){return s.n;}), backgroundColor:[PALETTE.green,PALETTE.red]}]},
-    options:{responsive:true, plugins:{legend:{position:'bottom', labels:{color:PALETTE.text}}}}
-  });
+destroy('prod');
+charts.prod = new Chart(document.getElementById('chartProd'), {
+type:'bar',
+data:{labels:PRODUCTS.map(function(p){return p.producto;}), datasets:[{data:PRODUCTS.map(function(p){return p.posiciones;}), backgroundColor:PALETTE.green}]},
+options:{indexAxis:'y', responsive:true, plugins:{legend:{display:false}}, scales:{
+x:{ticks:{color:PALETTE.text}, grid:{color:PALETTE.grid}},
+y:{ticks:{color:PALETTE.text, font:{size:10}}, grid:{color:PALETTE.grid}}
+}}
+});
+destroy('sector');
+charts.sector = new Chart(document.getElementById('chartSector'), {
+type:'doughnut',
+data:{labels:SECTORS.map(function(s){return s.sector+' ('+s.n+')';}), datasets:[{data:SECTORS.map(function(s){return s.n;}), backgroundColor:[PALETTE.green,PALETTE.sage,'#c9d8c6','#e7ece5',PALETTE.red]}]},
+options:{responsive:true, plugins:{legend:{position:'bottom', labels:{color:PALETTE.text, font:{size:10}}}}}
+});
+destroy('estado');
+charts.estado = new Chart(document.getElementById('chartEstado'), {
+type:'doughnut',
+data:{labels:STATUS.map(function(s){return s.estado+' ('+s.n+')';}), datasets:[{data:STATUS.map(function(s){return s.n;}), backgroundColor:[PALETTE.green,PALETTE.red]}]},
+options:{responsive:true, plugins:{legend:{position:'bottom', labels:{color:PALETTE.text}}}}
+});
 
-  var tbody = document.querySelector('#stockTable tbody'); tbody.innerHTML='';
-  STOCK_DETALLE.forEach(function(r){
-    var tr = document.createElement('tr');
-    tr.innerHTML = '<td>'+r.producto+'</td><td>'+r.posiciones+'</td><td>'+fmt(r.bultos)+'</td><td>'+fmt(r.unidades)+'</td><td><span class="pill">'+r.estado+'</span></td>';
-    tbody.appendChild(tr);
-  });
+var tbody = document.querySelector('#stockTable tbody'); tbody.innerHTML='';
+STOCK_DETALLE.forEach(function(r){
+var tr = document.createElement('tr');
+tr.innerHTML = '<td>'+r.producto+'</td><td>'+r.posiciones+'</td><td>'+fmt(r.bultos)+'</td><td>'+fmt(r.unidades)+'</td><td><span class="pill">'+r.estado+'</span></td>';
+tbody.appendChild(tr);
+});
 }
 
 /* ================= VIDA ÚTIL ================= */
 function renderVidaUtil(){
-  var el = document.getElementById('vu-kpis');
-  el.innerHTML =
-    kpi('Lotes en muestra', VU_KPIS.lotesMuestra) +
-    kpi('Días al vencimiento más próximo', VU_KPIS.diasMasProximo, 'green') +
-    kpi('Lotes < 90 días', VU_KPIS.lotesCriticos, VU_KPIS.lotesCriticos>0?'red':'green') +
-    kpi('Productos distintos', VU_KPIS.productosDistintos);
+var el = document.getElementById('vu-kpis');
+el.innerHTML =
+kpi('Lotes en muestra', VU_KPIS.lotesMuestra) +
+kpi('Días al vencimiento más próximo', VU_KPIS.diasMasProximo, 'green') +
+kpi('Lotes < 90 días', VU_KPIS.lotesCriticos, VU_KPIS.lotesCriticos>0?'red':'green') +
+kpi('Productos distintos', VU_KPIS.productosDistintos);
 
-  destroy('buckets');
-  charts.buckets = new Chart(document.getElementById('chartBuckets'), {
-    type:'bar',
-    data:{labels:BUCKETS.map(function(b){return b.rango;}), datasets:[{data:BUCKETS.map(function(b){return b.n;}), backgroundColor:[PALETTE.red,PALETTE.amber,'#dfe0a0',PALETTE.green,PALETTE.sage]}]},
-    options:{responsive:true, plugins:{legend:{display:false}}, scales:{
-      x:{ticks:{color:PALETTE.text}, grid:{color:PALETTE.grid}},
-      y:{ticks:{color:PALETTE.text}, grid:{color:PALETTE.grid}}
-    }}
-  });
-  destroy('prodmin');
-  charts.prodmin = new Chart(document.getElementById('chartProdMin'), {
-    type:'bar',
-    data:{labels:PRODUCT_MIN.map(function(p){return p.producto;}), datasets:[{data:PRODUCT_MIN.map(function(p){return p.dias;}), backgroundColor:PALETTE.sage}]},
-    options:{indexAxis:'y', responsive:true, plugins:{legend:{display:false}}, scales:{
-      x:{ticks:{color:PALETTE.text}, grid:{color:PALETTE.grid}},
-      y:{ticks:{color:PALETTE.text, font:{size:9}}, grid:{color:PALETTE.grid}}
-    }}
-  });
+destroy('buckets');
+charts.buckets = new Chart(document.getElementById('chartBuckets'), {
+type:'bar',
+data:{labels:BUCKETS.map(function(b){return b.rango;}), datasets:[{data:BUCKETS.map(function(b){return b.n;}), backgroundColor:[PALETTE.red,PALETTE.amber,'#dfe0a0',PALETTE.green,PALETTE.sage]}]},
+options:{responsive:true, plugins:{legend:{display:false}}, scales:{
+x:{ticks:{color:PALETTE.text}, grid:{color:PALETTE.grid}},
+y:{ticks:{color:PALETTE.text}, grid:{color:PALETTE.grid}}
+}}
+});
+destroy('prodmin');
+charts.prodmin = new Chart(document.getElementById('chartProdMin'), {
+type:'bar',
+data:{labels:PRODUCT_MIN.map(function(p){return p.producto;}), datasets:[{data:PRODUCT_MIN.map(function(p){return p.dias;}), backgroundColor:PALETTE.sage}]},
+options:{indexAxis:'y', responsive:true, plugins:{legend:{display:false}}, scales:{
+x:{ticks:{color:PALETTE.text}, grid:{color:PALETTE.grid}},
+y:{ticks:{color:PALETTE.text, font:{size:9}}, grid:{color:PALETTE.grid}}
+}}
+});
 
-  var tbody = document.querySelector('#soonTable tbody'); tbody.innerHTML='';
-  SOON.forEach(function(r){
-    var tr = document.createElement('tr');
-    tr.innerHTML = '<td>'+r.producto+'</td><td>'+r.lote+'</td><td>'+r.pallet+'</td><td>'+r.vencimiento+'</td><td>'+r.dias+'</td><td><span class="pill">'+r.estado+'</span></td>';
-    tbody.appendChild(tr);
-  });
+var tbody = document.querySelector('#soonTable tbody'); tbody.innerHTML='';
+SOON.forEach(function(r){
+var tr = document.createElement('tr');
+tr.innerHTML = '<td>'+r.producto+'</td><td>'+r.lote+'</td><td>'+r.pallet+'</td><td>'+r.vencimiento+'</td><td>'+r.dias+'</td><td><span class="pill">'+r.estado+'</span></td>';
+tbody.appendChild(tr);
+});
 }
 
 function renderAll(){
-  renderCumplimiento();
-  renderStock();
-  renderVidaUtil();
+renderCumplimiento();
+renderStock();
+renderVidaUtil();
 }
 
 /* ================= NAV / TOGGLE / TABS ================= */
 document.querySelectorAll('nav.tabs button').forEach(function(btn){
-  btn.addEventListener('click', function(){
-    document.querySelectorAll('nav.tabs button').forEach(function(b){b.classList.remove('active');});
-    btn.classList.add('active');
-    document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active');});
-    document.getElementById('panel-'+btn.dataset.tab).classList.add('active');
-    // Re-render this tab's charts now that its container is visible —
-    // Chart.js sizes canvases from the container's rendered box, which is
-    // wrong (0/auto) while the panel is display:none.
-    if(btn.dataset.tab==='cumplimiento') renderCumplimiento();
-    else if(btn.dataset.tab==='stock') renderStock();
-    else if(btn.dataset.tab==='vidautil') renderVidaUtil();
-  });
+btn.addEventListener('click', function(){
+document.querySelectorAll('nav.tabs button').forEach(function(b){b.classList.remove('active');});
+btn.classList.add('active');
+document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active');});
+document.getElementById('panel-'+btn.dataset.tab).classList.add('active');
+// Re-render this tab's charts now that its container is visible —
+// Chart.js sizes canvases from the container's rendered box, which is
+// wrong (0/auto) while the panel is display:none.
+if(btn.dataset.tab==='cumplimiento') renderCumplimiento();
+else if(btn.dataset.tab==='stock') renderStock();
+else if(btn.dataset.tab==='vidautil') renderVidaUtil();
+});
 });
 document.getElementById('btn-semana').addEventListener('click', function(){
-  cumplMode='semana';
-  this.classList.add('active'); document.getElementById('btn-dia').classList.remove('active');
-  renderCumplimiento();
+cumplMode='semana';
+this.classList.add('active'); document.getElementById('btn-dia').classList.remove('active');
+renderCumplimiento();
 });
 document.getElementById('btn-dia').addEventListener('click', function(){
-  cumplMode='dia';
-  this.classList.add('active'); document.getElementById('btn-semana').classList.remove('active');
-  renderCumplimiento();
+cumplMode='dia';
+this.classList.add('active'); document.getElementById('btn-semana').classList.remove('active');
+renderCumplimiento();
 });
 
 window.__loadChart(renderAll);
