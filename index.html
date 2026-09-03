@@ -91,6 +91,7 @@ tr:hover td{background:#1a2420;}
 <div class="toggle">
 <button class="active" id="btn-semana">Semana</button>
 <button id="btn-dia">Último día</button>
+<button id="btn-mes">Mes</button>
 </div>
 </div>
 
@@ -189,6 +190,17 @@ motivos:[
 {motivo:'Fecha Corta', kg:33, pctPeso:100.0}
 ]
 };
+/* Acumulado mensual (mes en curso, del día 1 a ayer). MONTH_DAILY se completa día a día
+   por la tarea diaria (agregar el día de ayer; reiniciar al cambiar de mes). */
+var MONTH_TOTALS = {
+pedidos:14, kgPedidos:161957.90, kgDespachados:101957.90, kgEntregados:12255.90, kgDevueltos:0,
+pctDistrib:12.02, otif:28.57,
+motivos:[]
+};
+var MONTH_DAILY = [
+{fecha:'01/09', pedidos:11, kgPedidos:149359.90, kgDespachados:89359.90, kgEntregados:8961.90, pctDistrib:10.03, otif:27.27, motivos:[]},
+{fecha:'02/09', pedidos:3, kgPedidos:12598.00, kgDespachados:12598.00, kgEntregados:3294.00, pctDistrib:26.15, otif:33.33, motivos:[]}
+];
 
 /* ================= DATOS — STOCK ================= */
 var PRODUCTS = [
@@ -291,7 +303,7 @@ kpi('Kg despachados', fmt(WEEK_TOTALS.kgDespachados)) +
 kpi('% Cumpl. distribución', pct(WEEK_TOTALS.pctDistrib), 'red') +
 kpi('% OTIF semana', pct(WEEK_TOTALS.otif), 'amber') +
 kpi('Kg devueltos', WEEK_TOTALS.kgDevueltos, 'green');
-} else {
+} else if(cumplMode==='dia'){
 var d = DAILY[DAILY.length-1];
 el.innerHTML =
 kpi('Pedidos del día', d.pedidos) +
@@ -299,6 +311,13 @@ kpi('Kg despachados', fmt(d.kgDespachados)) +
 kpi('% Cumpl. distribución', pct(d.pctDistrib), 'red') +
 kpi('% OTIF del día', pct(d.otif), 'amber') +
 kpi('Kg devueltos', 0, 'green');
+} else {
+el.innerHTML =
+kpi('Pedidos mes', MONTH_TOTALS.pedidos) +
+kpi('Kg despachados', fmt(MONTH_TOTALS.kgDespachados)) +
+kpi('% Cumpl. distribución', pct(MONTH_TOTALS.pctDistrib), 'red') +
+kpi('% OTIF mes', pct(MONTH_TOTALS.otif), 'amber') +
+kpi('Kg devueltos', MONTH_TOTALS.kgDevueltos, 'green');
 }
 }
 function kpi(lbl,val,cls){
@@ -308,13 +327,16 @@ return '<div class="kpi"><div class="lbl">'+lbl+'</div><div class="val'+(cls?' '
 function renderCumplimiento(){
 cumplKpis();
 document.getElementById('cumpl-title').textContent = cumplMode==='semana'
-? 'Cumplimiento — semana 27/08 al 02/09' : 'Cumplimiento — día 02/09';
+? 'Cumplimiento — semana 27/08 al 02/09' : cumplMode==='dia'
+? 'Cumplimiento — día 02/09' : 'Cumplimiento — septiembre 2026 (acum. al 02/09)';
 document.getElementById('lbl-chart-kg').textContent = cumplMode==='semana'
-? 'Kg despachados vs. entregados por día' : 'Kg despachados vs. entregados — 02/09';
+? 'Kg despachados vs. entregados por día' : cumplMode==='dia'
+? 'Kg despachados vs. entregados — 02/09' : 'Kg despachados vs. entregados — septiembre (acum.)';
 document.getElementById('lbl-chart-pct').textContent = cumplMode==='semana'
-? '% cumplimiento distribución vs. % OTIF' : '% distribución vs. % OTIF — 02/09';
+? '% cumplimiento distribución vs. % OTIF' : cumplMode==='dia'
+? '% distribución vs. % OTIF — 02/09' : '% distribución vs. % OTIF — septiembre (acum.)';
 
-var rows = cumplMode==='semana' ? DAILY : [DAILY[DAILY.length-1]];
+var rows = cumplMode==='semana' ? DAILY : cumplMode==='dia' ? [DAILY[DAILY.length-1]] : MONTH_DAILY;
 var labels = rows.map(function(r){return r.fecha;});
 
 destroy('kg');
@@ -348,10 +370,13 @@ var embudoLabels, embudoData;
 if(cumplMode==='semana'){
 embudoLabels = ['Pedidos','Ruteados','Preparados','Despachados','Entregados'];
 embudoData = [WEEK_TOTALS.kgPedidos, Math.round(WEEK_TOTALS.kgPedidos*0.975), Math.round(WEEK_TOTALS.kgPedidos*0.955), WEEK_TOTALS.kgDespachados, WEEK_TOTALS.kgEntregados];
-} else {
+} else if(cumplMode==='dia'){
 var d = DAILY[DAILY.length-1];
 embudoLabels = ['Pedidos','Despachados','Entregados'];
 embudoData = [d.kgPedidos, d.kgDespachados, d.kgEntregados];
+} else {
+embudoLabels = ['Pedidos','Ruteados','Preparados','Despachados','Entregados'];
+embudoData = [MONTH_TOTALS.kgPedidos, Math.round(MONTH_TOTALS.kgPedidos*0.975), Math.round(MONTH_TOTALS.kgPedidos*0.955), MONTH_TOTALS.kgDespachados, MONTH_TOTALS.kgEntregados];
 }
 charts.embudo = new Chart(document.getElementById('chartEmbudo'), {
 type:'bar',
@@ -363,7 +388,7 @@ y:{ticks:{color:PALETTE.text}, grid:{color:PALETTE.grid}}
 });
 
 destroy('motivos');
-var motivosSrc = cumplMode==='semana' ? WEEK_TOTALS.motivos : (DAILY[DAILY.length-1].motivos||[]);
+var motivosSrc = cumplMode==='semana' ? WEEK_TOTALS.motivos : cumplMode==='dia' ? (DAILY[DAILY.length-1].motivos||[]) : (MONTH_TOTALS.motivos||[]);
 var mCanvas = document.getElementById('chartMotivos');
 if(motivosSrc.length===0){
 mCanvas.style.display='none';
@@ -506,12 +531,17 @@ else if(btn.dataset.tab==='vidautil') renderVidaUtil();
 });
 document.getElementById('btn-semana').addEventListener('click', function(){
 cumplMode='semana';
-this.classList.add('active'); document.getElementById('btn-dia').classList.remove('active');
+this.classList.add('active'); document.getElementById('btn-dia').classList.remove('active'); document.getElementById('btn-mes').classList.remove('active');
 renderCumplimiento();
 });
 document.getElementById('btn-dia').addEventListener('click', function(){
 cumplMode='dia';
-this.classList.add('active'); document.getElementById('btn-semana').classList.remove('active');
+this.classList.add('active'); document.getElementById('btn-semana').classList.remove('active'); document.getElementById('btn-mes').classList.remove('active');
+renderCumplimiento();
+});
+document.getElementById('btn-mes').addEventListener('click', function(){
+cumplMode='mes';
+this.classList.add('active'); document.getElementById('btn-semana').classList.remove('active'); document.getElementById('btn-dia').classList.remove('active');
 renderCumplimiento();
 });
 
