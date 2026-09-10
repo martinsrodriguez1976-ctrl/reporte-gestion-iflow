@@ -75,7 +75,7 @@ tr:hover td{background:#1a2420;}
 <div class="eyebrow">Refinería del Centro · iFlow BI</div>
 <h1>Reporte de Gestión iFlow</h1>
 </div>
-<div class="meta">Cumplimiento: semana 28/08–03/09/2026<br>Stock / Vida útil: corte 04/09/2026 07:40</div>
+<div class="meta">Cumplimiento: semana 03/09–09/09/2026<br>Stock / Vida útil: corte 10/09/2026 07:40</div>
 </div>
 
 <nav class="tabs">
@@ -87,7 +87,7 @@ tr:hover td{background:#1a2420;}
 <!-- ===================== TAB 1: CUMPLIMIENTO ===================== -->
 <section class="panel active" id="panel-cumplimiento">
 <div class="section-head">
-<h2 id="cumpl-title">Cumplimiento — semana 28/08 al 03/09</h2>
+<h2 id="cumpl-title">Cumplimiento — semana 03/09 al 09/09</h2>
 <div class="toggle">
 <button class="active" id="btn-semana">Semana</button>
 <button id="btn-dia">Último día</button>
@@ -155,7 +155,7 @@ tr:hover td{background:#1a2420;}
 
 <div class="foot">
 <span>Refinería del Centro · iFlow BI · Dossier Performance / Dashboard Stock (MicroStrategy)</span>
-<span>Reporte unificado generado 04/09/2026</span>
+<span>Reporte unificado generado 10/09/2026</span>
 </div>
 </div>
 
@@ -177,109 +177,121 @@ document.head.appendChild(s1);
 <script>
 /* ================= DATOS — CUMPLIMIENTO ================= */
 var DAILY = [
-{fecha:"28/08", pedidos:5, kgPedidos:5952.79, kgDespachados:5952.79, kgEntregados:5919.79, pctDistrib:99.45, otif:40.0, motivos:[{motivo:"Fecha Corta", kg:33, pctPeso:100.0}]},
-{fecha:"31/08", pedidos:6, kgPedidos:13761.2, kgDespachados:13761.2, kgEntregados:13761.2, pctDistrib:100.0, otif:100.0, motivos:[]},
-{fecha:"01/09", pedidos:11, kgPedidos:149359.9, kgDespachados:129359.9, kgEntregados:8961.9, pctDistrib:6.93, otif:27.27, motivos:[]},
-{fecha:"02/09", pedidos:3, kgPedidos:12598.0, kgDespachados:12598.0, kgEntregados:12598.0, pctDistrib:100.0, otif:100.0, motivos:[]},
-{fecha:"03/09", pedidos:12, kgPedidos:176011.0, kgDespachados:16011.0, kgEntregados:0.0, pctDistrib:0.0, otif:0.0, motivos:[]}
+{fecha:"03/09", pedidos:12, kgPedidos:176011.00, kgDespachados:156011.00, kgEntregados:16011.00, pctDistrib:10.26, otif:33.33, motivos:[]},
+{fecha:"04/09", pedidos:4, kgPedidos:2104.00, kgDespachados:2104.00, kgEntregados:2102.00, pctDistrib:99.90, otif:50.00, motivos:[{motivo:"No Pedido", kg:2, pctPeso:100.0}]},
+{fecha:"06/09", pedidos:5, kgPedidos:100000.00, kgDespachados:60000.00, kgEntregados:0.00, pctDistrib:0.00, otif:0.00, motivos:[]},
+{fecha:"07/09", pedidos:11, kgPedidos:124393.94, kgDespachados:84393.94, kgEntregados:2217.94, pctDistrib:2.63, otif:36.36, motivos:[]},
+{fecha:"08/09", pedidos:19, kgPedidos:118214.15, kgDespachados:58214.15, kgEntregados:15116.80, pctDistrib:25.97, otif:47.37, motivos:[{motivo:"Rotura de Producto", kg:1, pctPeso:100.0}]},
+{fecha:"09/09", pedidos:12, kgPedidos:141648.15, kgDespachados:21648.15, kgEntregados:0.00, pctDistrib:0.00, otif:0.00, motivos:[]}
 ];
 var WEEK_TOTALS = {
-pedidos:37, kgPedidos:357682.89, kgDespachados:177682.89, kgEntregados:41240.89, kgDevueltos:33,
-pctDistrib:23.21, otif:37.84,
+pedidos:63, kgPedidos:662371.24, kgDespachados:382371.24, kgEntregados:35447.74, kgDevueltos:3,
+pctDistrib:9.27, otif:30.16,
 motivos:[
-{motivo:"Fecha Corta", kg:33, pctPeso:100.0}
+{motivo:"No Pedido", kg:2, pctPeso:66.67},
+{motivo:"Rotura de Producto", kg:1, pctPeso:33.33}
 ]
 };
 /* Acumulado mensual (mes en curso, del día 1 a ayer). MONTH_DAILY se completa día a día
 por la tarea diaria (agregar el día de ayer; reiniciar al cambiar de mes). */
 var MONTH_TOTALS = {
-pedidos:26, kgPedidos:337968.9, kgDespachados:157968.9, kgEntregados:21559.9, kgDevueltos:0,
-pctDistrib:13.65, otif:23.08,
-motivos:[]
+pedidos:77, kgPedidos:824329.14, kgDespachados:524329.14, kgEntregados:57007.64, kgDevueltos:3,
+pctDistrib:10.87, otif:32.47,
+motivos:[
+{motivo:"No Pedido", kg:2, pctPeso:66.67},
+{motivo:"Rotura de Producto", kg:1, pctPeso:33.33}
+]
 };
 var MONTH_DAILY = [
-{fecha:"01/09", pedidos:11, kgPedidos:149359.9, kgDespachados:129359.9, kgEntregados:8961.9, pctDistrib:6.93, otif:27.27, motivos:[]},
-{fecha:"02/09", pedidos:3, kgPedidos:12598.0, kgDespachados:12598.0, kgEntregados:12598.0, pctDistrib:100.0, otif:100.0, motivos:[]},
-{fecha:"03/09", pedidos:12, kgPedidos:176011.0, kgDespachados:16011.0, kgEntregados:0.0, pctDistrib:0.0, otif:0.0, motivos:[]}
+{fecha:"01/09", pedidos:11, kgPedidos:149359.90, kgDespachados:129359.90, kgEntregados:8961.90, pctDistrib:6.93, otif:27.27, motivos:[]},
+{fecha:"02/09", pedidos:3, kgPedidos:12598.00, kgDespachados:12598.00, kgEntregados:12598.00, pctDistrib:100.00, otif:100.00, motivos:[]},
+{fecha:"03/09", pedidos:12, kgPedidos:176011.00, kgDespachados:156011.00, kgEntregados:16011.00, pctDistrib:10.26, otif:33.33, motivos:[]},
+{fecha:"04/09", pedidos:4, kgPedidos:2104.00, kgDespachados:2104.00, kgEntregados:2102.00, pctDistrib:99.90, otif:50.00, motivos:[{motivo:"No Pedido", kg:2, pctPeso:100.0}]},
+{fecha:"06/09", pedidos:5, kgPedidos:100000.00, kgDespachados:60000.00, kgEntregados:0.00, pctDistrib:0.00, otif:0.00, motivos:[]},
+{fecha:"07/09", pedidos:11, kgPedidos:124393.94, kgDespachados:84393.94, kgEntregados:2217.94, pctDistrib:2.63, otif:36.36, motivos:[]},
+{fecha:"08/09", pedidos:19, kgPedidos:118214.15, kgDespachados:58214.15, kgEntregados:15116.80, pctDistrib:25.97, otif:47.37, motivos:[{motivo:"Rotura de Producto", kg:1, pctPeso:100.0}]},
+{fecha:"09/09", pedidos:12, kgPedidos:141648.15, kgDespachados:21648.15, kgEntregados:0.00, pctDistrib:0.00, otif:0.00, motivos:[]}
 ];
 
 /* ================= DATOS — STOCK ================= */
 var PRODUCTS = [
-{producto:"Danica Soft Margarina Vegetal Pote 24x200g", posiciones:34},
-{producto:"Margad\u00e1n Marg Vegetal Pan 30x200g", posiciones:32},
-{producto:"Danica Dor Cremosa Marg Veg Pote 24x210g", posiciones:31},
-{producto:"Danica Marg Vegetal Pan 30x200g", posiciones:16},
-{producto:"Manty Pan Untar Y Cocinar 30x200", posiciones:14},
-{producto:"Margad\u00e1n Marg Vegetal Pan 12x500g", posiciones:13},
-{producto:"Danica Marg Vegetal Pan 12x500g", posiciones:13},
-{producto:"Mayonesa D'Fiesta 24x250ml", posiciones:12},
-{producto:"Mayonesa D'Fiesta 8x1000ml 9091", posiciones:11},
-{producto:"Danica Equilibrio Marg Vegetal Pote 24x220g", posiciones:10}
+{producto:"Danica Soft Margarina Vegetal Pote 24x200g", posiciones:224},
+{producto:"Danica Dor Cremosa Marg Veg Pote 24x210g", posiciones:119},
+{producto:"Margad\u00e1n Marg Vegetal Pan 30x200g", posiciones:81},
+{producto:"Margad\u00e1n Marg Vegetal Pan 12x500g", posiciones:47},
+{producto:"Danica Marg Vegetal Pan 30x200g", posiciones:45},
+{producto:"Danica Equilibrio Marg Vegetal Pote 24x220g", posiciones:43},
+{producto:"Danica Marg Vegetal Pan 12x500g", posiciones:40},
+{producto:"Manty Pan Untar Y Cocinar 30x200", posiciones:37},
+{producto:"Ketchup Danica Nuevo 192x8g", posiciones:26},
+{producto:"Mayonesa Danica Nueva 192x8cc", posiciones:25}
 ];
 var SECTORS = [
-{sector:"T. Controlada", n:154}, {sector:"Ambiente", n:105}, {sector:"PK Ambiente", n:28}, {sector:"PK T. Controlada", n:8}, {sector:"Rotura", n:4}, {sector:"Muelle", n:1}
+{sector:"T. Controlada", n:550}, {sector:"Ambiente", n:197}, {sector:"Muelle", n:101}, {sector:"PK Ambiente", n:30}, {sector:"PK T. Controlada", n:8}, {sector:"Rotura", n:7}
 ];
-var STATUS = [{estado:"Available", n:296}, {estado:"Rotura", n:4}];
-var TOTAL_SISTEMA = 300;
-var MUESTRA = {n:300, pct:100, productosDistintos:38, posicionesRotura:4, corte:"04/09/2026 07:40"};
+var STATUS = [{estado:"Available", n:869}, {estado:"Critico", n:17}, {estado:"Rotura", n:6}, {estado:"Vencido", n:1}];
+var TOTAL_SISTEMA = 943;
+var MUESTRA = {n:893, pct:95, productosDistintos:40, posicionesRotura:6, corte:"10/09/2026 07:40"};
 var STOCK_DETALLE = [
-{producto:"Danica Soft Margarina Vegetal Pote 24x200g", posiciones:34, bultos:3726, unidades:3726, estado:"Available"},
-{producto:"Margad\u00e1n Marg Vegetal Pan 30x200g", posiciones:32, bultos:5567, unidades:5567, estado:"Available"},
-{producto:"Danica Dor Cremosa Marg Veg Pote 24x210g", posiciones:31, bultos:3396, unidades:3396, estado:"Available"},
-{producto:"Danica Marg Vegetal Pan 30x200g", posiciones:16, bultos:2695, unidades:2695, estado:"Available"},
-{producto:"Manty Pan Untar Y Cocinar 30x200", posiciones:14, bultos:2326, unidades:2326, estado:"Available"},
-{producto:"Margad\u00e1n Marg Vegetal Pan 12x500g", posiciones:13, bultos:2136, unidades:2136, estado:"Available"}
+{producto:"Danica Soft Margarina Vegetal Pote 24x200g", posiciones:224, bultos:25023, unidades:25023, estado:"Available"},
+{producto:"Danica Dor Cremosa Marg Veg Pote 24x210g", posiciones:119, bultos:13228, unidades:13228, estado:"Available"},
+{producto:"Margad\u00e1n Marg Vegetal Pan 30x200g", posiciones:81, bultos:14143, unidades:14143, estado:"Available"},
+{producto:"Margad\u00e1n Marg Vegetal Pan 12x500g", posiciones:47, bultos:7816, unidades:7816, estado:"Available"},
+{producto:"Danica Marg Vegetal Pan 30x200g", posiciones:45, bultos:7732, unidades:7732, estado:"Available"},
+{producto:"Danica Equilibrio Marg Vegetal Pote 24x220g", posiciones:43, bultos:4760, unidades:4760, estado:"Available"}
 ];
 
 /* ================= DATOS — VIDA ÚTIL ================= */
 var BUCKETS = [
-{rango:"<30 d\u00edas", n:0}, {rango:"30-89 d\u00edas", n:0}, {rango:"90-179 d\u00edas", n:16}, {rango:"180-269 d\u00edas", n:186}, {rango:"270+ d\u00edas", n:98}
+{rango:"<30 d\u00edas", n:2}, {rango:"30-89 d\u00edas", n:0}, {rango:"90-179 d\u00edas", n:12}, {rango:"180-269 d\u00edas", n:725}, {rango:"270+ d\u00edas", n:154}
 ];
 var PRODUCT_MIN = [
-{producto:"Salsa Golf Danica Nueva 4x2900cc", dias:134},
-{producto:"Salsa Golf Danica 12x220ml", dias:135},
-{producto:"Cheddar Danica 24x220 ml", dias:167},
-{producto:"Cheddar Danica 8x1000 ml", dias:170},
-{producto:"Mayonesa Danica 24x500ml", dias:171},
-{producto:"Danica Soft Margarina Vegetal Pote 24x200g", dias:175},
-{producto:"Danica Dor Cremosa Marg Veg Pote 24x210g", dias:177},
-{producto:"Mayonesa Mayod\u00e1n Nueva 24x500cc", dias:181},
-{producto:"Danica Equilibrio Marg Vegetal Pote 24x220g", dias:211},
-{producto:"Margad\u00e1n Marg Vegetal Pan 12x500g", dias:212},
-{producto:"Mayo Red Cal Mayod\u00e1n 4x2900cc", dias:217},
-{producto:"Danica Marg Vegetal Pan 30x200g", dias:219},
-{producto:"Danica Marg Vegetal Pan 12x500g", dias:219},
-{producto:"Mayonesa Danica Nueva 20x100cc", dias:222},
-{producto:"Manty Pan Untar Y Cocinar 30x200", dias:226},
-{producto:"Mayonesa D'Fiesta 24x500ml", dias:229},
-{producto:"Margad\u00e1n Marg Vegetal Pan 30x200g", dias:234},
-{producto:"Mostaza Danica Nueva 192x8g", dias:237},
-{producto:"Ketchup Danica Nuevo 192x8g", dias:245},
-{producto:"Ketchup Danica 24x475g", dias:252},
-{producto:"Mayonesa Danica 8x1000ml", dias:256},
-{producto:"Mayo Red Lip D'Fiesta 20x100cc", dias:265},
-{producto:"Ketchup Danica Nuevo 4x3000g", dias:266},
-{producto:"Mayonesa D'Fiesta 8x1000ml 9091", dias:270},
-{producto:"Mayonesa Danica Nueva 192x8cc", dias:270},
-{producto:"Mayonesa Danica Equilibrio 24x500cc", dias:275},
-{producto:"Mayonesa D'Fiesta 24x250ml", dias:276},
-{producto:"Mayonesa Danica 24x250ml", dias:282},
-{producto:"Mayonesa Danica Nueva 4x2900cc", dias:283},
-{producto:"Barbacoa D'Fiesta 12x 220gr 9552", dias:295},
-{producto:"Ketchup D'Fiesta 24x 220g", dias:301},
-{producto:"Mostaza Americana Danica 24x475g", dias:301},
-{producto:"Mostaza Danica 24x220g 9202", dias:306},
-{producto:"Mostaza Danica Nueva 24x60g", dias:308},
-{producto:"Mostaza Danica Nueva 4x3000g", dias:312},
-{producto:"Ketchup D'Fiesta 12x 220gr 9552", dias:312},
-{producto:"Aditivo Mejorador Impuld\u00e1n x10kg", dias:342},
-{producto:"Salsa Barbacoa Danica 24x220g", dias:342}
+{producto:"Danica Soft Margarina Vegetal Pote 24x200g", dias:-861},
+{producto:"Mostaza Danica Nueva 4x3000g", dias:22},
+{producto:"Salsa Golf Danica Nueva 4x2900cc", dias:128},
+{producto:"Salsa Golf Danica 12x220ml", dias:129},
+{producto:"Cheddar Danica 24x220 ml", dias:161},
+{producto:"Cheddar Danica 8x1000 ml", dias:164},
+{producto:"Danica Dor Cremosa Marg Veg Pote 24x210g", dias:171},
+{producto:"Mayonesa Mayod\u00e1n Nueva 24x500cc", dias:175},
+{producto:"Mayonesa Danica 24x500ml", dias:186},
+{producto:"Do\u00f1a Flora Ref. B 10x 1/2 Kg", dias:203},
+{producto:"Danica Equilibrio Marg Vegetal Pote 24x220g", dias:205},
+{producto:"Margad\u00e1n Marg Vegetal Pan 12x500g", dias:206},
+{producto:"Ketchup Danica Nuevo 192x8g", dias:209},
+{producto:"Mayo Red Cal Mayod\u00e1n 4x2900cc", dias:211},
+{producto:"Danica Marg Vegetal Pan 30x200g", dias:213},
+{producto:"Danica Marg Vegetal Pan 12x500g", dias:213},
+{producto:"Mayonesa Danica Nueva 20x100cc", dias:216},
+{producto:"Mayonesa D'Fiesta 24x500ml", dias:223},
+{producto:"Mostaza Danica Nueva 192x8g", dias:231},
+{producto:"Margad\u00e1n Marg Vegetal Pan 30x200g", dias:235},
+{producto:"Ketchup Danica 24x475g", dias:246},
+{producto:"Manty Pan Untar Y Cocinar 30x200", dias:247},
+{producto:"Mayonesa Danica 8x1000ml", dias:250},
+{producto:"Mayonesa Danica Nueva 192x8cc", dias:251},
+{producto:"Ketchup Danica Nuevo 4x3000g", dias:257},
+{producto:"Mayo Red Lip D'Fiesta 20x100cc", dias:259},
+{producto:"Mayonesa D'Fiesta 8x1000ml 9091", dias:264},
+{producto:"Mayonesa Danica Equilibrio 24x500cc", dias:269},
+{producto:"Mayonesa D'Fiesta 24x250ml", dias:270},
+{producto:"Mayonesa Danica 24x250ml", dias:276},
+{producto:"Mayonesa Danica Nueva 4x2900cc", dias:277},
+{producto:"Barbacoa D'Fiesta 12x 220gr 9552", dias:289},
+{producto:"Ketchup D'Fiesta 24x 220g", dias:295},
+{producto:"Mostaza Americana Danica 24x475g", dias:295},
+{producto:"Mostaza Danica 24x220g 9202", dias:300},
+{producto:"Mostaza Danica Nueva 24x60g", dias:302},
+{producto:"Ketchup D'Fiesta 24x 220gr 9552", dias:307},
+{producto:"Ketchup Danica Nuevo 24x50g", dias:310},
+{producto:"Aditivo Mejorador Impuld\u00e1n x10kg", dias:336},
+{producto:"Salsa Barbacoa Danica 24x220g", dias:336}
 ];
-var VU_KPIS = {lotesMuestra:300, diasMasProximo:134, lotesCriticos:0, productosDistintos:38, corte:"04/09/2026 07:40"};
+var VU_KPIS = {lotesMuestra:893, diasMasProximo:-861, lotesCriticos:2, productosDistintos:40, corte:"10/09/2026 07:40"};
 var SOON = [
-{producto:"Salsa Golf Danica Nueva 4x2900cc", lote:"630240702", pallet:"424967", vencimiento:"16/01/2027", dias:134, estado:"OK"},
-{producto:"Salsa Golf Danica 12x220ml", lote:"630342302", pallet:"425173", vencimiento:"17/01/2027", dias:135, estado:"OK"},
-{producto:"Cheddar Danica 24x220 ml", lote:"626342302", pallet:"L000018991", vencimiento:"18/02/2027", dias:167, estado:"OK"}
+{producto:"Danica Soft Margarina Vegetal Pote 24x200g", lote:"632400401", pallet:"428022", vencimiento:"02/05/2024", dias:-861, estado:"Vencido"},
+{producto:"Mostaza Danica Nueva 4x3000g", lote:"545540703", pallet:"390125", vencimiento:"02/10/2026", dias:22, estado:"Critico"},
+{producto:"Salsa Golf Danica Nueva 4x2900cc", lote:"630204702", pallet:"433441", vencimiento:"16/01/2027", dias:128, estado:"Available"}
 ];
 
 /* ================= HELPERS ================= */
@@ -326,14 +338,14 @@ return '<div class="kpi"><div class="lbl">'+lbl+'</div><div class="val'+(cls?' '
 function renderCumplimiento(){
 cumplKpis();
 document.getElementById('cumpl-title').textContent = cumplMode==='semana'
-? 'Cumplimiento — semana 28/08 al 03/09' : cumplMode==='dia'
-? 'Cumplimiento — día 03/09' : 'Cumplimiento — septiembre 2026 (acum. al 03/09)';
+? 'Cumplimiento — semana 03/09 al 09/09' : cumplMode==='dia'
+? 'Cumplimiento — día 09/09' : 'Cumplimiento — septiembre 2026 (acum. al 09/09)';
 document.getElementById('lbl-chart-kg').textContent = cumplMode==='semana'
 ? 'Kg despachados vs. entregados por día' : cumplMode==='dia'
-? 'Kg despachados vs. entregados — 03/09' : 'Kg despachados vs. entregados — septiembre (acum.)';
+? 'Kg despachados vs. entregados — 09/09' : 'Kg despachados vs. entregados — septiembre (acum.)';
 document.getElementById('lbl-chart-pct').textContent = cumplMode==='semana'
 ? '% cumplimiento distribución vs. % OTIF' : cumplMode==='dia'
-? '% distribución vs. % OTIF — 03/09' : '% distribución vs. % OTIF — septiembre (acum.)';
+? '% distribución vs. % OTIF — 09/09' : '% distribución vs. % OTIF — septiembre (acum.)';
 
 var rows = cumplMode==='semana' ? DAILY : cumplMode==='dia' ? [DAILY[DAILY.length-1]] : MONTH_DAILY;
 var labels = rows.map(function(r){return r.fecha;});
