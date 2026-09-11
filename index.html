@@ -38,6 +38,7 @@ nav.tabs button.active{background:var(--accent-2);color:#0d1210;border-color:var
 .toggle{display:flex;gap:8px;}
 .toggle button{font-family:'IBM Plex Mono',monospace;font-size:11.5px;background:var(--panel);border:1px solid var(--border);color:var(--muted);padding:7px 14px;border-radius:5px;cursor:pointer;}
 .toggle button.active{background:var(--accent-2);color:#0d1210;border-color:var(--accent-2);}
+#mes-selector{font-family:'IBM Plex Mono',monospace;font-size:11.5px;background:var(--panel);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:5px;cursor:pointer;}
 .section-head{display:flex;justify-content:space-between;align-items:baseline;margin:26px 0 12px;flex-wrap:wrap;gap:10px;}
 .section-head h2{font-family:'Libre Franklin',sans-serif;font-size:19px;font-weight:700;margin:0;}
 .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:20px;}
@@ -75,7 +76,7 @@ tr:hover td{background:#1a2420;}
 <div class="eyebrow">Refinería del Centro · iFlow BI</div>
 <h1>Reporte de Gestión iFlow</h1>
 </div>
-<div class="meta">Cumplimiento: semana 03/09–09/09/2026<br>Stock / Vida útil: corte 10/09/2026 07:40</div>
+<div class="meta">Cumplimiento: semana 04/09–10/09/2026<br>Stock / Vida útil: corte 11/09/2026 07:40</div>
 </div>
 
 <nav class="tabs">
@@ -92,10 +93,20 @@ tr:hover td{background:#1a2420;}
 <button class="active" id="btn-semana">Semana</button>
 <button id="btn-dia">Último día</button>
 <button id="btn-mes">Mes</button>
+<button id="btn-historico">Histórico</button>
 </div>
 </div>
 
+<div class="hist-controls" id="hist-controls" style="display:none;margin-bottom:16px;">
+<label class="cap" for="mes-selector" style="margin-right:8px;">Mes:</label>
+<select id="mes-selector"></select>
+</div>
+
 <div class="kpis" id="cumpl-kpis"></div>
+
+<div class="grid2 hist-only" id="hist-chart-row" style="display:none;">
+<div class="card tall" style="grid-column:1 / -1;"><h3>Evolución mensual — % OTIF y % cumplimiento distribución</h3><canvas id="chartHistorico"></canvas></div>
+</div>
 
 <div class="grid2">
 <div class="card tall"><h3 id="lbl-chart-kg">Kg despachados vs. entregados por día</h3><canvas id="chartKg"></canvas></div>
@@ -123,15 +134,24 @@ tr:hover td{background:#1a2420;}
 <div class="grid3">
 <div class="card tall"><h3>Posiciones por producto (top 10 muestra)</h3><canvas id="chartProd"></canvas></div>
 <div class="card tall"><h3>Por sector de depósito</h3><canvas id="chartSector"></canvas></div>
-<div class="card tall"><h3>Estado de posición</h3><canvas id="chartEstado"></canvas></div>
+<div class="card tall"><h3 id="lbl-chart-estado">Estado de posición — clic para filtrar el detalle</h3><canvas id="chartEstado"></canvas></div>
 </div>
 <div class="card">
-<h3>Detalle por producto (muestra relevada)</h3>
+<div class="section-head" style="margin:0 0 12px;">
+<h3 id="stock-table-title" style="margin:0;">Detalle por producto (muestra relevada)</h3>
+<div class="toggle" id="stock-filtro-toggle">
+<button class="active" data-estado="Todos">Todos</button>
+<button data-estado="Available">Available</button>
+<button data-estado="Critico">Crítico</button>
+<button data-estado="Rotura">Rotura</button>
+<button data-estado="Vencido">Vencido</button>
+</div>
+</div>
 <table id="stockTable">
 <thead><tr><th>Producto</th><th>Posiciones</th><th>Bultos</th><th>Unidades</th><th>Estado</th></tr></thead>
 <tbody></tbody>
 </table>
-<div class="cap">Muestra parcial relevada sobre el total del sistema (ver KPI "Muestra relevada").</div>
+<div class="cap" id="stock-table-cap">Muestra parcial relevada sobre el total del sistema (ver KPI "Muestra relevada").</div>
 </div>
 </section>
 
@@ -155,7 +175,7 @@ tr:hover td{background:#1a2420;}
 
 <div class="foot">
 <span>Refinería del Centro · iFlow BI · Dossier Performance / Dashboard Stock (MicroStrategy)</span>
-<span>Reporte unificado generado 10/09/2026</span>
+<span>Reporte unificado generado 11/09/2026</span>
 </div>
 </div>
 
@@ -176,29 +196,36 @@ document.head.appendChild(s1);
 
 <script>
 /* ================= DATOS — CUMPLIMIENTO ================= */
+/* Nombre y corte del mes en curso — únicas 2 variables a tocar cada corrida para los títulos dinámicos
+(reemplaza el esquema anterior de 3 strings hardcodeados por separado). */
+var MES_ACTUAL_LABEL = "septiembre 2026";
+var MES_ACTUAL_CORTE = "10/09";
+var WEEK_RANGE_LABEL = "04/09 al 10/09";
+
 var DAILY = [
-{fecha:"03/09", pedidos:4, kgPedidos:16011.00, kgDespachados:16011.00, kgEntregados:16011.00, pctDistrib:100.00, otif:100.00, motivos:[]},
 {fecha:"04/09", pedidos:4, kgPedidos:2104.00, kgDespachados:2104.00, kgEntregados:2102.00, pctDistrib:99.90, otif:50.00, motivos:[{motivo:"No Pedido", kg:2, pctPeso:100.0}]},
 {fecha:"07/09", pedidos:5, kgPedidos:4393.94, kgDespachados:4393.94, kgEntregados:2217.94, pctDistrib:50.48, otif:80.00, motivos:[]},
-{fecha:"08/09", pedidos:14, kgPedidos:18214.15, kgDespachados:18214.15, kgEntregados:15116.80, pctDistrib:82.99, otif:64.29, motivos:[{motivo:"Rotura de Producto", kg:1, pctPeso:100.0}]},
-{fecha:"09/09", pedidos:6, kgPedidos:21648.15, kgDespachados:21648.15, kgEntregados:0.00, pctDistrib:0.00, otif:0.00, motivos:[]}
+{fecha:"08/09", pedidos:14, kgPedidos:18214.15, kgDespachados:18214.15, kgEntregados:18213.15, pctDistrib:99.99, otif:92.86, motivos:[{motivo:"Rotura de Producto", kg:1, pctPeso:100.0}]},
+{fecha:"09/09", pedidos:6, kgPedidos:21648.15, kgDespachados:21648.15, kgEntregados:21532.15, pctDistrib:99.46, otif:66.67, motivos:[{motivo:"Rotura de Producto", kg:6, pctPeso:100.0}]},
+{fecha:"10/09", pedidos:13, kgPedidos:23420.15, kgDespachados:16261.15, kgEntregados:0.00, pctDistrib:0.00, otif:0.00, motivos:[]}
 ];
 var WEEK_TOTALS = {
-pedidos:33, kgPedidos:62371.24, kgDespachados:62371.24, kgEntregados:35447.74, kgDevueltos:3,
-pctDistrib:56.83, otif:57.58,
+pedidos:42, kgPedidos:69780.39, kgDespachados:62621.39, kgEntregados:44065.24, kgDevueltos:9,
+pctDistrib:70.37, otif:54.76,
 motivos:[
-{motivo:"No Pedido", kg:2, pctPeso:66.67},
-{motivo:"Rotura de Producto", kg:1, pctPeso:33.33}
+{motivo:"No Pedido", kg:2, pctPeso:22.22},
+{motivo:"Rotura de Producto", kg:7, pctPeso:77.78}
 ]
 };
 /* Acumulado mensual (mes en curso, del día 1 a ayer). MONTH_DAILY se completa día a día
-por la tarea diaria (agregar el día de ayer; reiniciar al cambiar de mes). */
+por la tarea diaria (agregar el día de ayer; reiniciar al cambiar de mes). Al cerrar un mes,
+empujar {mes, mesLabel, totals:MONTH_TOTALS, daily:MONTH_DAILY} a MONTHLY_HISTORY antes de reiniciar. */
 var MONTH_TOTALS = {
-pedidos:40, kgPedidos:84329.14, kgDespachados:84329.14, kgEntregados:57007.64, kgDevueltos:3,
-pctDistrib:67.60, otif:62.50,
+pedidos:53, kgPedidos:107749.29, kgDespachados:100590.29, kgEntregados:81636.14, kgDevueltos:9,
+pctDistrib:81.16, otif:62.26,
 motivos:[
-{motivo:"No Pedido", kg:2, pctPeso:66.67},
-{motivo:"Rotura de Producto", kg:1, pctPeso:33.33}
+{motivo:"No Pedido", kg:2, pctPeso:22.22},
+{motivo:"Rotura de Producto", kg:7, pctPeso:77.78}
 ]
 };
 var MONTH_DAILY = [
@@ -207,9 +234,14 @@ var MONTH_DAILY = [
 {fecha:"03/09", pedidos:4, kgPedidos:16011.00, kgDespachados:16011.00, kgEntregados:16011.00, pctDistrib:100.00, otif:100.00, motivos:[]},
 {fecha:"04/09", pedidos:4, kgPedidos:2104.00, kgDespachados:2104.00, kgEntregados:2102.00, pctDistrib:99.90, otif:50.00, motivos:[{motivo:"No Pedido", kg:2, pctPeso:100.0}]},
 {fecha:"07/09", pedidos:5, kgPedidos:4393.94, kgDespachados:4393.94, kgEntregados:2217.94, pctDistrib:50.48, otif:80.00, motivos:[]},
-{fecha:"08/09", pedidos:14, kgPedidos:18214.15, kgDespachados:18214.15, kgEntregados:15116.80, pctDistrib:82.99, otif:64.29, motivos:[{motivo:"Rotura de Producto", kg:1, pctPeso:100.0}]},
-{fecha:"09/09", pedidos:6, kgPedidos:21648.15, kgDespachados:21648.15, kgEntregados:0.00, pctDistrib:0.00, otif:0.00, motivos:[]}
+{fecha:"08/09", pedidos:14, kgPedidos:18214.15, kgDespachados:18214.15, kgEntregados:18213.15, pctDistrib:99.99, otif:92.86, motivos:[{motivo:"Rotura de Producto", kg:1, pctPeso:100.0}]},
+{fecha:"09/09", pedidos:6, kgPedidos:21648.15, kgDespachados:21648.15, kgEntregados:21532.15, pctDistrib:99.46, otif:66.67, motivos:[{motivo:"Rotura de Producto", kg:6, pctPeso:100.0}]},
+{fecha:"10/09", pedidos:13, kgPedidos:23420.15, kgDespachados:16261.15, kgEntregados:0.00, pctDistrib:0.00, otif:0.00, motivos:[]}
 ];
+/* Histórico de meses YA CERRADOS (vacío hasta que termine septiembre 2026 — la operación
+Colecta y Distribución Nogues no tiene datos previos a septiembre 2026 en MicroStrategy).
+Shape por entrada: {mes:"2026-09", mesLabel:"Septiembre 2026", totals:{...shape de MONTH_TOTALS...}, daily:[...shape de MONTH_DAILY...]} */
+var MONTHLY_HISTORY = [];
 
 /* ================= DATOS — STOCK ================= */
 var PRODUCTS = [
@@ -227,9 +259,9 @@ var PRODUCTS = [
 var SECTORS = [
 {sector:"T. Controlada", n:550}, {sector:"Ambiente", n:197}, {sector:"Muelle", n:101}, {sector:"PK Ambiente", n:30}, {sector:"PK T. Controlada", n:8}, {sector:"Rotura", n:7}
 ];
-var STATUS = [{estado:"Available", n:869}, {estado:"Critico", n:17}, {estado:"Rotura", n:6}, {estado:"Vencido", n:1}];
-var TOTAL_SISTEMA = 943;
-var MUESTRA = {n:893, pct:95, productosDistintos:40, posicionesRotura:6, corte:"10/09/2026 07:40"};
+var STATUS = [{estado:"Available", n:1044}, {estado:"Critico", n:18}, {estado:"Rotura", n:6}, {estado:"Vencido", n:1}];
+var TOTAL_SISTEMA = 1069;
+var MUESTRA = {n:893, pct:84, productosDistintos:40, posicionesRotura:6, corte:"11/09/2026 07:40"};
 var STOCK_DETALLE = [
 {producto:"Danica Soft Margarina Vegetal Pote 24x200g", posiciones:224, bultos:25023, unidades:25023, estado:"Available"},
 {producto:"Danica Dor Cremosa Marg Veg Pote 24x210g", posiciones:119, bultos:13228, unidades:13228, estado:"Available"},
@@ -238,58 +270,94 @@ var STOCK_DETALLE = [
 {producto:"Danica Marg Vegetal Pan 30x200g", posiciones:45, bultos:7732, unidades:7732, estado:"Available"},
 {producto:"Danica Equilibrio Marg Vegetal Pote 24x220g", posiciones:43, bultos:4760, unidades:4760, estado:"Available"}
 ];
+/* Detalle por lote para las 3 categorías críticas — relevamiento COMPLETO (100%, no muestra),
+vía filtro Estado Posición + orden por columna en la grilla MicroStrategy. "Available" usa
+la muestra representativa de STOCK_DETALLE de arriba (no se releva lote por lote por ser ~1044 posiciones). */
+var STOCK_LOTS = {
+Vencido: [
+{producto:"Danica Soft Margarina Vegetal Pote 24x200g", lote:"632400401", pallet:"428022", vencimiento:"02/05/2024", dias:-862, bultos:112}
+],
+Critico: [
+{producto:"Doña Flora Ref. B 10x 1/2 Kg", lote:"627500703", pallet:"1108853", vencimiento:"01/04/2027", dias:202, bultos:132},
+{producto:"Doña Flora Ref. B 10x 1/2 Kg", lote:"629500101", pallet:"11108804", vencimiento:"01/05/2027", dias:232, bultos:132},
+{producto:"Doña Flora Ref. B 10x 1/2 Kg", lote:"627600702", pallet:"11105463", vencimiento:"01/04/2027", dias:202, bultos:132},
+{producto:"Doña Flora Ref. B 10x 1/2 Kg", lote:"629600101", pallet:"11108914", vencimiento:"01/05/2027", dias:232, bultos:132},
+{producto:"Doña Flora Ref. B 10x 1/2 Kg", lote:"629600103", pallet:"11109087", vencimiento:"01/05/2027", dias:232, bultos:132},
+{producto:"Doña Flora Ref. B 10x 1/2 Kg", lote:"630100101", pallet:"11109451", vencimiento:"01/05/2027", dias:232, bultos:132},
+{producto:"Doña Flora Ref. B 10x 1/2 Kg", lote:"629500102", pallet:"11108853", vencimiento:"01/05/2027", dias:232, bultos:132},
+{producto:"Doña Flora Ref. B 10x 1/2 Kg", lote:"627600703", pallet:"11105614", vencimiento:"01/04/2027", dias:202, bultos:132},
+{producto:"Doña Flora Ref. B 10x 1/2 Kg", lote:"627600703", pallet:"11105619", vencimiento:"01/04/2027", dias:202, bultos:132},
+{producto:"Doña Flora Ref. B 10x 1/2 Kg", lote:"629500102", pallet:"L000028896", vencimiento:"01/05/2027", dias:232, bultos:123},
+{producto:"Doña Flora Ref. B 10x 1/2 Kg", lote:"627500703", pallet:"11109083", vencimiento:"01/05/2027", dias:232, bultos:132},
+{producto:"Doña Flora Ref. B 10x 1/2 Kg", lote:"627600702", pallet:"11105520", vencimiento:"01/04/2027", dias:202, bultos:132},
+{producto:"Doña Flora Ref. B 10x 1/2 Kg", lote:"627600702", pallet:"1105508", vencimiento:"01/04/2027", dias:202, bultos:132},
+{producto:"Doña Flora Ref. B 10x 1/2 Kg", lote:"627600702", pallet:"1105589", vencimiento:"01/04/2027", dias:202, bultos:132},
+{producto:"Doña Flora Ref. B 10x 1/2 Kg", lote:"627600702", pallet:"1105613", vencimiento:"01/04/2027", dias:202, bultos:132},
+{producto:"Doña Flora Ref. B 10x 1/2 Kg", lote:"627660702", pallet:"11105525", vencimiento:"01/04/2027", dias:202, bultos:132},
+{producto:"Mostaza Danica Nueva 4x3000g", lote:"545540703", pallet:"390125", vencimiento:"02/10/2026", dias:21, bultos:90},
+{producto:"Mostaza Americana Danica 24x475g", lote:"632541503", pallet:"428658", vencimiento:"02/07/2027", dias:294, bultos:52}
+],
+Rotura: [
+{producto:"Danica Marg Vegetal Pan 30x200g", lote:"633400702", pallet:"L000026346", vencimiento:"09/05/2027", dias:240, bultos:null},
+{producto:"Mayonesa D'Fiesta 24x500ml", lote:"626541501", pallet:"L000019946", vencimiento:"21/04/2027", dias:222, bultos:null},
+{producto:"Mostaza Danica Nueva 24x60g", lote:"633542003", pallet:"L000024298", vencimiento:"09/07/2027", dias:301, bultos:null},
+{producto:"Mayonesa Danica 24x500ml", lote:"621341503", pallet:"L000027710", vencimiento:"15/03/2027", dias:185, bultos:null},
+{producto:"Cheddar Danica 24x220 ml", lote:"626342302", pallet:"L000018991", vencimiento:"18/02/2027", dias:160, bultos:null},
+{producto:"Cheddar Danica 8x1000 ml", lote:"626641202", pallet:"L000019947", vencimiento:"21/02/2027", dias:163, bultos:null}
+]
+};
 
 /* ================= DATOS — VIDA ÚTIL ================= */
 var BUCKETS = [
 {rango:"<30 días", n:2}, {rango:"30-89 días", n:0}, {rango:"90-179 días", n:12}, {rango:"180-269 días", n:725}, {rango:"270+ días", n:154}
 ];
 var PRODUCT_MIN = [
-{producto:"Danica Soft Margarina Vegetal Pote 24x200g", dias:-861},
-{producto:"Mostaza Danica Nueva 4x3000g", dias:22},
-{producto:"Salsa Golf Danica Nueva 4x2900cc", dias:128},
-{producto:"Salsa Golf Danica 12x220ml", dias:129},
-{producto:"Cheddar Danica 24x220 ml", dias:161},
-{producto:"Cheddar Danica 8x1000 ml", dias:164},
-{producto:"Danica Dor Cremosa Marg Veg Pote 24x210g", dias:171},
-{producto:"Mayonesa Mayodán Nueva 24x500cc", dias:175},
-{producto:"Mayonesa Danica 24x500ml", dias:186},
-{producto:"Doña Flora Ref. B 10x 1/2 Kg", dias:203},
-{producto:"Danica Equilibrio Marg Vegetal Pote 24x220g", dias:205},
-{producto:"Margadán Marg Vegetal Pan 12x500g", dias:206},
-{producto:"Ketchup Danica Nuevo 192x8g", dias:209},
-{producto:"Mayo Red Cal Mayodán 4x2900cc", dias:211},
-{producto:"Danica Marg Vegetal Pan 30x200g", dias:213},
-{producto:"Danica Marg Vegetal Pan 12x500g", dias:213},
-{producto:"Mayonesa Danica Nueva 20x100cc", dias:216},
-{producto:"Mayonesa D'Fiesta 24x500ml", dias:223},
-{producto:"Mostaza Danica Nueva 192x8g", dias:231},
-{producto:"Margadán Marg Vegetal Pan 30x200g", dias:235},
-{producto:"Ketchup Danica 24x475g", dias:246},
-{producto:"Manty Pan Untar Y Cocinar 30x200", dias:247},
-{producto:"Mayonesa Danica 8x1000ml", dias:250},
-{producto:"Mayonesa Danica Nueva 192x8cc", dias:251},
-{producto:"Ketchup Danica Nuevo 4x3000g", dias:257},
-{producto:"Mayo Red Lip D'Fiesta 20x100cc", dias:259},
-{producto:"Mayonesa D'Fiesta 8x1000ml 9091", dias:264},
-{producto:"Mayonesa Danica Equilibrio 24x500cc", dias:269},
-{producto:"Mayonesa D'Fiesta 24x250ml", dias:270},
-{producto:"Mayonesa Danica 24x250ml", dias:276},
-{producto:"Mayonesa Danica Nueva 4x2900cc", dias:277},
-{producto:"Barbacoa D'Fiesta 12x 220gr 9552", dias:289},
-{producto:"Ketchup D'Fiesta 24x 220g", dias:295},
-{producto:"Mostaza Americana Danica 24x475g", dias:295},
-{producto:"Mostaza Danica 24x220g 9202", dias:300},
-{producto:"Mostaza Danica Nueva 24x60g", dias:302},
-{producto:"Ketchup D'Fiesta 24x 220gr 9552", dias:307},
-{producto:"Ketchup Danica Nuevo 24x50g", dias:310},
-{producto:"Aditivo Mejorador Impuldán x10kg", dias:336},
-{producto:"Salsa Barbacoa Danica 24x220g", dias:336}
+{producto:"Danica Soft Margarina Vegetal Pote 24x200g", dias:-862},
+{producto:"Mostaza Danica Nueva 4x3000g", dias:21},
+{producto:"Salsa Golf Danica Nueva 4x2900cc", dias:127},
+{producto:"Salsa Golf Danica 12x220ml", dias:128},
+{producto:"Cheddar Danica 24x220 ml", dias:160},
+{producto:"Cheddar Danica 8x1000 ml", dias:163},
+{producto:"Danica Dor Cremosa Marg Veg Pote 24x210g", dias:170},
+{producto:"Mayonesa Mayodán Nueva 24x500cc", dias:174},
+{producto:"Mayonesa Danica 24x500ml", dias:185},
+{producto:"Doña Flora Ref. B 10x 1/2 Kg", dias:202},
+{producto:"Danica Equilibrio Marg Vegetal Pote 24x220g", dias:204},
+{producto:"Margadán Marg Vegetal Pan 12x500g", dias:205},
+{producto:"Ketchup Danica Nuevo 192x8g", dias:208},
+{producto:"Mayo Red Cal Mayodán 4x2900cc", dias:210},
+{producto:"Danica Marg Vegetal Pan 30x200g", dias:212},
+{producto:"Danica Marg Vegetal Pan 12x500g", dias:212},
+{producto:"Mayonesa Danica Nueva 20x100cc", dias:215},
+{producto:"Mayonesa D'Fiesta 24x500ml", dias:222},
+{producto:"Mostaza Danica Nueva 192x8g", dias:230},
+{producto:"Margadán Marg Vegetal Pan 30x200g", dias:234},
+{producto:"Ketchup Danica 24x475g", dias:245},
+{producto:"Manty Pan Untar Y Cocinar 30x200", dias:246},
+{producto:"Mayonesa Danica 8x1000ml", dias:249},
+{producto:"Mayonesa Danica Nueva 192x8cc", dias:250},
+{producto:"Ketchup Danica Nuevo 4x3000g", dias:256},
+{producto:"Mayo Red Lip D'Fiesta 20x100cc", dias:258},
+{producto:"Mayonesa D'Fiesta 8x1000ml 9091", dias:263},
+{producto:"Mayonesa Danica Equilibrio 24x500cc", dias:268},
+{producto:"Mayonesa D'Fiesta 24x250ml", dias:269},
+{producto:"Mayonesa Danica 24x250ml", dias:275},
+{producto:"Mayonesa Danica Nueva 4x2900cc", dias:276},
+{producto:"Barbacoa D'Fiesta 12x 220gr 9552", dias:288},
+{producto:"Ketchup D'Fiesta 24x 220g", dias:294},
+{producto:"Mostaza Americana Danica 24x475g", dias:294},
+{producto:"Mostaza Danica 24x220g 9202", dias:299},
+{producto:"Mostaza Danica Nueva 24x60g", dias:301},
+{producto:"Ketchup D'Fiesta 24x 220gr 9552", dias:306},
+{producto:"Ketchup Danica Nuevo 24x50g", dias:309},
+{producto:"Aditivo Mejorador Impuldán x10kg", dias:335},
+{producto:"Salsa Barbacoa Danica 24x220g", dias:335}
 ];
-var VU_KPIS = {lotesMuestra:893, diasMasProximo:-861, lotesCriticos:2, productosDistintos:40, corte:"10/09/2026 07:40"};
+var VU_KPIS = {lotesMuestra:893, diasMasProximo:-862, lotesCriticos:2, productosDistintos:40, corte:"11/09/2026 07:40"};
 var SOON = [
-{producto:"Danica Soft Margarina Vegetal Pote 24x200g", lote:"632400401", pallet:"428022", vencimiento:"02/05/2024", dias:-861, estado:"Vencido"},
-{producto:"Mostaza Danica Nueva 4x3000g", lote:"545540703", pallet:"390125", vencimiento:"02/10/2026", dias:22, estado:"Critico"},
-{producto:"Salsa Golf Danica Nueva 4x2900cc", lote:"630204702", pallet:"433441", vencimiento:"16/01/2027", dias:128, estado:"Available"}
+{producto:"Danica Soft Margarina Vegetal Pote 24x200g", lote:"632400401", pallet:"428022", vencimiento:"02/05/2024", dias:-862, estado:"Vencido"},
+{producto:"Mostaza Danica Nueva 4x3000g", lote:"545540703", pallet:"390125", vencimiento:"02/10/2026", dias:21, estado:"Critico"},
+{producto:"Salsa Golf Danica Nueva 4x2900cc", lote:"630204702", pallet:"433441", vencimiento:"16/01/2027", dias:127, estado:"Available"}
 ];
 
 /* ================= HELPERS ================= */
@@ -302,6 +370,17 @@ function destroy(id){ if(charts[id]){ charts[id].destroy(); delete charts[id]; }
 
 /* ================= CUMPLIMIENTO ================= */
 var cumplMode = 'semana';
+var historicoMesIdx = null;
+
+/* Une el histórico de meses cerrados (MONTHLY_HISTORY) con el mes en curso (MONTH_TOTALS/MONTH_DAILY),
+para que el selector "Histórico" y el gráfico de evolución siempre incluyan el mes actual. */
+function getAllMonths(){
+var actualLabel = MES_ACTUAL_LABEL.charAt(0).toUpperCase()+MES_ACTUAL_LABEL.slice(1);
+return MONTHLY_HISTORY.concat([{
+mes:'actual', mesLabel:actualLabel+' (acum. al '+MES_ACTUAL_CORTE+')',
+completo:false, totals:MONTH_TOTALS, daily:MONTH_DAILY
+}]);
+}
 
 function cumplKpis(){
 var el = document.getElementById('cumpl-kpis');
@@ -320,32 +399,72 @@ kpi('Kg despachados', fmt(d.kgDespachados)) +
 kpi('% Cumpl. distribución', pct(d.pctDistrib), 'red') +
 kpi('% OTIF del día', pct(d.otif), 'amber') +
 kpi('Kg devueltos', 0, 'green');
-} else {
+} else if(cumplMode==='mes'){
 el.innerHTML =
 kpi('Pedidos mes', MONTH_TOTALS.pedidos) +
 kpi('Kg despachados', fmt(MONTH_TOTALS.kgDespachados)) +
 kpi('% Cumpl. distribución', pct(MONTH_TOTALS.pctDistrib), 'red') +
 kpi('% OTIF mes', pct(MONTH_TOTALS.otif), 'amber') +
 kpi('Kg devueltos', MONTH_TOTALS.kgDevueltos, 'green');
+} else {
+var months = getAllMonths();
+var idx = historicoMesIdx!==null ? historicoMesIdx : months.length-1;
+var m = months[idx];
+el.innerHTML =
+kpi('Pedidos', m.totals.pedidos) +
+kpi('Kg despachados', fmt(m.totals.kgDespachados)) +
+kpi('% Cumpl. distribución', pct(m.totals.pctDistrib), 'red') +
+kpi('% OTIF', pct(m.totals.otif), 'amber') +
+kpi('Kg devueltos', m.totals.kgDevueltos, 'green');
 }
 }
 function kpi(lbl,val,cls){
 return '<div class="kpi"><div class="lbl">'+lbl+'</div><div class="val'+(cls?' '+cls:'')+'">'+val+'</div></div>';
 }
 
+function populateMesSelector(){
+var sel = document.getElementById('mes-selector');
+var months = getAllMonths();
+if(historicoMesIdx===null) historicoMesIdx = months.length-1;
+sel.innerHTML = months.map(function(m,i){return '<option value="'+i+'">'+m.mesLabel+'</option>';}).join('');
+sel.value = historicoMesIdx;
+}
+
 function renderCumplimiento(){
 cumplKpis();
+
+var histControls = document.getElementById('hist-controls');
+var histChartRow = document.getElementById('hist-chart-row');
+var esHistorico = cumplMode==='historico';
+histControls.style.display = esHistorico ? 'flex' : 'none';
+histChartRow.style.display = esHistorico ? 'grid' : 'none';
+if(esHistorico) populateMesSelector();
+
 document.getElementById('cumpl-title').textContent = cumplMode==='semana'
-? 'Cumplimiento — semana 03/09 al 09/09' : cumplMode==='dia'
-? 'Cumplimiento — día 09/09' : 'Cumplimiento — septiembre 2026 (acum. al 09/09)';
+? 'Cumplimiento — semana ' + WEEK_RANGE_LABEL : cumplMode==='dia'
+? 'Cumplimiento — día ' + DAILY[DAILY.length-1].fecha : cumplMode==='mes'
+? 'Cumplimiento — ' + MES_ACTUAL_LABEL + ' (acum. al ' + MES_ACTUAL_CORTE + ')'
+: 'Cumplimiento — histórico mensual';
 document.getElementById('lbl-chart-kg').textContent = cumplMode==='semana'
 ? 'Kg despachados vs. entregados por día' : cumplMode==='dia'
-? 'Kg despachados vs. entregados — 09/09' : 'Kg despachados vs. entregados — septiembre (acum.)';
+? 'Kg despachados vs. entregados — ' + DAILY[DAILY.length-1].fecha : cumplMode==='mes'
+? 'Kg despachados vs. entregados — ' + MES_ACTUAL_LABEL + ' (acum.)'
+: 'Kg despachados vs. entregados — mes seleccionado';
 document.getElementById('lbl-chart-pct').textContent = cumplMode==='semana'
 ? '% cumplimiento distribución vs. % OTIF' : cumplMode==='dia'
-? '% distribución vs. % OTIF — 09/09' : '% distribución vs. % OTIF — septiembre (acum.)';
+? '% distribución vs. % OTIF — ' + DAILY[DAILY.length-1].fecha : cumplMode==='mes'
+? '% distribución vs. % OTIF — ' + MES_ACTUAL_LABEL + ' (acum.)'
+: '% distribución vs. % OTIF — mes seleccionado';
 
-var rows = cumplMode==='semana' ? DAILY : cumplMode==='dia' ? [DAILY[DAILY.length-1]] : MONTH_DAILY;
+var rows, totalsRef;
+if(cumplMode==='semana'){ rows = DAILY; totalsRef = WEEK_TOTALS; }
+else if(cumplMode==='dia'){ rows = [DAILY[DAILY.length-1]]; totalsRef = null; }
+else if(cumplMode==='mes'){ rows = MONTH_DAILY; totalsRef = MONTH_TOTALS; }
+else {
+var months = getAllMonths();
+var idx = historicoMesIdx!==null ? historicoMesIdx : months.length-1;
+rows = months[idx].daily; totalsRef = months[idx].totals;
+}
 var labels = rows.map(function(r){return r.fecha;});
 
 destroy('kg');
@@ -376,16 +495,13 @@ y:{min:0,max:100, ticks:{color:PALETTE.text, callback:function(v){return v+'%';}
 
 destroy('embudo');
 var embudoLabels, embudoData;
-if(cumplMode==='semana'){
-embudoLabels = ['Pedidos','Ruteados','Preparados','Despachados','Entregados'];
-embudoData = [WEEK_TOTALS.kgPedidos, Math.round(WEEK_TOTALS.kgPedidos*0.975), Math.round(WEEK_TOTALS.kgPedidos*0.955), WEEK_TOTALS.kgDespachados, WEEK_TOTALS.kgEntregados];
-} else if(cumplMode==='dia'){
+if(cumplMode==='dia'){
 var d = DAILY[DAILY.length-1];
 embudoLabels = ['Pedidos','Despachados','Entregados'];
 embudoData = [d.kgPedidos, d.kgDespachados, d.kgEntregados];
 } else {
 embudoLabels = ['Pedidos','Ruteados','Preparados','Despachados','Entregados'];
-embudoData = [MONTH_TOTALS.kgPedidos, Math.round(MONTH_TOTALS.kgPedidos*0.975), Math.round(MONTH_TOTALS.kgPedidos*0.955), MONTH_TOTALS.kgDespachados, MONTH_TOTALS.kgEntregados];
+embudoData = [totalsRef.kgPedidos, Math.round(totalsRef.kgPedidos*0.975), Math.round(totalsRef.kgPedidos*0.955), totalsRef.kgDespachados, totalsRef.kgEntregados];
 }
 charts.embudo = new Chart(document.getElementById('chartEmbudo'), {
 type:'bar',
@@ -397,7 +513,7 @@ y:{ticks:{color:PALETTE.text}, grid:{color:PALETTE.grid}}
 });
 
 destroy('motivos');
-var motivosSrc = cumplMode==='semana' ? WEEK_TOTALS.motivos : cumplMode==='dia' ? (DAILY[DAILY.length-1].motivos||[]) : (MONTH_TOTALS.motivos||[]);
+var motivosSrc = cumplMode==='dia' ? (DAILY[DAILY.length-1].motivos||[]) : (totalsRef ? (totalsRef.motivos||[]) : []);
 var mCanvas = document.getElementById('chartMotivos');
 if(motivosSrc.length===0){
 mCanvas.style.display='none';
@@ -413,13 +529,30 @@ options:{responsive:true, plugins:{legend:{position:'bottom', labels:{color:PALE
 });
 }
 
-buildDailyTable();
+if(esHistorico){
+var monthsAll = getAllMonths();
+destroy('historico');
+charts.historico = new Chart(document.getElementById('chartHistorico'), {
+type:'line',
+data:{labels:monthsAll.map(function(m){return m.mesLabel;}), datasets:[
+{label:'% OTIF', data:monthsAll.map(function(m){return m.totals.otif;}), borderColor:PALETTE.amber, backgroundColor:PALETTE.amber, tension:.3},
+{label:'% Cumpl. distribución', data:monthsAll.map(function(m){return m.totals.pctDistrib;}), borderColor:PALETTE.line, backgroundColor:PALETTE.line, borderDash:[4,3], tension:.3}
+]},
+options:{responsive:true, plugins:{legend:{labels:{color:PALETTE.text}}}, scales:{
+x:{ticks:{color:PALETTE.text}, grid:{color:PALETTE.grid}},
+y:{min:0,max:100, ticks:{color:PALETTE.text, callback:function(v){return v+'%';}}, grid:{color:PALETTE.grid}}
+}}
+});
 }
 
-function buildDailyTable(){
+buildDailyTable(rows);
+}
+
+function buildDailyTable(rows){
+rows = rows || DAILY;
 var tbody = document.querySelector('#dailyTable tbody');
 tbody.innerHTML='';
-DAILY.forEach(function(d, idx){
+rows.forEach(function(d, idx){
 var tr = document.createElement('tr');
 tr.className='drill';
 tr.innerHTML = '<td>'+d.fecha+'</td><td>'+d.pedidos+'</td><td>'+fmt(d.kgPedidos)+'</td><td>'+fmt(d.kgDespachados)+'</td><td>'+fmt(d.kgEntregados)+'</td><td>'+pct(d.pctDistrib)+'</td><td>'+pct(d.otif)+'</td>';
@@ -428,8 +561,8 @@ var trDrill = document.createElement('tr');
 trDrill.className='drill-row';
 var td = document.createElement('td'); td.colSpan=7;
 var inner = document.createElement('div'); inner.className='drill-inner';
-if(d.motivos===null){
-inner.innerHTML = '<span class="cap">Detalle de motivos no discriminado por día en este snapshot — ver agregado semanal en "Motivos de devolución".</span>';
+if(d.motivos===null||d.motivos===undefined){
+inner.innerHTML = '<span class="cap">Detalle de motivos no discriminado por día en este snapshot — ver agregado en "Motivos de devolución".</span>';
 } else if(d.motivos.length===0){
 inner.innerHTML = '<span class="cap">Sin motivos de devolución registrados este día.</span>';
 } else {
@@ -443,6 +576,51 @@ tr.addEventListener('click', function(){ inner.classList.toggle('open'); });
 }
 
 /* ================= STOCK ================= */
+var stockFiltro = 'Todos';
+var STATUS_COLORS = {Available:PALETTE.green, Critico:'#d1a53d', Rotura:'#c65b5b', Vencido:'#8a4b6b'};
+
+function setStockFiltro(estado){
+stockFiltro = estado;
+var btns = document.querySelectorAll('#stock-filtro-toggle button');
+for(var i=0;i<btns.length;i++){ btns[i].classList.toggle('active', btns[i].getAttribute('data-estado')===estado); }
+renderStockTable();
+}
+
+function renderStockTable(){
+var titleEl = document.getElementById('stock-table-title');
+var capEl = document.getElementById('stock-table-cap');
+var thead = document.querySelector('#stockTable thead');
+var tbody = document.querySelector('#stockTable tbody'); tbody.innerHTML='';
+
+if(stockFiltro==='Todos' || stockFiltro==='Available'){
+titleEl.textContent = stockFiltro==='Todos' ? 'Detalle por producto (muestra relevada)' : 'Detalle por producto — Available (muestra relevada)';
+capEl.textContent = 'Muestra parcial relevada sobre el total del sistema (ver KPI "Muestra relevada").';
+thead.innerHTML = '<tr><th>Producto</th><th>Posiciones</th><th>Bultos</th><th>Unidades</th><th>Estado</th></tr>';
+var rows = stockFiltro==='Todos' ? STOCK_DETALLE : STOCK_DETALLE.filter(function(r){return r.estado==='Available';});
+rows.forEach(function(r){
+var tr = document.createElement('tr');
+tr.innerHTML = '<td>'+r.producto+'</td><td>'+r.posiciones+'</td><td>'+fmt(r.bultos)+'</td><td>'+fmt(r.unidades)+'</td><td><span class="pill">'+r.estado+'</span></td>';
+tbody.appendChild(tr);
+});
+} else {
+var lotes = STOCK_LOTS[stockFiltro] || [];
+titleEl.textContent = 'Detalle de lotes — '+stockFiltro+' ('+lotes.length+')';
+capEl.textContent = 'Relevamiento 100% de posiciones en estado '+stockFiltro+' (no es muestra).';
+thead.innerHTML = '<tr><th>Producto</th><th>Lote</th><th>Pallet</th><th>Vencimiento</th><th>Días</th><th>Bultos</th></tr>';
+lotes.forEach(function(r){
+var tr = document.createElement('tr');
+var diasTxt = (r.dias<0 ? (Math.abs(r.dias)+' vencido') : r.dias);
+tr.innerHTML = '<td>'+r.producto+'</td><td>'+r.lote+'</td><td>'+r.pallet+'</td><td>'+r.vencimiento+'</td><td>'+diasTxt+'</td><td>'+(r.bultos==null?'s/d':fmt(r.bultos))+'</td>';
+tbody.appendChild(tr);
+});
+if(lotes.length===0){
+var tr = document.createElement('tr');
+tr.innerHTML = '<td colspan="6" style="text-align:center;color:'+PALETTE.text+';opacity:.6;">Sin posiciones en este estado.</td>';
+tbody.appendChild(tr);
+}
+}
+}
+
 function renderStock(){
 var el = document.getElementById('stock-kpis');
 el.innerHTML =
@@ -469,16 +647,20 @@ options:{responsive:true, plugins:{legend:{position:'bottom', labels:{color:PALE
 destroy('estado');
 charts.estado = new Chart(document.getElementById('chartEstado'), {
 type:'doughnut',
-data:{labels:STATUS.map(function(s){return s.estado+' ('+s.n+')';}), datasets:[{data:STATUS.map(function(s){return s.n;}), backgroundColor:[PALETTE.green,PALETTE.red]}]},
-options:{responsive:true, plugins:{legend:{position:'bottom', labels:{color:PALETTE.text}}}}
+data:{labels:STATUS.map(function(s){return s.estado+' ('+s.n+')';}), datasets:[{data:STATUS.map(function(s){return s.n;}), backgroundColor:STATUS.map(function(s){return STATUS_COLORS[s.estado]||PALETTE.sage;})}]},
+options:{responsive:true, onClick:function(evt, elements){
+if(elements && elements.length){
+var idx = elements[0].index;
+var estado = STATUS[idx].estado;
+setStockFiltro(estado);
+}
+}, plugins:{legend:{position:'bottom', labels:{color:PALETTE.text}, onClick:function(e, legendItem){
+var estado = STATUS[legendItem.index].estado;
+setStockFiltro(estado);
+}}}}
 });
 
-var tbody = document.querySelector('#stockTable tbody'); tbody.innerHTML='';
-STOCK_DETALLE.forEach(function(r){
-var tr = document.createElement('tr');
-tr.innerHTML = '<td>'+r.producto+'</td><td>'+r.posiciones+'</td><td>'+fmt(r.bultos)+'</td><td>'+fmt(r.unidades)+'</td><td><span class="pill">'+r.estado+'</span></td>';
-tbody.appendChild(tr);
-});
+renderStockTable();
 }
 
 /* ================= VIDA ÚTIL ================= */
@@ -537,18 +719,30 @@ else if(btn.dataset.tab==='vidautil') renderVidaUtil();
 });
 document.getElementById('btn-semana').addEventListener('click', function(){
 cumplMode='semana';
-this.classList.add('active'); document.getElementById('btn-dia').classList.remove('active'); document.getElementById('btn-mes').classList.remove('active');
+this.classList.add('active'); document.getElementById('btn-dia').classList.remove('active'); document.getElementById('btn-mes').classList.remove('active'); document.getElementById('btn-historico').classList.remove('active');
 renderCumplimiento();
 });
 document.getElementById('btn-dia').addEventListener('click', function(){
 cumplMode='dia';
-this.classList.add('active'); document.getElementById('btn-semana').classList.remove('active'); document.getElementById('btn-mes').classList.remove('active');
+this.classList.add('active'); document.getElementById('btn-semana').classList.remove('active'); document.getElementById('btn-mes').classList.remove('active'); document.getElementById('btn-historico').classList.remove('active');
 renderCumplimiento();
 });
 document.getElementById('btn-mes').addEventListener('click', function(){
 cumplMode='mes';
-this.classList.add('active'); document.getElementById('btn-semana').classList.remove('active'); document.getElementById('btn-dia').classList.remove('active');
+this.classList.add('active'); document.getElementById('btn-semana').classList.remove('active'); document.getElementById('btn-dia').classList.remove('active'); document.getElementById('btn-historico').classList.remove('active');
 renderCumplimiento();
+});
+document.getElementById('btn-historico').addEventListener('click', function(){
+cumplMode='historico';
+this.classList.add('active'); document.getElementById('btn-semana').classList.remove('active'); document.getElementById('btn-dia').classList.remove('active'); document.getElementById('btn-mes').classList.remove('active');
+renderCumplimiento();
+});
+document.getElementById('mes-selector').addEventListener('change', function(){
+historicoMesIdx = parseInt(this.value, 10);
+renderCumplimiento();
+});
+document.querySelectorAll('#stock-filtro-toggle button').forEach(function(btn){
+btn.addEventListener('click', function(){ setStockFiltro(btn.getAttribute('data-estado')); });
 });
 
 window.__loadChart(renderAll);
