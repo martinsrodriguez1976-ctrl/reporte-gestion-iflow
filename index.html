@@ -207,11 +207,11 @@ var DAILY = [
 {fecha:"22/09", pedidos:14, kgPedidos:33366.94, kgDespachados:33309.28, kgEntregados:32754.28, pctDistrib:98.33, otif:64.29, motivos:[{motivo:"Inversión", kg:24, pctPeso:100.0}]},
 {fecha:"23/09", pedidos:6, kgPedidos:24044.30, kgDespachados:23006.00, kgEntregados:23000.00, pctDistrib:99.97, otif:66.67, motivos:[{motivo:"Rotura de Producto", kg:6, pctPeso:100.0}]},
 {fecha:"24/09", pedidos:14, kgPedidos:18236.00, kgDespachados:18096.00, kgEntregados:18096.00, pctDistrib:100.00, otif:92.86, motivos:[]},
-{fecha:"25/09", pedidos:5, kgPedidos:6219.00, kgDespachados:4441.00, kgEntregados:0.00, pctDistrib:0.00, otif:0.00, motivos:[]}
+{fecha:"25/09", pedidos:5, kgPedidos:6219.00, kgDespachados:6219.00, kgEntregados:2651.00, pctDistrib:42.63, otif:20.00, motivos:[]}
 ];
 var WEEK_TOTALS = {
-pedidos:53, kgPedidos:108224.54, kgDespachados:105210.58, kgEntregados:100178.58, kgDevueltos:60,
-pctDistrib:95.22, otif:67.92,
+pedidos:53, kgPedidos:108224.54, kgDespachados:106988.58, kgEntregados:102829.58, kgDevueltos:60,
+pctDistrib:96.11, otif:69.81,
 motivos:[
 {motivo:"No Pedido", kg:30, pctPeso:50.00},
 {motivo:"Inversión", kg:24, pctPeso:40.00},
@@ -224,10 +224,12 @@ empujar {mes, mesLabel, totals:MONTH_TOTALS, daily:MONTH_DAILY} a MONTHLY_HISTOR
 Nota 28/09/2026: al releer el mes completo se detectaron 3 correcciones retroactivas en MicroStrategy
 sobre días ya cargados (07/09, 15/09 y 17/09 subieron su Kg Entregados/%OTIF respecto de lo publicado
 el 18/09 — probablemente entregas que estaban pendientes de confirmar y se cerraron después). Se
-actualizaron esos 3 días con los valores frescos en vez de arrastrar los viejos. */
+actualizaron esos 3 días con los valores frescos en vez de arrastrar los viejos. Nueva corrección
+28/09/2026: 25/09 subió de Kg Despachados 4.441/Kg Entregados 0 a 6.219/2.651 (entrega que se
+terminó de confirmar después del corte del día). */
 var MONTH_TOTALS = {
-pedidos:169, kgPedidos:341672.18, kgDespachados:317962.48, kgEntregados:307659.48, kgDevueltos:4837,
-pctDistrib:96.76, otif:78.70,
+pedidos:169, kgPedidos:341672.18, kgDespachados:319740.48, kgEntregados:310310.48, kgDevueltos:4837,
+pctDistrib:97.05, otif:79.29,
 motivos:[
 {motivo:"No Pedido", kg:4744, pctPeso:98.08},
 {motivo:"Rotura de Producto", kg:69, pctPeso:1.43},
@@ -254,7 +256,7 @@ var MONTH_DAILY = [
 {fecha:"22/09", pedidos:14, kgPedidos:33366.94, kgDespachados:33309.28, kgEntregados:32754.28, pctDistrib:98.33, otif:64.29, motivos:[{motivo:"Inversión", kg:24, pctPeso:100.0}]},
 {fecha:"23/09", pedidos:6, kgPedidos:24044.30, kgDespachados:23006.00, kgEntregados:23000.00, pctDistrib:99.97, otif:66.67, motivos:[{motivo:"Rotura de Producto", kg:6, pctPeso:100.0}]},
 {fecha:"24/09", pedidos:14, kgPedidos:18236.00, kgDespachados:18096.00, kgEntregados:18096.00, pctDistrib:100.00, otif:92.86, motivos:[]},
-{fecha:"25/09", pedidos:5, kgPedidos:6219.00, kgDespachados:4441.00, kgEntregados:0.00, pctDistrib:0.00, otif:0.00, motivos:[]}
+{fecha:"25/09", pedidos:5, kgPedidos:6219.00, kgDespachados:6219.00, kgEntregados:2651.00, pctDistrib:42.63, otif:20.00, motivos:[]}
 ];
 /* Histórico de meses YA CERRADOS (vacío hasta que termine septiembre 2026 — la operación
 Colecta y Distribución Nogues no tiene datos previos a septiembre 2026 en MicroStrategy).
