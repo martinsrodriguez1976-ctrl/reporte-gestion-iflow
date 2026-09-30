@@ -651,7 +651,7 @@ type:'bar',
 data:{labels:PRODUCTS.map(function(p){return p.producto;}), datasets:[{data:PRODUCTS.map(function(p){return p.posiciones;}), backgroundColor:PALETTE.green}]},
 options:{indexAxis:'y', responsive:true, plugins:{legend:{display:false}}, scales:{
 x:{ticks:{color:PALETTE.text}, grid:{color:PALETTE.grid}},
-y:{ticks:{color:PALETTE.text, font:{size:10}}, grid:{color:PALETTE.grid}}
+y:{ticks:{color:PALETTE.text, font:{size:10}, autoSkip:false}, grid:{color:PALETTE.grid}}
 }}
 });
 destroy('sector');
@@ -703,7 +703,7 @@ type:'bar',
 data:{labels:PRODUCT_MIN.map(function(p){return p.producto;}), datasets:[{data:PRODUCT_MIN.map(function(p){return p.dias;}), backgroundColor:PALETTE.sage}]},
 options:{indexAxis:'y', responsive:true, plugins:{legend:{display:false}}, scales:{
 x:{ticks:{color:PALETTE.text}, grid:{color:PALETTE.grid}},
-y:{ticks:{color:PALETTE.text, font:{size:9}}, grid:{color:PALETTE.grid}}
+y:{ticks:{color:PALETTE.text, font:{size:9}, autoSkip:false}, grid:{color:PALETTE.grid}}
 }}
 });
 
