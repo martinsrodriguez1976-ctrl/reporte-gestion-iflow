@@ -97,6 +97,11 @@ tr:hover td{background:#1a2420;}
 </div>
 </div>
 
+<div class="hist-controls" id="semana-controls" style="display:none;margin-bottom:16px;">
+<label class="cap" for="semana-selector" style="margin-right:8px;">Semana:</label>
+<select id="semana-selector"></select>
+</div>
+
 <div class="hist-controls" id="hist-controls" style="display:none;margin-bottom:16px;">
 <label class="cap" for="mes-selector" style="margin-right:8px;">Mes:</label>
 <select id="mes-selector"></select>
@@ -114,7 +119,12 @@ tr:hover td{background:#1a2420;}
 </div>
 <div class="grid2">
 <div class="card tall"><h3 id="lbl-chart-embudo">Embudo (semana, kg)</h3><canvas id="chartEmbudo"></canvas></div>
-<div class="card tall"><h3 id="lbl-chart-motivos">Motivos de devolución</h3><canvas id="chartMotivos"></canvas></div>
+<div class="card tall">
+<h3 id="lbl-chart-motivos">Motivos de devolución — filtro acumulativo (kg)</h3>
+<div id="motivo-filtro" style="margin-bottom:10px;"></div>
+<div class="cap" style="margin-bottom:6px;">Kg acumulados (motivos seleccionados): <span id="motivo-total-kg" style="color:var(--text);font-weight:600;">—</span></div>
+<canvas id="chartMotivos"></canvas>
+</div>
 </div>
 
 <div class="card">
@@ -135,6 +145,9 @@ tr:hover td{background:#1a2420;}
 <div class="card tall"><h3>Posiciones por producto (top 10 muestra)</h3><canvas id="chartProd"></canvas></div>
 <div class="card tall"><h3>Por sector de depósito</h3><canvas id="chartSector"></canvas></div>
 <div class="card tall"><h3 id="lbl-chart-estado">Estado de posición — clic para filtrar el detalle</h3><canvas id="chartEstado"></canvas></div>
+</div>
+<div class="grid2">
+<div class="card tall" style="grid-column:1 / -1;"><h3>Evolución diaria — posiciones totales ocupadas (sistema)</h3><canvas id="chartStockHist"></canvas></div>
 </div>
 <div class="card">
 <div class="section-head" style="margin:0 0 12px;">
@@ -200,22 +213,12 @@ document.head.appendChild(s1);
 (reemplaza el esquema anterior de 3 strings hardcodeados por separado). */
 var MES_ACTUAL_LABEL = "septiembre 2026";
 var MES_ACTUAL_CORTE = "29/09";
-var WEEK_RANGE_LABEL = "23/09 al 29/09";
+/* WEEK_RANGE_LABEL/DAILY/WEEK_TOTALS quedaron DEPRECADOS (30/09/2026, a pedido del usuario: selector
+para elegir semana). Ahora la vista "Semana" se deriva 100% de MONTH_DAILY + MONTHLY_HISTORY vía
+getAllWeeks() más abajo (ventanas móviles de 7 días calendario terminando en el día más reciente
+cargado) — ya no hay que mantener un array separado a mano cada corrida, MONTH_DAILY (que de todos
+modos se actualiza a diario) alcanza como única fuente de verdad. */
 
-var DAILY = [
-{fecha:"23/09", pedidos:6, kgPedidos:24044.30, kgDespachados:23006.00, kgEntregados:23000.00, pctDistrib:99.97, otif:66.67, motivos:[{motivo:"Rotura de Producto", kg:6, pctPeso:100.0}]},
-{fecha:"24/09", pedidos:14, kgPedidos:18236.00, kgDespachados:18096.00, kgEntregados:18096.00, pctDistrib:100.00, otif:92.86, motivos:[]},
-{fecha:"25/09", pedidos:5, kgPedidos:6219.00, kgDespachados:6219.00, kgEntregados:6219.00, pctDistrib:100.00, otif:80.00, motivos:[]},
-{fecha:"28/09", pedidos:9, kgPedidos:16044.00, kgDespachados:16044.00, kgEntregados:8774.00, pctDistrib:54.69, otif:88.89, motivos:[]},
-{fecha:"29/09", pedidos:4, kgPedidos:6212.25, kgDespachados:6188.25, kgEntregados:0.00, pctDistrib:0.00, otif:0.00, motivos:[]}
-];
-var WEEK_TOTALS = {
-pedidos:38, kgPedidos:70755.55, kgDespachados:69553.25, kgEntregados:56089.00, kgDevueltos:6,
-pctDistrib:80.64, otif:76.32,
-motivos:[
-{motivo:"Rotura de Producto", kg:6, pctPeso:100.00}
-]
-};
 /* Acumulado mensual (mes en curso, del día 1 a ayer). MONTH_DAILY se completa día a día
 por la tarea diaria (agregar el día de ayer; reiniciar al cambiar de mes). Al cerrar un mes,
 empujar {mes, mesLabel, totals:MONTH_TOTALS, daily:MONTH_DAILY} a MONTHLY_HISTORY antes de reiniciar.
@@ -291,6 +294,14 @@ var SECTORS = [
 var STATUS = [{estado:"Available", n:1196}, {estado:"Control de Calidad", n:98}, {estado:"Rotura", n:16}, {estado:"Critico", n:3}, {estado:"Vencido", n:1}];
 var TOTAL_SISTEMA = 1314;
 var MUESTRA = {n:952, pct:72, productosDistintos:11, posicionesRotura:16, corte:"30/09/2026 07:40"};
+/* Serie diaria de posiciones totales ocupadas (a pedido del usuario, 30/09/2026). Mantenimiento diario:
+hacer PUSH de {fecha:"dd/mm", total:TOTAL_SISTEMA} cada corrida (nunca reconstruir desde cero) y
+dedupe por fecha si la tarea corre 2 veces el mismo día (reemplazar la entrada existente de esa fecha
+en vez de duplicarla). Arranca el 30/09/2026 con un solo punto — no hay snapshots históricos previos
+de este indicador, va a ir creciendo día a día a partir de ahora. */
+var STOCK_HISTORY = [
+{fecha:"30/09", total:1314}
+];
 var STOCK_DETALLE = [
 {producto:"Danica Soft Margarina Vegetal Pote 24x200g", posiciones:316, bultos:35315, unidades:35315, estado:"Available"},
 {producto:"Danica Dor Cremosa Marg Veg Pote 24x210g", posiciones:242, bultos:26885, unidades:26885, estado:"Available"},
@@ -387,6 +398,8 @@ function destroy(id){ if(charts[id]){ charts[id].destroy(); delete charts[id]; }
 /* ================= CUMPLIMIENTO ================= */
 var cumplMode = 'semana';
 var historicoMesIdx = null;
+var semanaIdx = null;
+var motivosSeleccionados = null;
 
 /* Une el histórico de meses cerrados (MONTHLY_HISTORY) con el mes en curso (MONTH_TOTALS/MONTH_DAILY),
 para que el selector "Histórico" y el gráfico de evolución siempre incluyan el mes actual. */
@@ -398,17 +411,92 @@ completo:false, totals:MONTH_TOTALS, daily:MONTH_DAILY
 }]);
 }
 
+/* ---- Derivación de "semana" y "día" a partir de MONTH_DAILY + MONTHLY_HISTORY (30/09/2026) ---- */
+function parseFechaDDMM(fechaStr, anio){
+var partes = fechaStr.split('/');
+return new Date(anio, parseInt(partes[1],10)-1, parseInt(partes[0],10));
+}
+function fmtFechaDDMM(d){
+var dd = String(d.getDate()).padStart(2,'0');
+var mm = String(d.getMonth()+1).padStart(2,'0');
+return dd+'/'+mm;
+}
+function anioActualDetectado(){
+var match = MES_ACTUAL_LABEL.match(/\d{4}/);
+return match ? parseInt(match[0],10) : new Date().getFullYear();
+}
+/* Todos los días con datos (histórico cerrado + mes en curso), ordenados cronológicamente. */
+function getAllDaily(){
+var out = [];
+MONTHLY_HISTORY.forEach(function(m){
+var anio = parseInt(m.mes.split('-')[0],10);
+m.daily.forEach(function(d){ var c = Object.assign({}, d); c._anio = anio; out.push(c); });
+});
+var anioActual = anioActualDetectado();
+MONTH_DAILY.forEach(function(d){ var c = Object.assign({}, d); c._anio = anioActual; out.push(c); });
+out.forEach(function(d){ d._date = parseFechaDDMM(d.fecha, d._anio); });
+out.sort(function(a,b){ return a._date - b._date; });
+return out;
+}
+/* Agrega una lista de días al shape de totales (mismo criterio que usa MicroStrategy: %OTIF
+ponderado por pedidos, %distrib. = kg entregados/kg despachados, motivos sumados en kg). */
+function aggregateDays(days){
+var pedidos=0, kgPedidos=0, kgDespachados=0, kgEntregados=0, otifNum=0;
+var motivosMap = {};
+days.forEach(function(d){
+pedidos += d.pedidos; kgPedidos += d.kgPedidos; kgDespachados += d.kgDespachados; kgEntregados += d.kgEntregados;
+otifNum += d.pedidos * d.otif;
+(d.motivos||[]).forEach(function(m){ motivosMap[m.motivo] = (motivosMap[m.motivo]||0) + m.kg; });
+});
+var kgDevueltos = 0;
+Object.keys(motivosMap).forEach(function(k){ kgDevueltos += motivosMap[k]; });
+var motivos = Object.keys(motivosMap).map(function(k){
+return {motivo:k, kg:motivosMap[k], pctPeso: kgDevueltos ? (motivosMap[k]/kgDevueltos*100) : 0};
+});
+return {
+pedidos:pedidos, kgPedidos:kgPedidos, kgDespachados:kgDespachados, kgEntregados:kgEntregados,
+kgDevueltos:kgDevueltos, pctDistrib: kgDespachados ? (kgEntregados/kgDespachados*100) : 0,
+otif: pedidos ? (otifNum/pedidos) : 0, motivos:motivos
+};
+}
+/* Ventanas móviles de 7 días calendario, terminando en el día más reciente cargado y retrocediendo
+— reproduce exactamente el criterio con que se arma la "semana" cada corrida (últimos 7 días
+terminados ayer). Devuelve más reciente primero. */
+function getAllWeeks(){
+var all = getAllDaily();
+if(all.length===0) return [];
+var weeks = [];
+var remaining = all.slice();
+while(remaining.length>0){
+var winEnd = remaining[remaining.length-1]._date;
+var winStart = new Date(winEnd); winStart.setDate(winStart.getDate()-6);
+var inWin = [], outWin = [];
+remaining.forEach(function(d){ (d._date>=winStart && d._date<=winEnd ? inWin : outWin).push(d); });
+weeks.push({ label: fmtFechaDDMM(winStart)+' al '+fmtFechaDDMM(winEnd), days:inWin, totals:aggregateDays(inWin) });
+remaining = outWin;
+}
+return weeks;
+}
+function getMotivoUniverse(){
+var set = {};
+getAllDaily().forEach(function(d){ (d.motivos||[]).forEach(function(m){ set[m.motivo]=true; }); });
+return Object.keys(set);
+}
+
 function cumplKpis(){
 var el = document.getElementById('cumpl-kpis');
 if(cumplMode==='semana'){
+var weeks = getAllWeeks();
+var wk = weeks[semanaIdx!==null?semanaIdx:0] || weeks[0] || {totals:{pedidos:0,kgDespachados:0,pctDistrib:0,otif:0,kgDevueltos:0}};
 el.innerHTML =
-kpi('Pedidos semana', WEEK_TOTALS.pedidos) +
-kpi('Kg despachados', fmt(WEEK_TOTALS.kgDespachados)) +
-kpi('% Cumpl. distribución', pct(WEEK_TOTALS.pctDistrib), 'red') +
-kpi('% OTIF semana', pct(WEEK_TOTALS.otif), 'amber') +
-kpi('Kg devueltos', WEEK_TOTALS.kgDevueltos, 'green');
+kpi('Pedidos semana', wk.totals.pedidos) +
+kpi('Kg despachados', fmt(wk.totals.kgDespachados)) +
+kpi('% Cumpl. distribución', pct(wk.totals.pctDistrib), 'red') +
+kpi('% OTIF semana', pct(wk.totals.otif), 'amber') +
+kpi('Kg devueltos', fmt(wk.totals.kgDevueltos), 'green');
 } else if(cumplMode==='dia'){
-var d = DAILY[DAILY.length-1];
+var allDaily = getAllDaily();
+var d = allDaily[allDaily.length-1];
 el.innerHTML =
 kpi('Pedidos del día', d.pedidos) +
 kpi('Kg despachados', fmt(d.kgDespachados)) +
@@ -445,36 +533,73 @@ if(historicoMesIdx===null) historicoMesIdx = months.length-1;
 sel.innerHTML = months.map(function(m,i){return '<option value="'+i+'">'+m.mesLabel+'</option>';}).join('');
 sel.value = historicoMesIdx;
 }
+function populateSemanaSelector(){
+var sel = document.getElementById('semana-selector');
+var weeks = getAllWeeks();
+if(semanaIdx===null) semanaIdx = 0;
+sel.innerHTML = weeks.map(function(w,i){return '<option value="'+i+'">'+w.label+'</option>';}).join('');
+sel.value = semanaIdx;
+}
+function renderMotivoFiltro(motivosSrc){
+var wrap = document.getElementById('motivo-filtro');
+var universo = getMotivoUniverse();
+if(motivosSeleccionados===null){ motivosSeleccionados = {}; universo.forEach(function(m){ motivosSeleccionados[m]=true; }); }
+wrap.innerHTML = universo.map(function(m){
+var checked = motivosSeleccionados[m] ? 'checked' : '';
+return '<label style="display:inline-flex;align-items:center;gap:5px;margin-right:14px;margin-bottom:4px;font-family:\'IBM Plex Mono\',monospace;font-size:11px;color:'+PALETTE.text+';cursor:pointer;"><input type="checkbox" data-motivo="'+m+'" '+checked+'> '+m+'</label>';
+}).join('');
+wrap.querySelectorAll('input[type=checkbox]').forEach(function(cb){
+cb.addEventListener('change', function(){
+motivosSeleccionados[cb.getAttribute('data-motivo')] = cb.checked;
+renderCumplimiento();
+});
+});
+var totalFiltrado = 0;
+(motivosSrc||[]).forEach(function(m){ if(motivosSeleccionados[m.motivo]) totalFiltrado += m.kg; });
+document.getElementById('motivo-total-kg').textContent = fmt(totalFiltrado)+' kg';
+}
 
 function renderCumplimiento(){
 cumplKpis();
 
 var histControls = document.getElementById('hist-controls');
 var histChartRow = document.getElementById('hist-chart-row');
+var semanaControls = document.getElementById('semana-controls');
 var esHistorico = cumplMode==='historico';
+var esSemana = cumplMode==='semana';
 histControls.style.display = esHistorico ? 'flex' : 'none';
 histChartRow.style.display = esHistorico ? 'grid' : 'none';
+semanaControls.style.display = esSemana ? 'flex' : 'none';
 if(esHistorico) populateMesSelector();
+if(esSemana) populateSemanaSelector();
+
+var weeks = getAllWeeks();
+var wk = weeks[semanaIdx!==null?semanaIdx:0] || weeks[0];
+var allDaily = getAllDaily();
+var ultimoDia = allDaily[allDaily.length-1];
 
 document.getElementById('cumpl-title').textContent = cumplMode==='semana'
-? 'Cumplimiento — semana ' + WEEK_RANGE_LABEL : cumplMode==='dia'
-? 'Cumplimiento — día ' + DAILY[DAILY.length-1].fecha : cumplMode==='mes'
+? 'Cumplimiento — semana ' + (wk?wk.label:'') : cumplMode==='dia'
+? 'Cumplimiento — día ' + ultimoDia.fecha : cumplMode==='mes'
 ? 'Cumplimiento — ' + MES_ACTUAL_LABEL + ' (acum. al ' + MES_ACTUAL_CORTE + ')'
 : 'Cumplimiento — histórico mensual';
 document.getElementById('lbl-chart-kg').textContent = cumplMode==='semana'
 ? 'Kg despachados vs. entregados por día' : cumplMode==='dia'
-? 'Kg despachados vs. entregados — ' + DAILY[DAILY.length-1].fecha : cumplMode==='mes'
+? 'Kg despachados vs. entregados — ' + ultimoDia.fecha : cumplMode==='mes'
 ? 'Kg despachados vs. entregados — ' + MES_ACTUAL_LABEL + ' (acum.)'
 : 'Kg despachados vs. entregados — mes seleccionado';
 document.getElementById('lbl-chart-pct').textContent = cumplMode==='semana'
 ? '% cumplimiento distribución vs. % OTIF' : cumplMode==='dia'
-? '% distribución vs. % OTIF — ' + DAILY[DAILY.length-1].fecha : cumplMode==='mes'
+? '% distribución vs. % OTIF — ' + ultimoDia.fecha : cumplMode==='mes'
 ? '% distribución vs. % OTIF — ' + MES_ACTUAL_LABEL + ' (acum.)'
 : '% distribución vs. % OTIF — mes seleccionado';
 
+var metaEl = document.querySelector('.meta');
+if(metaEl && weeks[0]) metaEl.innerHTML = 'Cumplimiento: semana '+weeks[0].label+'<br>Stock / Vida útil: corte '+MUESTRA.corte;
+
 var rows, totalsRef;
-if(cumplMode==='semana'){ rows = DAILY; totalsRef = WEEK_TOTALS; }
-else if(cumplMode==='dia'){ rows = [DAILY[DAILY.length-1]]; totalsRef = null; }
+if(cumplMode==='semana'){ rows = wk ? wk.days : []; totalsRef = wk ? wk.totals : null; }
+else if(cumplMode==='dia'){ rows = [ultimoDia]; totalsRef = null; }
 else if(cumplMode==='mes'){ rows = MONTH_DAILY; totalsRef = MONTH_TOTALS; }
 else {
 var months = getAllMonths();
@@ -512,7 +637,7 @@ y:{min:0,max:100, ticks:{color:PALETTE.text, callback:function(v){return v+'%';}
 destroy('embudo');
 var embudoLabels, embudoData;
 if(cumplMode==='dia'){
-var d = DAILY[DAILY.length-1];
+var d = ultimoDia;
 embudoLabels = ['Pedidos','Despachados','Entregados'];
 embudoData = [d.kgPedidos, d.kgDespachados, d.kgEntregados];
 } else {
@@ -529,18 +654,21 @@ y:{ticks:{color:PALETTE.text}, grid:{color:PALETTE.grid}}
 });
 
 destroy('motivos');
-var motivosSrc = cumplMode==='dia' ? (DAILY[DAILY.length-1].motivos||[]) : (totalsRef ? (totalsRef.motivos||[]) : []);
+var motivosSrc = cumplMode==='dia' ? (ultimoDia.motivos||[]) : (totalsRef ? (totalsRef.motivos||[]) : []);
+renderMotivoFiltro(motivosSrc);
+var motivosFiltrados = motivosSrc.filter(function(m){ return motivosSeleccionados && motivosSeleccionados[m.motivo]; });
 var mCanvas = document.getElementById('chartMotivos');
-if(motivosSrc.length===0){
+if(motivosFiltrados.length===0){
 mCanvas.style.display='none';
 var msg = mCanvas.parentElement.querySelector('.cap-empty');
-if(!msg){ msg = document.createElement('div'); msg.className='cap-empty'; msg.style.cssText='padding:40px 0;text-align:center;color:var(--muted);font-family:\'IBM Plex Mono\',monospace;font-size:12px;'; msg.textContent='Sin motivos de devolución registrados en este período.'; mCanvas.parentElement.appendChild(msg); }
+if(!msg){ msg = document.createElement('div'); msg.className='cap-empty'; msg.style.cssText='padding:40px 0;text-align:center;color:var(--muted);font-family:\'IBM Plex Mono\',monospace;font-size:12px;'; msg.textContent='Sin motivos de devolución registrados (o ninguno seleccionado) en este período.'; mCanvas.parentElement.appendChild(msg); }
 } else {
 mCanvas.style.display='block';
 var msg2 = mCanvas.parentElement.querySelector('.cap-empty'); if(msg2) msg2.remove();
+var motivosColorMap = {'Rotura de Producto':PALETTE.red, 'No Pedido':PALETTE.amber, 'Inversión':PALETTE.sage};
 charts.motivos = new Chart(mCanvas, {
 type:'doughnut',
-data:{labels:motivosSrc.map(function(m){return m.motivo+' ('+m.kg+' kg)';}), datasets:[{data:motivosSrc.map(function(m){return m.kg;}), backgroundColor:[PALETTE.amber,PALETTE.red,PALETTE.sage]}]},
+data:{labels:motivosFiltrados.map(function(m){return m.motivo+' ('+fmt(m.kg)+' kg)';}), datasets:[{data:motivosFiltrados.map(function(m){return m.kg;}), backgroundColor:motivosFiltrados.map(function(m){return motivosColorMap[m.motivo]||PALETTE.text;})}]},
 options:{responsive:true, plugins:{legend:{position:'bottom', labels:{color:PALETTE.text}}}}
 });
 }
@@ -565,7 +693,7 @@ buildDailyTable(rows);
 }
 
 function buildDailyTable(rows){
-rows = rows || DAILY;
+rows = rows || [];
 var tbody = document.querySelector('#dailyTable tbody');
 tbody.innerHTML='';
 rows.forEach(function(d, idx){
@@ -676,6 +804,18 @@ setStockFiltro(estado);
 }}}}
 });
 
+destroy('stockhist');
+charts.stockhist = new Chart(document.getElementById('chartStockHist'), {
+type:'line',
+data:{labels:STOCK_HISTORY.map(function(h){return h.fecha;}), datasets:[
+{label:'Posiciones ocupadas', data:STOCK_HISTORY.map(function(h){return h.total;}), borderColor:PALETTE.line, backgroundColor:PALETTE.line, tension:.25, pointRadius:4}
+]},
+options:{responsive:true, plugins:{legend:{labels:{color:PALETTE.text}}}, scales:{
+x:{ticks:{color:PALETTE.text}, grid:{color:PALETTE.grid}},
+y:{ticks:{color:PALETTE.text}, grid:{color:PALETTE.grid}}
+}}
+});
+
 renderStockTable();
 }
 
@@ -755,6 +895,10 @@ renderCumplimiento();
 });
 document.getElementById('mes-selector').addEventListener('change', function(){
 historicoMesIdx = parseInt(this.value, 10);
+renderCumplimiento();
+});
+document.getElementById('semana-selector').addEventListener('change', function(){
+semanaIdx = parseInt(this.value, 10);
 renderCumplimiento();
 });
 document.querySelectorAll('#stock-filtro-toggle button').forEach(function(btn){
