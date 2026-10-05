@@ -76,7 +76,7 @@ tr:hover td{background:#1a2420;}
 <div class="eyebrow">Refinería del Centro · iFlow BI</div>
 <h1>Reporte de Gestión iFlow</h1>
 </div>
-<div class="meta">Cumplimiento: semana 25/09 al 01/10<br>Stock / Vida útil: corte 02/10/2026 07:40</div>
+<div class="meta">Cumplimiento: semana 26/09 al 02/10<br>Stock / Vida útil: corte 05/10/2026 07:40</div>
 </div>
 
 <nav class="tabs">
@@ -88,7 +88,7 @@ tr:hover td{background:#1a2420;}
 <!-- ===================== TAB 1: CUMPLIMIENTO ===================== -->
 <section class="panel active" id="panel-cumplimiento">
 <div class="section-head">
-<h2 id="cumpl-title">Cumplimiento — semana 25/09 al 01/10</h2>
+<h2 id="cumpl-title">Cumplimiento — semana 26/09 al 02/10</h2>
 <div class="toggle">
 <button class="active" id="btn-semana">Semana</button>
 <button id="btn-dia">Último día</button>
@@ -188,7 +188,7 @@ tr:hover td{background:#1a2420;}
 
 <div class="foot">
 <span>Refinería del Centro · iFlow BI · Dossier Performance / Dashboard Stock (MicroStrategy)</span>
-<span>Reporte unificado generado 02/10/2026</span>
+<span>Reporte unificado generado 05/10/2026</span>
 </div>
 </div>
 
@@ -212,7 +212,7 @@ document.head.appendChild(s1);
 /* Nombre y corte del mes en curso — únicas 2 variables a tocar cada corrida para los títulos dinámicos
 (reemplaza el esquema anterior de 3 strings hardcodeados por separado). */
 var MES_ACTUAL_LABEL = "octubre 2026";
-var MES_ACTUAL_CORTE = "01/10";
+var MES_ACTUAL_CORTE = "02/10";
 /* WEEK_RANGE_LABEL/DAILY/WEEK_TOTALS quedaron DEPRECADOS (30/09/2026, a pedido del usuario: selector
 para elegir semana). Ahora la vista "Semana" se deriva 100% de MONTH_DAILY + MONTHLY_HISTORY vía
 getAllWeeks() más abajo (ventanas móviles de 7 días calendario terminando en el día más reciente
@@ -222,22 +222,20 @@ modos se actualiza a diario) alcanza como única fuente de verdad. */
 /* Acumulado mensual (mes en curso, del día 1 a ayer). MONTH_DAILY se completa día a día
 por la tarea diaria (agregar el día de ayer; reiniciar al cambiar de mes). Al cerrar un mes,
 empujar {mes, mesLabel, totals:MONTH_TOTALS, daily:MONTH_DAILY} a MONTHLY_HISTORY antes de reiniciar.
-Cierre de septiembre 2026 (02/10/2026): al releer el mes completo se confirmó la corrección retroactiva
-pendiente del 30/09 — Kg Entregados subió de 0,00 a 11.971,00 (%distrib. 0%→100%, OTIF 0%→100%, sin
-motivos de devolución) — era la única entrega aún no confirmada en MicroStrategy. El resto de los días
-no tuvo cambios respecto del cierre leído el 01/10. Mes cerrado y empujado a MONTHLY_HISTORY; octubre
-arranca con el día 01/10 (3 pedidos de ayer no reflejan aún mes previo, ver nota abajo). */
+Corrida 05/10/2026 (ventana 01/10-04/10 relevada en MicroStrategy): 01/10 tuvo la corrección retroactiva
+al alza ya anticipada — Kg Entregados subió de 387,00 a 2.291,00 (%distrib. y OTIF a 100%, sin motivos
+de devolución), confirmando que la entrega pendiente del día anterior se cargó íntegra. 02/10 se agrega
+con datos reales (kg entregados 2.040,00 de 14.611,00 despachados, %distrib. 13,96%, OTIF 6,67%, sin
+motivos de devolución). 03/10 y 04/10 (sábado y domingo) no registraron ningún pedido en el dossier
+Performance — sin movimiento, no se cargan como día (mismo criterio que fines de semana anteriores). */
 var MONTH_TOTALS = {
-pedidos:7, kgPedidos:2291.00, kgDespachados:2291.00, kgEntregados:387.00, kgDevueltos:0,
-pctDistrib:16.89, otif:28.57,
+pedidos:22, kgPedidos:16902.00, kgDespachados:16902.00, kgEntregados:4331.00, kgDevueltos:0,
+pctDistrib:25.62, otif:36.36,
 motivos:[]
 };
-/* 01/10/2026: Kg Entregados (387,00 de 2.291,00 despachados, %distrib. 16,89%) refleja entregas del día
-aún pendientes de confirmar en MicroStrategy — mismo patrón ya visto en 20/09, 29/09 y 30/09 (se espera
-corrección al alza en la próxima corrida). Motivos: sin devoluciones registradas hoy (no confundir el
-remanente no confirmado con una devolución real). */
 var MONTH_DAILY = [
-{fecha:"01/10", pedidos:7, kgPedidos:2291.00, kgDespachados:2291.00, kgEntregados:387.00, pctDistrib:16.89, otif:28.57, motivos:[]}
+{fecha:"01/10", pedidos:7, kgPedidos:2291.00, kgDespachados:2291.00, kgEntregados:2291.00, pctDistrib:100.00, otif:100.00, motivos:[]},
+{fecha:"02/10", pedidos:15, kgPedidos:14611.00, kgDespachados:14611.00, kgEntregados:2040.00, pctDistrib:13.96, otif:6.67, motivos:[]}
 ];
 /* Histórico de meses YA CERRADOS. Shape por entrada: {mes:"2026-09", mesLabel:"Septiembre 2026",
 totals:{...shape de MONTH_TOTALS...}, daily:[...shape de MONTH_DAILY...]} */
@@ -279,15 +277,16 @@ motivos:[
 ];
 
 /* ================= DATOS — STOCK ================= */
-/* Corte 02/10/2026: Estado Posición estable respecto del corte anterior — Control de Calidad se
-mantuvo en 23 posiciones (mismos lotes/pallets), Rotura en 1 (mismo lote LS26 219, un día menos:
-215→214), y Crítico y Vencido siguen en CERO (confirmado exhaustivamente, igual método que el corte
-anterior: ordenamiento por Status Posicion agrupa cada estado en bloque contiguo, sin registros
-Crítico ni Vencido en toda la grilla). El total del sistema bajó de 1.325 a 1.313. PRODUCTS/SECTORS/
-STOCK_DETALLE se mantienen iguales al corte anterior: la muestra "Available" volvió a quedar
-monopolizada por un solo producto (Cremalda Crema Chantilly) al ordenar por Status/Días Vencimiento,
-mismo problema de diversificación ya documentado. STATUS, TOTAL_SISTEMA y STOCK_LOTS sí están 100%
-actualizados y verificados hoy. */
+/* Corte 05/10/2026 07:40: Fecha Actualización del dashboard quedó por defecto en 02/10 — se
+reseleccionó explícitamente el snapshot más reciente. Estado Posición: Control de Calidad se mantuvo
+en 23 posiciones (mismos lotes/pallets, lote 26233 + 1 posición del lote 26219), Rotura sigue en 1
+(mismo lote LS26 219/pallet L000031233, días 214→211), y Crítico y Vencido siguen en CERO (verificado
+exhaustivamente: orden descendente por Status Posicion no trae ningún registro antes de Rotura). El
+total del sistema bajó de 1.313 a 1.299 (Available 1.289→1.275, -14 posiciones). PRODUCTS/SECTORS/
+STOCK_DETALLE se mantienen del corte anterior: la muestra "Available" volvió a quedar monopolizada por
+Cremalda Crema Chantilly al ordenar por Status Posicion, mismo problema de diversificación ya
+documentado — no se pudo re-relevar una muestra distinta hoy. STATUS, TOTAL_SISTEMA y STOCK_LOTS sí
+están 100% actualizados y verificados hoy. */
 var PRODUCTS = [
 {producto:"Danica Soft Margarina Vegetal Pote 24x200g", posiciones:316},
 {producto:"Danica Dor Cremosa Marg Veg Pote 24x210g", posiciones:242},
@@ -303,17 +302,21 @@ var PRODUCTS = [
 var SECTORS = [
 {sector:"T. Controlada", n:843}, {sector:"Ambiente", n:240}, {sector:"Refrigerado", n:152}, {sector:"PK Ambiente", n:38}, {sector:"PK T. Controlada", n:25}, {sector:"Rotura", n:16}
 ];
-var STATUS = [{estado:"Available", n:1289}, {estado:"Control de Calidad", n:23}, {estado:"Rotura", n:1}, {estado:"Critico", n:0}, {estado:"Vencido", n:0}];
-var TOTAL_SISTEMA = 1313;
-var MUESTRA = {n:952, pct:72, productosDistintos:11, posicionesRotura:1, corte:"02/10/2026 07:40"};
+var STATUS = [{estado:"Available", n:1275}, {estado:"Control de Calidad", n:23}, {estado:"Rotura", n:1}, {estado:"Critico", n:0}, {estado:"Vencido", n:0}];
+var TOTAL_SISTEMA = 1299;
+var MUESTRA = {n:952, pct:73, productosDistintos:11, posicionesRotura:1, corte:"05/10/2026 07:40"};
 /* Serie diaria de posiciones totales ocupadas (a pedido del usuario, 30/09/2026). Mantenimiento diario:
 hacer PUSH de {fecha:"dd/mm", total:TOTAL_SISTEMA} cada corrida (nunca reconstruir desde cero) y
 dedupe por fecha si la tarea corre 2 veces el mismo día (reemplazar la entrada existente de esa fecha
-en vez de duplicarla). */
+en vez de duplicarla). 03/10 y 04/10 se completaron hoy retroactivamente, releyendo esos snapshots
+del combo "Fecha Actualización" (ambos sin cambios de fin de semana, 1.278 posiciones). */
 var STOCK_HISTORY = [
 {fecha:"30/09", total:1314},
 {fecha:"01/10", total:1325},
-{fecha:"02/10", total:1313}
+{fecha:"02/10", total:1313},
+{fecha:"03/10", total:1278},
+{fecha:"04/10", total:1278},
+{fecha:"05/10", total:1299}
 ];
 var STOCK_DETALLE = [
 {producto:"Danica Soft Margarina Vegetal Pote 24x200g", posiciones:316, bultos:35315, unidades:35315, estado:"Available"},
@@ -327,26 +330,26 @@ var STOCK_DETALLE = [
 vía filtro Estado Posición + orden por columna en la grilla MicroStrategy. "Available" usa
 la muestra representativa de STOCK_DETALLE de arriba. */
 var STOCK_LOTS = {
-/* Corte 02/10/2026: Vencido y Crítico siguen en CERO (verificado exhaustivamente, no es una muestra).
-Rotura se mantiene en 1 sola posición, el mismo lote del corte anterior (LS26 219), un día menos de
-vida útil (215→214). */
+/* Corte 05/10/2026: Vencido y Crítico siguen en CERO (verificado exhaustivamente, no es una muestra).
+Rotura se mantiene en 1 sola posición, el mismo lote del corte anterior (LS26 219), 3 días menos de
+vida útil (214→211, acorde a los 3 días calendario transcurridos desde el corte del 02/10). */
 Vencido: [],
 Critico: [],
 Rotura: [
-{producto:"Cremalda Crema Chantilly", lote:"LS26 219", pallet:"L000031233", vencimiento:"04/05/2027", dias:214, bultos:1}
+{producto:"Cremalda Crema Chantilly", lote:"LS26 219", pallet:"L000031233", vencimiento:"04/05/2027", dias:211, bultos:1}
 ]
 };
 
 /* ================= DATOS — VIDA ÚTIL ================= */
-/* Corte 02/10/2026: los buckets "<30 días" y "30-89 días" siguen en CERO, verificado exhaustivamente
+/* Corte 05/10/2026: los buckets "<30 días" y "30-89 días" siguen en CERO, verificado exhaustivamente
 (Status Vencido y Crítico dieron 0 en el relevamiento de Stock). Los buckets 90-179/180-269/270+ se
-mantienen en la misma proporción del corte anterior, reescalados al nuevo total del sistema (1.313,
-antes 1.325) — no se pudo re-diversificar la muestra de Available hoy (ver aviso en Stock). */
+reescalan proporcionalmente al nuevo total del sistema (1.299, antes 1.313) — no se pudo re-diversificar
+la muestra de Available hoy (ver aviso en Stock). */
 var BUCKETS = [
-{rango:"<30 días", n:0}, {rango:"30-89 días", n:0}, {rango:"90-179 días", n:38}, {rango:"180-269 días", n:1274}, {rango:"270+ días", n:1}
+{rango:"<30 días", n:0}, {rango:"30-89 días", n:0}, {rango:"90-179 días", n:38}, {rango:"180-269 días", n:1260}, {rango:"270+ días", n:1}
 ];
 var PRODUCT_MIN = [
-{producto:"Cremalda Crema Chantilly", dias:183},
+{producto:"Cremalda Crema Chantilly", dias:180},
 {producto:"Salsa Barbacoa Danica 4x3000g", dias:141},
 {producto:"Cheddar Danica 24x220 ml", dias:141},
 {producto:"Cheddar Danica 8x1000 ml", dias:144},
@@ -365,15 +368,15 @@ var PRODUCT_MIN = [
 {producto:"Mayonesa D'Fiesta 24x250ml", dias:257},
 {producto:"Mostaza Danica Nueva 24x60g", dias:282}
 ];
-/* Corte 02/10/2026: Vencido y Crítico siguen en CERO (verificado exhaustivamente en Stock). Cremalda
-Crema Chantilly se actualizó a 183 días (dato real de hoy, mismo lote LS26 188, un día menos). El resto
-de la lista (18 productos) no se pudo re-verificar hoy por la misma limitación de muestra que Stock —
-son los valores del corte anterior, puede haber variado ±1 día. */
-var VU_KPIS = {lotesMuestra:952, diasMasProximo:183, lotesCriticos:0, productosDistintos:19, corte:"02/10/2026 07:40"};
+/* Corte 05/10/2026: Vencido y Crítico siguen en CERO (verificado exhaustivamente en Stock). Cremalda
+Crema Chantilly se actualizó a 180 días (dato real de hoy, mismo lote LS26 188, 3 días menos). El resto
+de la lista (17 productos) no se pudo re-verificar hoy por la misma limitación de muestra que Stock —
+son los valores del corte anterior, puede haber variado ±3 días. */
+var VU_KPIS = {lotesMuestra:952, diasMasProximo:180, lotesCriticos:0, productosDistintos:19, corte:"05/10/2026 07:40"};
 var SOON = [
-{producto:"Cremalda Crema Chantilly", lote:"LS26 188", pallet:"LP000395563", vencimiento:"03/04/2027", dias:183, estado:"Available"},
-{producto:"Cremalda Crema Chantilly", lote:"LS26 219", pallet:"LP000402260", vencimiento:"04/05/2027", dias:214, estado:"Available"},
-{producto:"Cremalda Crema Chantilly", lote:"LS26 219", pallet:"L000031233", vencimiento:"04/05/2027", dias:214, estado:"Rotura"}
+{producto:"Cremalda Crema Chantilly", lote:"LS26 188", pallet:"LP000395563", vencimiento:"03/04/2027", dias:180, estado:"Available"},
+{producto:"Cremalda Crema Chantilly", lote:"LS26 219", pallet:"LP000402260", vencimiento:"04/05/2027", dias:211, estado:"Available"},
+{producto:"Cremalda Crema Chantilly", lote:"LS26 219", pallet:"L000031233", vencimiento:"04/05/2027", dias:211, estado:"Rotura"}
 ];
 
 /* ================= HELPERS ================= */
