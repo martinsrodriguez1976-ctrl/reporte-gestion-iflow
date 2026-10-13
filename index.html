@@ -76,7 +76,7 @@ tr:hover td{background:#1a2420;}
 <div class="eyebrow">Refinería del Centro · iFlow BI</div>
 <h1>Reporte de Gestión iFlow</h1>
 </div>
-<div class="meta">Cumplimiento: semana 02/10 al 08/10<br>Stock / Vida útil: corte 09/10/2026 07:40</div>
+<div class="meta">Cumplimiento: semana 03/10 al 09/10<br>Stock / Vida útil: corte 13/10/2026 07:40</div>
 </div>
 
 <nav class="tabs">
@@ -188,7 +188,7 @@ tr:hover td{background:#1a2420;}
 
 <div class="foot">
 <span>Refinería del Centro · iFlow BI · Dossier Performance / Dashboard Stock (MicroStrategy)</span>
-<span>Reporte unificado generado 09/10/2026</span>
+<span>Reporte unificado generado 13/10/2026</span>
 </div>
 </div>
 
@@ -212,7 +212,7 @@ document.head.appendChild(s1);
 /* Nombre y corte del mes en curso — únicas 2 variables a tocar cada corrida para los títulos dinámicos
 (reemplaza el esquema anterior de 3 strings hardcodeados por separado). */
 var MES_ACTUAL_LABEL = "octubre 2026";
-var MES_ACTUAL_CORTE = "08/10";
+var MES_ACTUAL_CORTE = "09/10";
 /* WEEK_RANGE_LABEL/DAILY/WEEK_TOTALS quedaron DEPRECADOS (30/09/2026, a pedido del usuario: selector
 para elegir semana). Ahora la vista "Semana" se deriva 100% de MONTH_DAILY + MONTHLY_HISTORY vía
 getAllWeeks() más abajo (ventanas móviles de 7 días calendario terminando en el día más reciente
@@ -238,8 +238,8 @@ motivos del mes (Sin Cargar, 40 kg, único registrado el 02/10) coincide exactam
 Devuelto total de Motivos para el rango 01/10-08/10 — el resto de la brecha (07/10 y 08/10, días sin
 confirmar aún) no tiene motivo cargado, consistente con el patrón de días recién ingresados. */
 var MONTH_TOTALS = {
-pedidos:50, kgPedidos:39239.21, kgDespachados:39157.21, kgEntregados:33272.21, kgDevueltos:40,
-pctDistrib:84.97, otif:86.00,
+pedidos:73, kgPedidos:103797.22, kgDespachados:44679.21, kgEntregados:35725.21, kgDevueltos:40,
+pctDistrib:79.96, otif:63.01,
 motivos:[
 {motivo:"Sin Cargar", kg:40, pctPeso:100.0}
 ]
@@ -250,7 +250,8 @@ var MONTH_DAILY = [
 {fecha:"05/10", pedidos:10, kgPedidos:11314.55, kgDespachados:11314.55, kgEntregados:11314.55, pctDistrib:100.00, otif:90.00, motivos:[]},
 {fecha:"06/10", pedidos:9, kgPedidos:3041.66, kgDespachados:3041.66, kgEntregados:3041.66, pctDistrib:100.00, otif:100.00, motivos:[]},
 {fecha:"07/10", pedidos:3, kgPedidos:3930.00, kgDespachados:4306.00, kgEntregados:914.00, pctDistrib:21.23, otif:33.33, motivos:[]},
-{fecha:"08/10", pedidos:6, kgPedidos:4051.00, kgDespachados:3593.00, kgEntregados:1140.00, pctDistrib:31.73, otif:50.00, motivos:[]}
+{fecha:"08/10", pedidos:6, kgPedidos:4051.00, kgDespachados:3593.00, kgEntregados:3593.00, pctDistrib:100.00, otif:100.00, motivos:[]},
+{fecha:"09/10", pedidos:23, kgPedidos:64558.01, kgDespachados:5522.00, kgEntregados:0.00, pctDistrib:0.00, otif:0.00, motivos:[]}
 ];
 /* Histórico de meses YA CERRADOS. Shape por entrada: {mes:"2026-09", mesLabel:"Septiembre 2026",
 totals:{...shape de MONTH_TOTALS...}, daily:[...shape de MONTH_DAILY...]} */
@@ -322,9 +323,9 @@ var PRODUCTS = [
 var SECTORS = [
 {sector:"T. Controlada", n:843}, {sector:"Ambiente", n:240}, {sector:"Refrigerado", n:152}, {sector:"PK Ambiente", n:38}, {sector:"PK T. Controlada", n:25}, {sector:"Rotura", n:16}
 ];
-var STATUS = [{estado:"Available", n:1313}, {estado:"Control de Calidad", n:23}, {estado:"Rotura", n:1}, {estado:"Critico", n:0}, {estado:"Vencido", n:0}];
-var TOTAL_SISTEMA = 1337;
-var MUESTRA = {n:952, pct:71, productosDistintos:11, posicionesRotura:1, corte:"09/10/2026 07:40"};
+var STATUS = [{estado:"Available", n:1198}, {estado:"Control de Calidad", n:23}, {estado:"Rotura", n:1}, {estado:"Critico", n:0}, {estado:"Vencido", n:0}];
+var TOTAL_SISTEMA = 1222;
+var MUESTRA = {n:952, pct:71, productosDistintos:11, posicionesRotura:1, corte:"13/10/2026 07:40"};
 /* Serie diaria de posiciones totales ocupadas (a pedido del usuario, 30/09/2026). Mantenimiento diario:
 hacer PUSH de {fecha:"dd/mm", total:TOTAL_SISTEMA} cada corrida (nunca reconstruir desde cero) y
 dedupe por fecha si la tarea corre 2 veces el mismo día (reemplazar la entrada existente de esa fecha
@@ -340,7 +341,8 @@ var STOCK_HISTORY = [
 {fecha:"06/10", total:1288},
 {fecha:"07/10", total:1300},
 {fecha:"08/10", total:1345},
-{fecha:"09/10", total:1337}
+{fecha:"09/10", total:1337},
+{fecha:"13/10", total:1222}
 ];
 var STOCK_DETALLE = [
 {producto:"Danica Soft Margarina Vegetal Pote 24x200g", posiciones:316, bultos:35315, unidades:35315, estado:"Available"},
@@ -361,7 +363,7 @@ al día calendario transcurrido desde el corte del 08/10). */
 Vencido: [],
 Critico: [],
 Rotura: [
-{producto:"Cremalda Crema Chantilly", lote:"LS26 219", pallet:"L000031233", vencimiento:"04/05/2027", dias:207, bultos:1}
+{producto:"Cremalda Crema Chantilly", lote:"LS26 219", pallet:"L000031233", vencimiento:"04/05/2027", dias:203, bultos:1}
 ]
 };
 
@@ -372,38 +374,27 @@ ascendente por Días Vencimiento sobre las 1.337 posiciones confirma que el mín
 Los buckets 90-179/180-269/270+ se reescalan proporcionalmente al nuevo total del sistema (1.337, antes
 1.345) — no se pudo re-diversificar la muestra de Available hoy (ver aviso en Stock). */
 var BUCKETS = [
-{rango:"<30 días", n:0}, {rango:"30-89 días", n:0}, {rango:"90-179 días", n:39}, {rango:"180-269 días", n:1297}, {rango:"270+ días", n:1}
+{rango:"<30 días", n:0}, {rango:"30-89 días", n:0}, {rango:"90-179 días", n:0}, {rango:"180-269 días", n:1222}, {rango:"270+ días", n:0}
 ];
 var PRODUCT_MIN = [
-{producto:"Cremalda Crema Chantilly", dias:176},
-{producto:"Salsa Barbacoa Danica 4x3000g", dias:141},
-{producto:"Cheddar Danica 24x220 ml", dias:141},
-{producto:"Cheddar Danica 8x1000 ml", dias:144},
-{producto:"Mayonesa Danica 24x500ml", dias:166},
-{producto:"Manty Pan Untar y Cocinar 30x200", dias:201},
+{producto:"Cremalda Crema Chantilly", dias:203},
 {producto:"Mayonesa D'Fiesta 24x500ml", dias:203},
 {producto:"Mostaza Danica Nueva 192x8g", dias:212},
 {producto:"Doña Flora Ref. B 10x 1/2 Kg", dias:213},
-{producto:"Margadán Marg Vegetal Pan 12x500g", dias:216},
-{producto:"Danica Marg Vegetal Pan 30x200g", dias:221},
-{producto:"Ketchup Danica Nuevo 4x3000g", dias:240},
-{producto:"Danica Soft Margarina Vegetal Pote 24x200g", dias:248},
-{producto:"Danica Dor Cremosa Marg Veg Pote 24x210g", dias:250},
-{producto:"Margadán Marg Vegetal Pan 30x200g", dias:252},
-{producto:"Mayonesa Danica Nueva 192x8cc", dias:256},
-{producto:"Mayonesa D'Fiesta 24x250ml", dias:257},
-{producto:"Mostaza Danica Nueva 24x60g", dias:282}
+{producto:"Margadán Marg Vegetal Pan 12x500g", dias:216}
 ];
-/* Corte 09/10/2026: Vencido y Crítico siguen en CERO (verificado exhaustivamente en Stock, sobre el
-sistema completo). Cremalda Crema Chantilly se actualizó a 176 días (dato real de hoy, verificado con
-sort ascendente sobre las 1.337 posiciones del sistema — mismo lote LS26 188, 1 día menos). El resto de
-la lista (17 productos) no se pudo re-verificar hoy por la misma limitación de muestra que Stock — son
-los valores del corte anterior, puede haber variado ±1 día. */
-var VU_KPIS = {lotesMuestra:952, diasMasProximo:176, lotesCriticos:0, productosDistintos:19, corte:"09/10/2026 07:40"};
+/* Corte 13/10/2026: sort completo (ascendente y descendente) por Días Vencimiento sobre el sistema
+completo (1.222 posiciones) confirma mínimo=203 y máximo=217 días, ambos extremos en Cremalda Crema
+Chantilly — rango drásticamente más angosto que el corte anterior (176-282). Eso vuelve matemáticamente
+imposibles 13 de los 18 productos que venían en PRODUCT_MIN (valores <203 o >217, ya no verificables) —
+se retiraron de la lista; probablemente ya no tienen stock o su vida útil cambió. Quedan 5 productos:
+Cremalda (verificado hoy) + 4 sin re-verificar pero aún compatibles con el rango vigente. Buckets
+90-179 y 270+ pasan a 0 (antes 39 y 1) por la misma razón — recomendado validar manualmente. */
+var VU_KPIS = {lotesMuestra:952, diasMasProximo:203, lotesCriticos:0, productosDistintos:5, corte:"13/10/2026 07:40"};
 var SOON = [
-{producto:"Cremalda Crema Chantilly", lote:"LS26 188", pallet:"LP000395563", vencimiento:"03/04/2027", dias:176, estado:"Available"},
-{producto:"Cremalda Crema Chantilly", lote:"LS26 188", pallet:"LP000402273", vencimiento:"03/04/2027", dias:176, estado:"Available"},
-{producto:"Cremalda Crema Chantilly", lote:"LS26 219", pallet:"L000031233", vencimiento:"04/05/2027", dias:207, estado:"Rotura"}
+{producto:"Cremalda Crema Chantilly", lote:"LS26 219", pallet:"LP000402257", vencimiento:"04/05/2027", dias:203, estado:"Available"},
+{producto:"Cremalda Crema Chantilly", lote:"LS26 219", pallet:"LP000402269", vencimiento:"04/05/2027", dias:203, estado:"Available"},
+{producto:"Cremalda Crema Chantilly", lote:"LS26 219", pallet:"L000031233", vencimiento:"04/05/2027", dias:203, estado:"Rotura"}
 ];
 
 /* ================= HELPERS ================= */
