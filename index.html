@@ -88,7 +88,7 @@ tr:hover td{background:#1a2420;}
 <!-- ===================== TAB 1: CUMPLIMIENTO ===================== -->
 <section class="panel active" id="panel-cumplimiento">
 <div class="section-head">
-<h2 id="cumpl-title">Cumplimiento — semana 02/10 al 08/10</h2>
+<h2 id="cumpl-title">Cumplimiento — semana 03/10 al 09/10</h2>
 <div class="toggle">
 <button class="active" id="btn-semana">Semana</button>
 <button id="btn-dia">Último día</button>
@@ -222,24 +222,22 @@ modos se actualiza a diario) alcanza como única fuente de verdad. */
 /* Acumulado mensual (mes en curso, del día 1 a ayer). MONTH_DAILY se completa día a día
 por la tarea diaria (agregar el día de ayer; reiniciar al cambiar de mes). Al cerrar un mes,
 empujar {mes, mesLabel, totals:MONTH_TOTALS, daily:MONTH_DAILY} a MONTHLY_HISTORY antes de reiniciar.
-Corrida 09/10/2026 (ventana 02/10-08/10 relevada en MicroStrategy, filtro Operación confirmado en
-Nogues únicamente, sin necesidad de corregirlo). El filtro Fecha se verificó en pantalla antes de cada
-lectura (Performance y Motivos, agregado mensual 01/10-08/10 y los 3 días puntuales con brecha
-despachado/entregado) sin inconvenientes. 05/10 tuvo la corrección retroactiva al alza ya anticipada —
-Kg Entregados subió de 11.125,55 a 11.314,55 (%distrib. 98,33%→100,00%, OTIF se mantuvo en 90,00%).
-07/10 también corrigió al alza — de 0,00 a 914,00 kg entregados (%distrib. 0,00%→21,23%, OTIF
-0,00%→33,33%); el drill-down de pedidos confirmó que la brecha restante (3.392 kg) corresponde a 2
-pedidos aún no entregados (REDESPACHAR por exceso de demora y NO ENTREGADO por no pedido), no a una
-devolución — Motivos con Desde=Hasta=07/10 no devolvió filas. 08/10 se agrega con datos recién
-cargados: 6 pedidos, 3.593,00 kg despachados, 1.140,00 kg entregados (31,73% distrib., 50,00% OTIF) —
-mismo patrón de día recién ingresado, candidato a corrección al alza mañana; Motivos con Desde=Hasta=
-08/10 tampoco devolvió filas. 01/10, 02/10 y 06/10 se re-verificaron sin cambios. Cruce de validación:
-motivos del mes (Sin Cargar, 40 kg, único registrado el 02/10) coincide exactamente con el Peso
-Devuelto total de Motivos para el rango 01/10-08/10 — el resto de la brecha (07/10 y 08/10, días sin
-confirmar aún) no tiene motivo cargado, consistente con el patrón de días recién ingresados. */
+Corrida 13/10/2026 (ventana 06/10-12/10 y acumulado mensual 01/10-12/10 relevados en MicroStrategy,
+filtro Operación confirmado en Nogues únicamente, sin necesidad de corregirlo). El filtro Fecha se
+verificó en pantalla antes de cada lectura (Performance y Motivos). 10/10, 11/10 y 12/10 confirmados
+sin movimiento (0 pedidos) por cuadratura exacta: la suma de los 7 días cargados en MONTH_DAILY
+coincide exactamente con el Total del dossier en pedidos/kg pedidos/despachados/entregados, sin resto.
+Corrección retroactiva importante en 09/10: pasó de 23 pedidos/64.558,01 kg pedidos/0,00 kg entregados
+(dato de la corrida anterior, mismo día calendario) a 8 pedidos/11.793,31 kg pedidos/1.030,00 kg
+entregados (%distrib. 0,00%→18,65%, OTIF se mantuvo en 0,00%) — Motivos con Desde=Hasta=09/10 no
+devolvió filas, confirmando que la brecha restante (4.492 kg) corresponde a pedidos aún no entregados,
+no a una devolución. 01/10, 02/10, 05/10, 06/10, 07/10 y 08/10 se re-verificaron sin cambios. Cruce de
+validación: motivos del mes (Sin Cargar, 40 kg, único registrado el 02/10) coincide exactamente con el
+Peso Devuelto total de Motivos para el rango 01/10-12/10, y la suma de kg pedidos/despachados/entregados
+de los 7 días de MONTH_DAILY coincide exacta con el Total mensual (51.032,52/44.679,21/36.755,21). */
 var MONTH_TOTALS = {
-pedidos:73, kgPedidos:103797.22, kgDespachados:44679.21, kgEntregados:35725.21, kgDevueltos:40,
-pctDistrib:79.96, otif:63.01,
+pedidos:58, kgPedidos:51032.52, kgDespachados:44679.21, kgEntregados:36755.21, kgDevueltos:40,
+pctDistrib:82.26, otif:79.31,
 motivos:[
 {motivo:"Sin Cargar", kg:40, pctPeso:100.0}
 ]
@@ -251,7 +249,7 @@ var MONTH_DAILY = [
 {fecha:"06/10", pedidos:9, kgPedidos:3041.66, kgDespachados:3041.66, kgEntregados:3041.66, pctDistrib:100.00, otif:100.00, motivos:[]},
 {fecha:"07/10", pedidos:3, kgPedidos:3930.00, kgDespachados:4306.00, kgEntregados:914.00, pctDistrib:21.23, otif:33.33, motivos:[]},
 {fecha:"08/10", pedidos:6, kgPedidos:4051.00, kgDespachados:3593.00, kgEntregados:3593.00, pctDistrib:100.00, otif:100.00, motivos:[]},
-{fecha:"09/10", pedidos:23, kgPedidos:64558.01, kgDespachados:5522.00, kgEntregados:0.00, pctDistrib:0.00, otif:0.00, motivos:[]}
+{fecha:"09/10", pedidos:8, kgPedidos:11793.31, kgDespachados:5522.00, kgEntregados:1030.00, pctDistrib:18.65, otif:0.00, motivos:[]}
 ];
 /* Histórico de meses YA CERRADOS. Shape por entrada: {mes:"2026-09", mesLabel:"Septiembre 2026",
 totals:{...shape de MONTH_TOTALS...}, daily:[...shape de MONTH_DAILY...]} */
@@ -329,8 +327,9 @@ var MUESTRA = {n:952, pct:71, productosDistintos:11, posicionesRotura:1, corte:"
 /* Serie diaria de posiciones totales ocupadas (a pedido del usuario, 30/09/2026). Mantenimiento diario:
 hacer PUSH de {fecha:"dd/mm", total:TOTAL_SISTEMA} cada corrida (nunca reconstruir desde cero) y
 dedupe por fecha si la tarea corre 2 veces el mismo día (reemplazar la entrada existente de esa fecha
-en vez de duplicarla). 03/10 y 04/10 se completaron hoy retroactivamente, releyendo esos snapshots
-del combo "Fecha Actualización" (ambos sin cambios de fin de semana, 1.278 posiciones). */
+en vez de duplicarla). 03/10 y 04/10 se completaron el 09/10 retroactivamente. 10/10, 11/10 y 12/10
+(días sin corrida) se retro-completaron hoy 13/10 releyendo esos 3 snapshots del combo "Fecha
+Actualización" (1.247, 1.235 y 1.235 respectivamente), cerrando el hueco de la serie. */
 var STOCK_HISTORY = [
 {fecha:"30/09", total:1314},
 {fecha:"01/10", total:1325},
@@ -342,6 +341,9 @@ var STOCK_HISTORY = [
 {fecha:"07/10", total:1300},
 {fecha:"08/10", total:1345},
 {fecha:"09/10", total:1337},
+{fecha:"10/10", total:1247},
+{fecha:"11/10", total:1235},
+{fecha:"12/10", total:1235},
 {fecha:"13/10", total:1222}
 ];
 var STOCK_DETALLE = [
