@@ -76,7 +76,7 @@ tr:hover td{background:#1a2420;}
 <div class="eyebrow">Refinería del Centro · iFlow BI</div>
 <h1>Reporte de Gestión iFlow</h1>
 </div>
-<div class="meta">Cumplimiento: semana 03/10 al 09/10<br>Stock / Vida útil: corte 13/10/2026 07:40</div>
+<div class="meta">Cumplimiento: semana 07/10 al 13/10<br>Stock / Vida útil: corte 14/10/2026 07:40</div>
 </div>
 
 <nav class="tabs">
@@ -188,7 +188,7 @@ tr:hover td{background:#1a2420;}
 
 <div class="foot">
 <span>Refinería del Centro · iFlow BI · Dossier Performance / Dashboard Stock (MicroStrategy)</span>
-<span>Reporte unificado generado 13/10/2026</span>
+<span>Reporte unificado generado 14/10/2026</span>
 </div>
 </div>
 
@@ -212,7 +212,7 @@ document.head.appendChild(s1);
 /* Nombre y corte del mes en curso — únicas 2 variables a tocar cada corrida para los títulos dinámicos
 (reemplaza el esquema anterior de 3 strings hardcodeados por separado). */
 var MES_ACTUAL_LABEL = "octubre 2026";
-var MES_ACTUAL_CORTE = "09/10";
+var MES_ACTUAL_CORTE = "13/10";
 /* WEEK_RANGE_LABEL/DAILY/WEEK_TOTALS quedaron DEPRECADOS (30/09/2026, a pedido del usuario: selector
 para elegir semana). Ahora la vista "Semana" se deriva 100% de MONTH_DAILY + MONTHLY_HISTORY vía
 getAllWeeks() más abajo (ventanas móviles de 7 días calendario terminando en el día más reciente
@@ -233,11 +233,21 @@ entregados (%distrib. 0,00%→18,65%, OTIF se mantuvo en 0,00%) — Motivos con 
 devolvió filas, confirmando que la brecha restante (4.492 kg) corresponde a pedidos aún no entregados,
 no a una devolución. 01/10, 02/10, 05/10, 06/10, 07/10 y 08/10 se re-verificaron sin cambios. Cruce de
 validación: motivos del mes (Sin Cargar, 40 kg, único registrado el 02/10) coincide exactamente con el
-Peso Devuelto total de Motivos para el rango 01/10-12/10, y la suma de kg pedidos/despachados/entregados
-de los 7 días de MONTH_DAILY coincide exacta con el Total mensual (51.032,52/44.679,21/36.755,21). */
+Peso Devuelto total de Motivos para el rango 01/10-13/10, y la suma de kg pedidos/despachados/entregados
+de los 8 días de MONTH_DAILY coincide exacta con el Total mensual (55.243,25/52.466,18/41.434,05).
+Corrida 14/10/2026: 10/10, 11/10 y 12/10 confirmados de nuevo sin movimiento (cuadratura exacta). 07/10
+se corrigió retroactivamente de 914,00 a 1.066,00 kg entregados (OTIF se mantuvo en 33,33%). 09/10 tuvo
+una corrección fuerte: de 1.030,00 a 5.556,84 kg entregados (OTIF se mantuvo en 0,00% — surge de "Porc.
+de pedidos cumplidos" del tab Análisis de Pedidos, que no coincide con el % de distribución en kg). El
+09/10 el % distribución en kg da 100,63% (kg entregados levemente por encima de kg despachados) por
+diferencia de pesaje entre despacho y entrega — no se trunca, se deja el valor real de MicroStrategy.
+13/10 (ayer) ingresó con 7 pedidos, 4.210,73 kg pedidos, 7.786,97 kg despachados y 0,00 kg
+entregados/0% OTIF — patrón habitual de día recién cargado, candidato a corrección al alza en próximas
+corridas. Motivos: chequeo cruzado día a día confirma 02/10=40 kg Sin Cargar como único motivo del mes;
+el resto de los días (incl. 10,11,12,13/10) dieron 0 kg devueltos. */
 var MONTH_TOTALS = {
-pedidos:58, kgPedidos:51032.52, kgDespachados:44679.21, kgEntregados:36755.21, kgDevueltos:40,
-pctDistrib:82.26, otif:79.31,
+pedidos:65, kgPedidos:55243.25, kgDespachados:52466.18, kgEntregados:41434.05, kgDevueltos:40,
+pctDistrib:78.97, otif:70.77,
 motivos:[
 {motivo:"Sin Cargar", kg:40, pctPeso:100.0}
 ]
@@ -247,9 +257,10 @@ var MONTH_DAILY = [
 {fecha:"02/10", pedidos:15, kgPedidos:14611.00, kgDespachados:14611.00, kgEntregados:14571.00, pctDistrib:99.73, otif:93.33, motivos:[{motivo:"Sin Cargar", kg:40, pctPeso:100.0}]},
 {fecha:"05/10", pedidos:10, kgPedidos:11314.55, kgDespachados:11314.55, kgEntregados:11314.55, pctDistrib:100.00, otif:90.00, motivos:[]},
 {fecha:"06/10", pedidos:9, kgPedidos:3041.66, kgDespachados:3041.66, kgEntregados:3041.66, pctDistrib:100.00, otif:100.00, motivos:[]},
-{fecha:"07/10", pedidos:3, kgPedidos:3930.00, kgDespachados:4306.00, kgEntregados:914.00, pctDistrib:21.23, otif:33.33, motivos:[]},
+{fecha:"07/10", pedidos:3, kgPedidos:3930.00, kgDespachados:4306.00, kgEntregados:1066.00, pctDistrib:24.76, otif:33.33, motivos:[]},
 {fecha:"08/10", pedidos:6, kgPedidos:4051.00, kgDespachados:3593.00, kgEntregados:3593.00, pctDistrib:100.00, otif:100.00, motivos:[]},
-{fecha:"09/10", pedidos:8, kgPedidos:11793.31, kgDespachados:5522.00, kgEntregados:1030.00, pctDistrib:18.65, otif:0.00, motivos:[]}
+{fecha:"09/10", pedidos:8, kgPedidos:11793.31, kgDespachados:5522.00, kgEntregados:5556.84, pctDistrib:100.63, otif:0.00, motivos:[]},
+{fecha:"13/10", pedidos:7, kgPedidos:4210.73, kgDespachados:7786.97, kgEntregados:0.00, pctDistrib:0.00, otif:0.00, motivos:[]}
 ];
 /* Histórico de meses YA CERRADOS. Shape por entrada: {mes:"2026-09", mesLabel:"Septiembre 2026",
 totals:{...shape de MONTH_TOTALS...}, daily:[...shape de MONTH_DAILY...]} */
@@ -291,21 +302,24 @@ motivos:[
 ];
 
 /* ================= DATOS — STOCK ================= */
-/* Corte 09/10/2026 07:40: Fecha Actualización del dashboard quedó por defecto en 08/10 — se
-reseleccionó explícitamente el snapshot más reciente (09/10 07:40:25) del combo (salto de Cantidad de
-Registros de 1.345 a 1.337 confirma el cambio). Relevamiento de Status Posicion 100% verificado hoy
-ordenando la grilla ascendentemente y descendentemente por esa columna: Vencido=0 y Crítico=0 (no
-aparece ninguna fila en ningún extremo del orden), Rotura=1 (mismo lote LS26 219/pallet L000031233,
-ahora 207 días, uno menos que ayer), Control de Calidad=23 (recontadas una por una, mismo lote base
-26233 + 1 posición de lote 26219 con igual status — estable respecto de ayer). Available = 1.337 − 23
-− 1 = 1.313. Adicionalmente se ordenó la grilla ascendentemente por "Días Vencimiento": el mínimo real
-de TODO el sistema (no solo la muestra) es 176 días (antes 177), confirmando que los buckets de vida
-útil por debajo de 90 días son cero en la totalidad del depósito, no solo en la muestra. PRODUCTS/
-SECTORS/STOCK_DETALLE se mantienen del corte anterior: se intentó diversificar la muestra "Available"
-ordenando por Desc Atributo tanto ascendente como descendentemente y en ambos casos los primeros
-renglones mostrados siguieron monopolizados por Cremalda Crema Chantilly (mismo problema de
-diversificación ya documentado) — no se pudo re-relevar una muestra distinta hoy. STATUS, TOTAL_SISTEMA
-y STOCK_LOTS sí están 100% actualizados y verificados hoy. */
+/* Corte 14/10/2026 07:40: Fecha Actualización quedó por defecto en el snapshot de 13/10 — se
+reseleccionó explícitamente el snapshot del día (Cantidad de Registros pasó de 1.222 a 1.164,
+confirmando el cambio). Relevamiento de Status Posicion mediante sort ascendente/descendente por esa
+columna antes de que la grilla "Detalle" entrara en un estado de renderizado corrupto (ver nota abajo):
+Vencido=0 y Crítico=0 confirmados con alta confianza (ningún registro apareció en ningún extremo del
+orden). Rotura pasó de 1 a 2 posiciones: mismo lote LS26 219, ahora 202 días, se sumó un segundo pallet
+(L000044856, 2 bultos) además del ya conocido (L000031233, 1 bulto). Control de Calidad se mantiene en
+20 (±1 de incertidumbre menor, ver nota). Available = 1.164 − 20 − 2 = 1.142. PRODUCTS/SECTORS/
+STOCK_DETALLE se mantienen de cortes anteriores (problema de diversificación de la muestra ya
+documentado, no se pudo re-relevar hoy tampoco). NOTA DE CALIDAD DEL DATO: al usar el menú contextual
+de columna ("Mostrar totales") sobre Status Posicion para intentar una re-verificación programática, la
+grilla quedó en un estado corrupto mostrando filas "Total"/subtotal en casi todos los límites
+jerárquicos de atributos, contaminando la extracción vía JS; destildar la opción, Restablecer, recargar
+la página y Deshacer no revirtieron el problema. Por eso STATUS/STOCK_LOTS de hoy se basan en las
+lecturas manuales (sort + captura) tomadas ANTES de que ocurriera la corrupción, con ±1 de margen en
+Control de Calidad (20 = 19 del lote base 26233 + 1 posición adicional del lote 26219 vista en un sort
+distinto). Vencido=0 y Crítico=0 quedan con alta confianza porque se confirmaron antes de la corrupción
+y no mostraban ninguna fila en los extremos del orden. */
 var PRODUCTS = [
 {producto:"Danica Soft Margarina Vegetal Pote 24x200g", posiciones:316},
 {producto:"Danica Dor Cremosa Marg Veg Pote 24x210g", posiciones:242},
@@ -321,14 +335,14 @@ var PRODUCTS = [
 var SECTORS = [
 {sector:"T. Controlada", n:843}, {sector:"Ambiente", n:240}, {sector:"Refrigerado", n:152}, {sector:"PK Ambiente", n:38}, {sector:"PK T. Controlada", n:25}, {sector:"Rotura", n:16}
 ];
-var STATUS = [{estado:"Available", n:1198}, {estado:"Control de Calidad", n:23}, {estado:"Rotura", n:1}, {estado:"Critico", n:0}, {estado:"Vencido", n:0}];
-var TOTAL_SISTEMA = 1222;
-var MUESTRA = {n:952, pct:71, productosDistintos:11, posicionesRotura:1, corte:"13/10/2026 07:40"};
+var STATUS = [{estado:"Available", n:1142}, {estado:"Control de Calidad", n:20}, {estado:"Rotura", n:2}, {estado:"Critico", n:0}, {estado:"Vencido", n:0}];
+var TOTAL_SISTEMA = 1164;
+var MUESTRA = {n:952, pct:71, productosDistintos:11, posicionesRotura:2, corte:"14/10/2026 07:40"};
 /* Serie diaria de posiciones totales ocupadas (a pedido del usuario, 30/09/2026). Mantenimiento diario:
 hacer PUSH de {fecha:"dd/mm", total:TOTAL_SISTEMA} cada corrida (nunca reconstruir desde cero) y
 dedupe por fecha si la tarea corre 2 veces el mismo día (reemplazar la entrada existente de esa fecha
 en vez de duplicarla). 03/10 y 04/10 se completaron el 09/10 retroactivamente. 10/10, 11/10 y 12/10
-(días sin corrida) se retro-completaron hoy 13/10 releyendo esos 3 snapshots del combo "Fecha
+(días sin corrida) se retro-completaron el 13/10 releyendo esos 3 snapshots del combo "Fecha
 Actualización" (1.247, 1.235 y 1.235 respectivamente), cerrando el hueco de la serie. */
 var STOCK_HISTORY = [
 {fecha:"30/09", total:1314},
@@ -344,7 +358,8 @@ var STOCK_HISTORY = [
 {fecha:"10/10", total:1247},
 {fecha:"11/10", total:1235},
 {fecha:"12/10", total:1235},
-{fecha:"13/10", total:1222}
+{fecha:"13/10", total:1222},
+{fecha:"14/10", total:1164}
 ];
 var STOCK_DETALLE = [
 {producto:"Danica Soft Margarina Vegetal Pote 24x200g", posiciones:316, bultos:35315, unidades:35315, estado:"Available"},
@@ -358,45 +373,40 @@ var STOCK_DETALLE = [
 vía filtro Estado Posición + orden por columna en la grilla MicroStrategy. "Available" usa
 la muestra representativa de STOCK_DETALLE de arriba. */
 var STOCK_LOTS = {
-/* Corte 09/10/2026: Vencido y Crítico siguen en CERO (verificado exhaustivamente ordenando la grilla
-tanto ascendente como descendentemente por Status Posicion, no es una muestra). Rotura se mantiene en 1
-sola posición, el mismo lote del corte anterior (LS26 219), 1 día menos de vida útil (208→207, acorde
-al día calendario transcurrido desde el corte del 08/10). */
+/* Corte 14/10/2026: Vencido y Crítico siguen en CERO (confirmado antes de la corrupción de grilla, ver
+nota arriba). Rotura pasó de 1 a 2 posiciones: mismo lote LS26 219 (202 días, uno menos que ayer), ahora
+con un segundo pallet detectado (L000044856, 2 bultos) además del ya conocido (L000031233, 1 bulto). */
 Vencido: [],
 Critico: [],
 Rotura: [
-{producto:"Cremalda Crema Chantilly", lote:"LS26 219", pallet:"L000031233", vencimiento:"04/05/2027", dias:203, bultos:1}
+{producto:"Cremalda Crema Chantilly", lote:"LS26 219", pallet:"L000031233", vencimiento:"04/05/2027", dias:202, bultos:1},
+{producto:"Cremalda Crema Chantilly", lote:"LS26 219", pallet:"L000044856", vencimiento:"04/05/2027", dias:202, bultos:2}
 ]
 };
 
 /* ================= DATOS — VIDA ÚTIL ================= */
-/* Corte 09/10/2026: los buckets "<30 días" y "30-89 días" siguen en CERO, verificado exhaustivamente
-sobre el sistema completo (Status Vencido y Crítico dieron 0 en el relevamiento de Stock, y el sort
-ascendente por Días Vencimiento sobre las 1.337 posiciones confirma que el mínimo real es 176 días).
-Los buckets 90-179/180-269/270+ se reescalan proporcionalmente al nuevo total del sistema (1.337, antes
-1.345) — no se pudo re-diversificar la muestra de Available hoy (ver aviso en Stock). */
+/* Corte 14/10/2026: los buckets "<30 días" y "30-89 días" siguen en CERO (Vencido y Crítico en 0 en el
+relevamiento de Stock). El bucket 180-269 días se reescala al nuevo total del sistema (1.164, antes
+1.222) — no se pudo re-diversificar la muestra de Available hoy (ver aviso en Stock). */
 var BUCKETS = [
-{rango:"<30 días", n:0}, {rango:"30-89 días", n:0}, {rango:"90-179 días", n:0}, {rango:"180-269 días", n:1222}, {rango:"270+ días", n:0}
+{rango:"<30 días", n:0}, {rango:"30-89 días", n:0}, {rango:"90-179 días", n:0}, {rango:"180-269 días", n:1164}, {rango:"270+ días", n:0}
 ];
 var PRODUCT_MIN = [
-{producto:"Cremalda Crema Chantilly", dias:203},
+{producto:"Cremalda Crema Chantilly", dias:202},
 {producto:"Mayonesa D'Fiesta 24x500ml", dias:203},
 {producto:"Mostaza Danica Nueva 192x8g", dias:212},
 {producto:"Doña Flora Ref. B 10x 1/2 Kg", dias:213},
 {producto:"Margadán Marg Vegetal Pan 12x500g", dias:216}
 ];
-/* Corte 13/10/2026: sort completo (ascendente y descendente) por Días Vencimiento sobre el sistema
-completo (1.222 posiciones) confirma mínimo=203 y máximo=217 días, ambos extremos en Cremalda Crema
-Chantilly — rango drásticamente más angosto que el corte anterior (176-282). Eso vuelve matemáticamente
-imposibles 13 de los 18 productos que venían en PRODUCT_MIN (valores <203 o >217, ya no verificables) —
-se retiraron de la lista; probablemente ya no tienen stock o su vida útil cambió. Quedan 5 productos:
-Cremalda (verificado hoy) + 4 sin re-verificar pero aún compatibles con el rango vigente. Buckets
-90-179 y 270+ pasan a 0 (antes 39 y 1) por la misma razón — recomendado validar manualmente. */
-var VU_KPIS = {lotesMuestra:952, diasMasProximo:203, lotesCriticos:0, productosDistintos:5, corte:"13/10/2026 07:40"};
+/* Corte 14/10/2026: solo Cremalda Crema Chantilly se re-verificó hoy (202 días, un día menos que
+ayer); los otros 4 productos de la lista no se re-relevaron hoy (grilla corrupta, ver nota en Stock) y
+se dejan con el valor del corte anterior. */
+var VU_KPIS = {lotesMuestra:952, diasMasProximo:202, lotesCriticos:0, productosDistintos:5, corte:"14/10/2026 07:40"};
 var SOON = [
-{producto:"Cremalda Crema Chantilly", lote:"LS26 219", pallet:"LP000402257", vencimiento:"04/05/2027", dias:203, estado:"Available"},
-{producto:"Cremalda Crema Chantilly", lote:"LS26 219", pallet:"LP000402269", vencimiento:"04/05/2027", dias:203, estado:"Available"},
-{producto:"Cremalda Crema Chantilly", lote:"LS26 219", pallet:"L000031233", vencimiento:"04/05/2027", dias:203, estado:"Rotura"}
+{producto:"Cremalda Crema Chantilly", lote:"LS26 219", pallet:"LP000402257", vencimiento:"04/05/2027", dias:202, estado:"Available"},
+{producto:"Cremalda Crema Chantilly", lote:"LS26 219", pallet:"LP000402269", vencimiento:"04/05/2027", dias:202, estado:"Available"},
+{producto:"Cremalda Crema Chantilly", lote:"LS26 219", pallet:"L000031233", vencimiento:"04/05/2027", dias:202, estado:"Rotura"},
+{producto:"Cremalda Crema Chantilly", lote:"LS26 219", pallet:"L000044856", vencimiento:"04/05/2027", dias:202, estado:"Rotura"}
 ];
 
 /* ================= HELPERS ================= */
