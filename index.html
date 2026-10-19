@@ -265,10 +265,20 @@ del dossier Performance para el rango 01/10-18/10, sin resto. Motivos: cross-che
 +40kg, 07/10:+3.240kg "No Pedido Total", 09/10:-35kg, 13/10:+12kg, resto en 0kg) cuadra exacto contra
 el Total mensual de Motivos (367 unidades / 3.257 kg: 356u/3.240kg "No Pedido Total" + 11u/17kg "Sin
 Cargar Parcial"). HALLAZGO relevante en Stock: Control de Calidad cayó de 23 a 1 posición (lote Cremalda
-Crema Chantilly 26219/438037, 41 bultos) — ver detalle en comentario de STATUS más abajo. */
+Crema Chantilly 26219/438037, 41 bultos) — ver detalle en comentario de STATUS más abajo.
+Segunda corrida 19/10/2026 (la tarea se disparó de nuevo el mismo día, ~13:12 UTC, tras una corrida previa
+~09:29/11:46 hora de corte MicroStrategy): re-relevado el dossier Performance con la misma ventana mensual
+01/10-18/10 (Operación ya confirmada en Nogues únicamente). 01/10 a 15/10 reconfirmados sin cambios.
+Corrección retroactiva en 16/10: de 0,00 a 190,00 kg entregados (0%→9,94% distrib., 0%→11,11% OTIF);
+Motivos con Desde=Hasta=16/10-18/10 no devolvió filas, confirmando que la brecha restante (1.722 kg) es
+pendiente de entrega, no devolución. 17/10 y 18/10 reconfirmados SIN pedidos creados. Motivos del mes sin
+cambios (367 unidades/3.257 kg, mismo detalle). En Stock, el corte de MicroStrategy resultó ser el mismo
+snapshot exacto de la corrida anterior (19/10/2026 07:40:23, 1.161 registros, idéntico al segundo) — por
+lo tanto STATUS/STOCK_LOTS/BUCKETS/PRODUCT_MIN/SOON/PRODUCTS/SECTORS/STOCK_DETALLE/STOCK_HISTORY se
+reutilizaron sin re-relevar (snapshot congelado, no hay drift posible entre dos lecturas del mismo corte). */
 var MONTH_TOTALS = {
-pedidos:87, kgPedidos:73026.25, kgDespachados:89463.18, kgEntregados:84129.02, kgDevueltos:3257,
-pctDistrib:94.04, otif:73.56,
+pedidos:87, kgPedidos:73026.25, kgDespachados:89463.18, kgEntregados:84319.02, kgDevueltos:3257,
+pctDistrib:94.25, otif:74.71,
 motivos:[
 {motivo:"No Pedido Total", kg:3240, pctPeso:99.48},
 {motivo:"Sin Cargar Parcial", kg:17, pctPeso:0.52}
@@ -285,7 +295,7 @@ var MONTH_DAILY = [
 {fecha:"13/10", pedidos:7, kgPedidos:4210.73, kgDespachados:7786.97, kgEntregados:7774.97, pctDistrib:99.85, otif:85.71, motivos:[{motivo:"Sin Cargar Parcial", kg:12, pctPeso:100.0}]},
 {fecha:"14/10", pedidos:6, kgPedidos:4298.00, kgDespachados:3429.00, kgEntregados:3429.00, pctDistrib:100.00, otif:100.00, motivos:[]},
 {fecha:"15/10", pedidos:7, kgPedidos:7839.00, kgDespachados:31656.00, kgEntregados:31491.00, pctDistrib:99.48, otif:85.71, motivos:[]},
-{fecha:"16/10", pedidos:9, kgPedidos:5646.00, kgDespachados:1912.00, kgEntregados:0.00, pctDistrib:0.00, otif:0.00, motivos:[]}
+{fecha:"16/10", pedidos:9, kgPedidos:5646.00, kgDespachados:1912.00, kgEntregados:190.00, pctDistrib:9.94, otif:11.11, motivos:[]}
 ];
 /* Histórico de meses YA CERRADOS. Shape por entrada: {mes:"2026-09", mesLabel:"Septiembre 2026",
 totals:{...shape de MONTH_TOTALS...}, daily:[...shape de MONTH_DAILY...]} */
@@ -370,8 +380,7 @@ también -3 días, sin altas ni bajas — detalle completo por lote en STOCK_LOT
 Control de Calidad cayó de 23 a apenas 1 posición (Cremalda Crema Chantilly, lote 26219, pallet 438037,
 197 días, 41 bultos) — caída fuerte en 3 días, a confirmar si es liberación de stock en cuarentena o
 corrección de catalogación; no se identificó el resto de las 22 posiciones que tenía el lote base 26233
-en cortes anteriores (ya no figuran en el grid con ese estado). Available = 1.161 − 1 − 23 ya no aplica:
-Available = 1.161 − 1(Vencido) − 12(Crítico) − 26(Rotura) − 1(Control de Calidad) = 1.121.
+en cortes anteriores (ya no figuran en el grid con ese estado). Available = 1.161 − 1(Vencido) − 12(Crítico) − 26(Rotura) − 1(Control de Calidad) = 1.121.
 PRODUCTS/SECTORS/STOCK_DETALLE/MUESTRA se reutilizan sin cambios (mismo problema de diversificación de
 siempre); TOTAL_SISTEMA/STATUS/STOCK_LOTS sí son 100% frescos de hoy. STOCK_HISTORY: el combo "Fecha
 Actualización" sí refleja los cortes correctamente en la grilla Detalle, pero el KPI "Cantidad de
@@ -488,7 +497,7 @@ Rotura: [
 
 /* ================= DATOS — VIDA ÚTIL ================= */
 /* Corte 19/10/2026: Vencido/Crítico/Rotura mantienen la misma composición del 16/10 (-3 días cada uno,
-ver STOCK_LOTS), confirmado con doble sort (Status Posicion y Días Vencimiento). BUCKETS "&lt;30"/
+ver STOCK_LOTS), confirmado con doble sort (Status Posicion y Días Vencimiento). BUCKETS "<30"/
 "30-89" son censo EXACTO (sort ascendente completo confirma el mínimo global en -79 días, lote Vencido,
 sin otro valor por debajo de 30 fuera de los 4 ya conocidos). "90-179" combina censo exacto de las 12
 posiciones Crítico + 4 Rotura que caen en ese rango con una estimación proporcional del resto de
