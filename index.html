@@ -76,7 +76,7 @@ tr:hover td{background:#1a2420;}
 <div class="eyebrow">Refinería del Centro · iFlow BI</div>
 <h1>Reporte de Gestión iFlow</h1>
 </div>
-<div class="meta">Cumplimiento: semana 23/10 al 29/10<br>Stock / Vida útil: corte 30/10/2026 07:40</div>
+<div class="meta">Cumplimiento: semana 04/11 al 10/11<br>Stock / Vida útil: corte 30/10/2026 07:40</div>
 </div>
 
 <nav class="tabs">
@@ -211,8 +211,8 @@ document.head.appendChild(s1);
 /* ================= DATOS — CUMPLIMIENTO ================= */
 /* Nombre y corte del mes en curso — únicas 2 variables a tocar cada corrida para los títulos dinámicos
 (reemplaza el esquema anterior de 3 strings hardcodeados por separado). */
-var MES_ACTUAL_LABEL = "octubre 2026";
-var MES_ACTUAL_CORTE = "29/10";
+var MES_ACTUAL_LABEL = "noviembre 2026";
+var MES_ACTUAL_CORTE = "10/11";
 /* WEEK_RANGE_LABEL/DAILY/WEEK_TOTALS quedaron DEPRECADOS (30/09/2026, a pedido del usuario: selector
 para elegir semana). Ahora la vista "Semana" se deriva 100% de MONTH_DAILY + MONTHLY_HISTORY vía
 getAllWeeks() más abajo (ventanas móviles de 7 días calendario terminando en el día más reciente
@@ -299,34 +299,24 @@ TOTAL_SISTEMA continúa la tendencia a la baja: 1.227(20/10)→1.105→1.058→9
 retro-completa 28/10 en STOCK_HISTORY (789 registros, solo total, sin censo detallado ese día por caída
 de Chrome en la corrida de esa fecha). */
 var MONTH_TOTALS = {
-pedidos:152, kgPedidos:160302.71, kgDespachados:160089.71, kgEntregados:138949.71, kgDevueltos:2223,
-pctDistrib:86.79, otif:80.92,
+pedidos:70, kgPedidos:150057.39, kgDespachados:96853.16, kgEntregados:83341.16, kgDevueltos:8280,
+pctDistrib:86.05, otif:51.43,
 motivos:[
-{motivo:"No Pedido Total", kg:2160, pctPeso:97.17},
-{motivo:"Sin Cargar Parcial", kg:63, pctPeso:2.83}
+{motivo:"Sin Turno Total", kg:3955, pctPeso:47.77},
+{motivo:"Sin Especificar Total", kg:3847, pctPeso:46.46},
+{motivo:"Sin Cargar Parcial", kg:252, pctPeso:3.04},
+{motivo:"Fecha Corta Parcial", kg:130, pctPeso:1.57},
+{motivo:"No Pedido Parcial", kg:80, pctPeso:0.97},
+{motivo:"Inversión Parcial", kg:16, pctPeso:0.19}
 ]
 };
 var MONTH_DAILY = [
-{fecha:"01/10", pedidos:7, kgPedidos:2291.00, kgDespachados:2291.00, kgEntregados:2291.00, pctDistrib:100.00, otif:100.00, motivos:[]},
-{fecha:"02/10", pedidos:15, kgPedidos:14611.00, kgDespachados:14611.00, kgEntregados:14571.00, pctDistrib:99.73, otif:93.33, motivos:[{motivo:"Sin Cargar Parcial", kg:40, pctPeso:100.0}]},
-{fecha:"05/10", pedidos:10, kgPedidos:11314.55, kgDespachados:11314.55, kgEntregados:11314.55, pctDistrib:100.00, otif:90.00, motivos:[]},
-{fecha:"06/10", pedidos:9, kgPedidos:3041.66, kgDespachados:3041.66, kgEntregados:3041.66, pctDistrib:100.00, otif:100.00, motivos:[]},
-{fecha:"07/10", pedidos:3, kgPedidos:3930.00, kgDespachados:3930.00, kgEntregados:1770.00, pctDistrib:45.04, otif:33.33, motivos:[{motivo:"No Pedido Total", kg:2160, pctPeso:100.0}]},
-{fecha:"08/10", pedidos:6, kgPedidos:4051.00, kgDespachados:4051.00, kgEntregados:4051.00, pctDistrib:100.00, otif:100.00, motivos:[]},
-{fecha:"09/10", pedidos:8, kgPedidos:11793.31, kgDespachados:11793.31, kgEntregados:11782.31, pctDistrib:99.91, otif:0.00, motivos:[{motivo:"Sin Cargar Parcial", kg:11, pctPeso:100.0}]},
-{fecha:"13/10", pedidos:7, kgPedidos:4210.73, kgDespachados:4210.73, kgEntregados:4204.73, pctDistrib:99.86, otif:85.71, motivos:[{motivo:"Sin Cargar Parcial", kg:6, pctPeso:100.0}]},
-{fecha:"14/10", pedidos:6, kgPedidos:4298.00, kgDespachados:4298.00, kgEntregados:4298.00, pctDistrib:100.00, otif:100.00, motivos:[]},
-{fecha:"15/10", pedidos:7, kgPedidos:7839.00, kgDespachados:7839.00, kgEntregados:7839.00, pctDistrib:100.00, otif:100.00, motivos:[]},
-{fecha:"16/10", pedidos:9, kgPedidos:5646.00, kgDespachados:5646.00, kgEntregados:5646.00, pctDistrib:100.00, otif:88.89, motivos:[]},
-{fecha:"19/10", pedidos:7, kgPedidos:5083.00, kgDespachados:5083.00, kgEntregados:5083.00, pctDistrib:100.00, otif:85.71, motivos:[]},
-{fecha:"20/10", pedidos:6, kgPedidos:16635.18, kgDespachados:16605.18, kgEntregados:1605.18, pctDistrib:9.67, otif:50.00, motivos:[]},
-{fecha:"21/10", pedidos:4, kgPedidos:13392.17, kgDespachados:13392.17, kgEntregados:13392.17, pctDistrib:100.00, otif:100.00, motivos:[]},
-{fecha:"22/10", pedidos:13, kgPedidos:11639.00, kgDespachados:11639.00, kgEntregados:11639.00, pctDistrib:100.00, otif:100.00, motivos:[]},
-{fecha:"23/10", pedidos:8, kgPedidos:16149.45, kgDespachados:16149.45, kgEntregados:16143.45, pctDistrib:99.96, otif:87.50, motivos:[{motivo:"Sin Cargar Parcial", kg:6, pctPeso:100.0}]},
-{fecha:"26/10", pedidos:6, kgPedidos:5408.00, kgDespachados:5408.00, kgEntregados:5408.00, pctDistrib:100.00, otif:83.33, motivos:[]},
-{fecha:"27/10", pedidos:6, kgPedidos:6517.66, kgDespachados:6367.66, kgEntregados:6367.66, pctDistrib:100.00, otif:83.33, motivos:[]},
-{fecha:"28/10", pedidos:8, kgPedidos:8535.00, kgDespachados:8502.00, kgEntregados:8502.00, pctDistrib:100.00, otif:87.50, motivos:[]},
-{fecha:"29/10", pedidos:7, kgPedidos:3917.00, kgDespachados:3917.00, kgEntregados:0.00, pctDistrib:0.00, otif:0.00, motivos:[]}
+{fecha:"02/11", pedidos:12, kgPedidos:21290.10, kgDespachados:9673.05, kgEntregados:9587.05, pctDistrib:99.11, otif:41.67, motivos:[{motivo:"Fecha Corta Parcial", kg:86, pctPeso:2.13},{motivo:"Sin Turno Total", kg:3955, pctPeso:97.87}]},
+{fecha:"03/11", pedidos:15, kgPedidos:31145.11, kgDespachados:29075.11, kgEntregados:29059.11, pctDistrib:99.94, otif:60.00, motivos:[{motivo:"Inversión Parcial", kg:16, pctPeso:100.0}]},
+{fecha:"04/11", pedidos:16, kgPedidos:29551.00, kgDespachados:29551.00, kgEntregados:29255.00, pctDistrib:99.00, otif:87.50, motivos:[{motivo:"Fecha Corta Parcial", kg:44, pctPeso:14.86},{motivo:"Sin Cargar Parcial", kg:252, pctPeso:85.14}]},
+{fecha:"05/11", pedidos:10, kgPedidos:26246.00, kgDespachados:21840.00, kgEntregados:8939.00, pctDistrib:40.93, otif:60.00, motivos:[{motivo:"No Pedido Parcial", kg:80, pctPeso:2.04},{motivo:"Sin Especificar Total", kg:3847, pctPeso:97.96}]},
+{fecha:"06/11", pedidos:2, kgPedidos:6501.00, kgDespachados:6501.00, kgEntregados:6501.00, pctDistrib:100.00, otif:100.00, motivos:[]},
+{fecha:"10/11", pedidos:15, kgPedidos:35324.18, kgDespachados:213.00, kgEntregados:0.00, pctDistrib:0.00, otif:0.00, motivos:[]}
 ];
 /* Histórico de meses YA CERRADOS. Shape por entrada: {mes:"2026-09", mesLabel:"Septiembre 2026",
 totals:{...shape de MONTH_TOTALS...}, daily:[...shape de MONTH_DAILY...]} */
@@ -364,6 +354,36 @@ motivos:[
 {fecha:"28/09", pedidos:9, kgPedidos:16044.00, kgDespachados:16044.00, kgEntregados:16042.00, pctDistrib:99.99, otif:88.89, motivos:[{motivo:"Rotura de Producto", kg:2, pctPeso:100.0}]},
 {fecha:"29/09", pedidos:4, kgPedidos:6212.25, kgDespachados:6188.25, kgEntregados:6176.25, pctDistrib:99.81, otif:50.00, motivos:[{motivo:"Sin Cargar", kg:12, pctPeso:100.0}]},
 {fecha:"30/09", pedidos:3, kgPedidos:11971.00, kgDespachados:11971.00, kgEntregados:11971.00, pctDistrib:100.00, otif:100.00, motivos:[]}
+]},
+{mes:"2026-10", mesLabel:"Octubre 2026", totals:{
+pedidos:156, kgPedidos:160875.71, kgDespachados:160662.71, kgEntregados:158439.71, kgDevueltos:2223,
+pctDistrib:98.62, otif:85.90,
+motivos:[
+{motivo:"No Pedido Total", kg:2160, pctPeso:97.17},
+{motivo:"Sin Cargar Parcial", kg:63, pctPeso:2.83}
+]
+}, daily:[
+{fecha:"01/10", pedidos:7, kgPedidos:2291.00, kgDespachados:2291.00, kgEntregados:2291.00, pctDistrib:100.00, otif:100.00, motivos:[]},
+{fecha:"02/10", pedidos:15, kgPedidos:14611.00, kgDespachados:14611.00, kgEntregados:14571.00, pctDistrib:99.73, otif:93.33, motivos:[{motivo:"Sin Cargar Parcial", kg:40, pctPeso:100.0}]},
+{fecha:"05/10", pedidos:10, kgPedidos:11314.55, kgDespachados:11314.55, kgEntregados:11314.55, pctDistrib:100.00, otif:90.00, motivos:[]},
+{fecha:"06/10", pedidos:9, kgPedidos:3041.66, kgDespachados:3041.66, kgEntregados:3041.66, pctDistrib:100.00, otif:100.00, motivos:[]},
+{fecha:"07/10", pedidos:3, kgPedidos:3930.00, kgDespachados:3930.00, kgEntregados:1770.00, pctDistrib:45.04, otif:33.33, motivos:[{motivo:"No Pedido Total", kg:2160, pctPeso:100.0}]},
+{fecha:"08/10", pedidos:6, kgPedidos:4051.00, kgDespachados:4051.00, kgEntregados:4051.00, pctDistrib:100.00, otif:100.00, motivos:[]},
+{fecha:"09/10", pedidos:8, kgPedidos:11793.31, kgDespachados:11793.31, kgEntregados:11782.31, pctDistrib:99.91, otif:0.00, motivos:[{motivo:"Sin Cargar Parcial", kg:11, pctPeso:100.0}]},
+{fecha:"13/10", pedidos:7, kgPedidos:4210.73, kgDespachados:4210.73, kgEntregados:4204.73, pctDistrib:99.86, otif:85.71, motivos:[{motivo:"Sin Cargar Parcial", kg:6, pctPeso:100.0}]},
+{fecha:"14/10", pedidos:6, kgPedidos:4298.00, kgDespachados:4298.00, kgEntregados:4298.00, pctDistrib:100.00, otif:100.00, motivos:[]},
+{fecha:"15/10", pedidos:7, kgPedidos:7839.00, kgDespachados:7839.00, kgEntregados:7839.00, pctDistrib:100.00, otif:100.00, motivos:[]},
+{fecha:"16/10", pedidos:9, kgPedidos:5646.00, kgDespachados:5646.00, kgEntregados:5646.00, pctDistrib:100.00, otif:88.89, motivos:[]},
+{fecha:"19/10", pedidos:7, kgPedidos:5083.00, kgDespachados:5083.00, kgEntregados:5083.00, pctDistrib:100.00, otif:85.71, motivos:[]},
+{fecha:"20/10", pedidos:6, kgPedidos:16635.18, kgDespachados:16605.18, kgEntregados:16605.18, pctDistrib:100.00, otif:50.00, motivos:[]},
+{fecha:"21/10", pedidos:4, kgPedidos:13392.17, kgDespachados:13392.17, kgEntregados:13392.17, pctDistrib:100.00, otif:100.00, motivos:[]},
+{fecha:"22/10", pedidos:13, kgPedidos:11639.00, kgDespachados:11639.00, kgEntregados:11639.00, pctDistrib:100.00, otif:100.00, motivos:[]},
+{fecha:"23/10", pedidos:8, kgPedidos:16149.45, kgDespachados:16149.45, kgEntregados:16143.45, pctDistrib:99.96, otif:87.50, motivos:[{motivo:"Sin Cargar Parcial", kg:6, pctPeso:100.0}]},
+{fecha:"26/10", pedidos:6, kgPedidos:5408.00, kgDespachados:5408.00, kgEntregados:5408.00, pctDistrib:100.00, otif:83.33, motivos:[]},
+{fecha:"27/10", pedidos:6, kgPedidos:6517.66, kgDespachados:6367.66, kgEntregados:6367.66, pctDistrib:100.00, otif:83.33, motivos:[]},
+{fecha:"28/10", pedidos:8, kgPedidos:8535.00, kgDespachados:8502.00, kgEntregados:8502.00, pctDistrib:100.00, otif:87.50, motivos:[]},
+{fecha:"29/10", pedidos:7, kgPedidos:3917.00, kgDespachados:3917.00, kgEntregados:3917.00, pctDistrib:100.00, otif:100.00, motivos:[]},
+{fecha:"30/10", pedidos:4, kgPedidos:573.00, kgDespachados:573.00, kgEntregados:573.00, pctDistrib:100.00, otif:100.00, motivos:[]}
 ]}
 ];
 
