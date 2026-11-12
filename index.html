@@ -188,7 +188,7 @@ tr:hover td{background:#1a2420;}
 
 <div class="foot">
 <span>Refinería del Centro · iFlow BI · Dossier Performance / Dashboard Stock (MicroStrategy)</span>
-<span>Reporte unificado generado 11/11/2026</span>
+<span>Reporte unificado generado 12/11/2026</span>
 </div>
 </div>
 
@@ -212,7 +212,7 @@ document.head.appendChild(s1);
 /* Nombre y corte del mes en curso — únicas 2 variables a tocar cada corrida para los títulos dinámicos
 (reemplaza el esquema anterior de 3 strings hardcodeados por separado). */
 var MES_ACTUAL_LABEL = "noviembre 2026";
-var MES_ACTUAL_CORTE = "10/11";
+var MES_ACTUAL_CORTE = "11/11";
 /* WEEK_RANGE_LABEL/DAILY/WEEK_TOTALS quedaron DEPRECADOS (30/09/2026, a pedido del usuario: selector
 para elegir semana). Ahora la vista "Semana" se deriva 100% de MONTH_DAILY + MONTHLY_HISTORY vía
 getAllWeeks() más abajo (ventanas móviles de 7 días calendario terminando en el día más reciente
@@ -299,8 +299,8 @@ TOTAL_SISTEMA continúa la tendencia a la baja: 1.227(20/10)→1.105→1.058→9
 retro-completa 28/10 en STOCK_HISTORY (789 registros, solo total, sin censo detallado ese día por caída
 de Chrome en la corrida de esa fecha). */
 var MONTH_TOTALS = {
-pedidos:70, kgPedidos:150057.39, kgDespachados:96853.16, kgEntregados:83341.16, kgDevueltos:8280,
-pctDistrib:86.05, otif:51.43,
+pedidos:61, kgPedidos:116406.90, kgDespachados:98214.85, kgEntregados:83554.16, kgDevueltos:8280,
+pctDistrib:85.07, otif:59.02,
 motivos:[
 {motivo:"Sin Turno Total", kg:3955, pctPeso:47.77},
 {motivo:"Sin Especificar Total", kg:3847, pctPeso:46.46},
@@ -316,7 +316,7 @@ var MONTH_DAILY = [
 {fecha:"04/11", pedidos:16, kgPedidos:29551.00, kgDespachados:29551.00, kgEntregados:29255.00, pctDistrib:99.00, otif:87.50, motivos:[{motivo:"Fecha Corta Parcial", kg:44, pctPeso:14.86},{motivo:"Sin Cargar Parcial", kg:252, pctPeso:85.14}]},
 {fecha:"05/11", pedidos:10, kgPedidos:26246.00, kgDespachados:21840.00, kgEntregados:8939.00, pctDistrib:40.93, otif:60.00, motivos:[{motivo:"No Pedido Parcial", kg:80, pctPeso:2.04},{motivo:"Sin Especificar Total", kg:3847, pctPeso:97.96}]},
 {fecha:"06/11", pedidos:2, kgPedidos:6501.00, kgDespachados:6501.00, kgEntregados:6501.00, pctDistrib:100.00, otif:100.00, motivos:[]},
-{fecha:"10/11", pedidos:15, kgPedidos:35324.18, kgDespachados:213.00, kgEntregados:0.00, pctDistrib:0.00, otif:0.00, motivos:[]}
+{fecha:"10/11", pedidos:6, kgPedidos:1673.69, kgDespachados:1574.69, kgEntregados:213.00, pctDistrib:13.53, otif:0.00, motivos:[]}
 ];
 /* Histórico de meses YA CERRADOS. Shape por entrada: {mes:"2026-09", mesLabel:"Septiembre 2026",
 totals:{...shape de MONTH_TOTALS...}, daily:[...shape de MONTH_DAILY...]} */
