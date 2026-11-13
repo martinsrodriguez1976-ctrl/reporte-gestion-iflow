@@ -76,7 +76,7 @@ tr:hover td{background:#1a2420;}
 <div class="eyebrow">Refinería del Centro · iFlow BI</div>
 <h1>Reporte de Gestión iFlow</h1>
 </div>
-<div class="meta">Cumplimiento: semana 04/11 al 10/11<br>Stock / Vida útil: corte 30/10/2026 07:40</div>
+<div class="meta">Cumplimiento: semana 06/11 al 12/11<br>Stock / Vida útil: corte 30/10/2026 07:40</div>
 </div>
 
 <nav class="tabs">
@@ -188,7 +188,7 @@ tr:hover td{background:#1a2420;}
 
 <div class="foot">
 <span>Refinería del Centro · iFlow BI · Dossier Performance / Dashboard Stock (MicroStrategy)</span>
-<span>Reporte unificado generado 12/11/2026</span>
+<span>Reporte unificado generado 13/11/2026</span>
 </div>
 </div>
 
@@ -212,7 +212,7 @@ document.head.appendChild(s1);
 /* Nombre y corte del mes en curso — únicas 2 variables a tocar cada corrida para los títulos dinámicos
 (reemplaza el esquema anterior de 3 strings hardcodeados por separado). */
 var MES_ACTUAL_LABEL = "noviembre 2026";
-var MES_ACTUAL_CORTE = "11/11";
+var MES_ACTUAL_CORTE = "12/11";
 /* WEEK_RANGE_LABEL/DAILY/WEEK_TOTALS quedaron DEPRECADOS (30/09/2026, a pedido del usuario: selector
 para elegir semana). Ahora la vista "Semana" se deriva 100% de MONTH_DAILY + MONTHLY_HISTORY vía
 getAllWeeks() más abajo (ventanas móviles de 7 días calendario terminando en el día más reciente
@@ -298,12 +298,26 @@ Chantilly desde 20/10, 1.868 bultos el 22/10 — variación menor). Rotura sube 
 TOTAL_SISTEMA continúa la tendencia a la baja: 1.227(20/10)→1.105→1.058→930(27/10)→833(29/10); se
 retro-completa 28/10 en STOCK_HISTORY (789 registros, solo total, sin censo detallado ese día por caída
 de Chrome en la corrida de esa fecha). */
+/* Corrida 13/11/2026 (ventana mensual 01/11-12/11, Operación confirmada en Nogues únicamente, filtro
+Fecha re-verificado en pantalla antes de cada lectura de Performance y Motivos). Correcciones retroactivas:
+05/11 (kgDespachados 21.840,00 -> 25.687,00, distrib. 40,93% -> 34,80%) y 10/11 (pedidos 6 -> 5, kgPedidos
+1.673,69 -> 1.574,69, kgEntregados 213,00 -> 1.574,69, distrib. 13,53% -> 100,00%, OTIF 0,00% -> 80,00%).
+Alta 12/11 (17 pedidos, 13.948,00 kg despachados, 2.176,00 kg entregados, 15,60% distrib., 5,88% OTIF —
+patrón habitual de día recién cargado; Motivos con Desde=Hasta=12/11 no devolvió filas, la brecha es
+pendiente de entrega, no devolución). 11/11 sin pedidos creados (no genera entrada). MicroStrategy
+RENOMBRÓ la categoría de motivo "Sin Especificar Total" a "Pedido Cancelado Total" (mismos 3.847 kg del
+05/11, total mensual de devoluciones sin cambios en 8.280 kg). Cuadratura exacta validada: los 7 días de
+MONTH_DAILY suman 77 pedidos y 133.467,25/116.009,85/87.091,85 kg pedidos/despachados/entregados, igual
+al Total del dossier, y el OTIF ponderado por pedidos da 53,25%, idéntico al % OTIF del renglón Total.
+Stock / Vida útil NO se actualizaron: el Dashboard Stock volvió a fallar (tercer día consecutivo,
+"Necesita permiso" por URL directa y "La página no se puede cargar" desde el listado) — todas las
+constantes de Stock y Vida útil quedan intactas con su corte declarado del 30/10/2026 07:40. */
 var MONTH_TOTALS = {
-pedidos:61, kgPedidos:116406.90, kgDespachados:98214.85, kgEntregados:83554.16, kgDevueltos:8280,
-pctDistrib:85.07, otif:59.02,
+pedidos:77, kgPedidos:133467.25, kgDespachados:116009.85, kgEntregados:87091.85, kgDevueltos:8280,
+pctDistrib:75.07, otif:53.25,
 motivos:[
 {motivo:"Sin Turno Total", kg:3955, pctPeso:47.77},
-{motivo:"Sin Especificar Total", kg:3847, pctPeso:46.46},
+{motivo:"Pedido Cancelado Total", kg:3847, pctPeso:46.46},
 {motivo:"Sin Cargar Parcial", kg:252, pctPeso:3.04},
 {motivo:"Fecha Corta Parcial", kg:130, pctPeso:1.57},
 {motivo:"No Pedido Parcial", kg:80, pctPeso:0.97},
@@ -314,9 +328,10 @@ var MONTH_DAILY = [
 {fecha:"02/11", pedidos:12, kgPedidos:21290.10, kgDespachados:9673.05, kgEntregados:9587.05, pctDistrib:99.11, otif:41.67, motivos:[{motivo:"Fecha Corta Parcial", kg:86, pctPeso:2.13},{motivo:"Sin Turno Total", kg:3955, pctPeso:97.87}]},
 {fecha:"03/11", pedidos:15, kgPedidos:31145.11, kgDespachados:29075.11, kgEntregados:29059.11, pctDistrib:99.94, otif:60.00, motivos:[{motivo:"Inversión Parcial", kg:16, pctPeso:100.0}]},
 {fecha:"04/11", pedidos:16, kgPedidos:29551.00, kgDespachados:29551.00, kgEntregados:29255.00, pctDistrib:99.00, otif:87.50, motivos:[{motivo:"Fecha Corta Parcial", kg:44, pctPeso:14.86},{motivo:"Sin Cargar Parcial", kg:252, pctPeso:85.14}]},
-{fecha:"05/11", pedidos:10, kgPedidos:26246.00, kgDespachados:21840.00, kgEntregados:8939.00, pctDistrib:40.93, otif:60.00, motivos:[{motivo:"No Pedido Parcial", kg:80, pctPeso:2.04},{motivo:"Sin Especificar Total", kg:3847, pctPeso:97.96}]},
+{fecha:"05/11", pedidos:10, kgPedidos:26246.00, kgDespachados:25687.00, kgEntregados:8939.00, pctDistrib:34.80, otif:60.00, motivos:[{motivo:"No Pedido Parcial", kg:80, pctPeso:2.04},{motivo:"Pedido Cancelado Total", kg:3847, pctPeso:97.96}]},
 {fecha:"06/11", pedidos:2, kgPedidos:6501.00, kgDespachados:6501.00, kgEntregados:6501.00, pctDistrib:100.00, otif:100.00, motivos:[]},
-{fecha:"10/11", pedidos:6, kgPedidos:1673.69, kgDespachados:1574.69, kgEntregados:213.00, pctDistrib:13.53, otif:0.00, motivos:[]}
+{fecha:"10/11", pedidos:5, kgPedidos:1574.69, kgDespachados:1574.69, kgEntregados:1574.69, pctDistrib:100.00, otif:80.00, motivos:[]},
+{fecha:"12/11", pedidos:17, kgPedidos:17159.35, kgDespachados:13948.00, kgEntregados:2176.00, pctDistrib:15.60, otif:5.88, motivos:[]}
 ];
 /* Histórico de meses YA CERRADOS. Shape por entrada: {mes:"2026-09", mesLabel:"Septiembre 2026",
 totals:{...shape de MONTH_TOTALS...}, daily:[...shape de MONTH_DAILY...]} */
