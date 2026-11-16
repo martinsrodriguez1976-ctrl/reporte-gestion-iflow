@@ -76,7 +76,7 @@ tr:hover td{background:#1a2420;}
 <div class="eyebrow">Refinería del Centro · iFlow BI</div>
 <h1>Reporte de Gestión iFlow</h1>
 </div>
-<div class="meta">Cumplimiento: semana 06/11 al 12/11<br>Stock / Vida útil: corte 30/10/2026 07:40</div>
+<div class="meta">Cumplimiento: semana 07/11 al 13/11<br>Stock / Vida útil: corte 16/11/2026 07:40</div>
 </div>
 
 <nav class="tabs">
@@ -88,7 +88,7 @@ tr:hover td{background:#1a2420;}
 <!-- ===================== TAB 1: CUMPLIMIENTO ===================== -->
 <section class="panel active" id="panel-cumplimiento">
 <div class="section-head">
-<h2 id="cumpl-title">Cumplimiento — semana 03/10 al 09/10</h2>
+<h2 id="cumpl-title">Cumplimiento — semana 07/11 al 13/11</h2>
 <div class="toggle">
 <button class="active" id="btn-semana">Semana</button>
 <button id="btn-dia">Último día</button>
@@ -313,22 +313,21 @@ Stock / Vida útil NO se actualizaron: el Dashboard Stock volvió a fallar (terc
 "Necesita permiso" por URL directa y "La página no se puede cargar" desde el listado) — todas las
 constantes de Stock y Vida útil quedan intactas con su corte declarado del 30/10/2026 07:40. */
 var MONTH_TOTALS = {
-pedidos:95, kgPedidos:158563.35, kgDespachados:145731.30, kgEntregados:97229.20, kgDevueltos:12962,
-pctDistrib:66.72, otif:54.74,
+pedidos:95, kgPedidos:158563.35, kgDespachados:144019.30, kgEntregados:97229.20, kgDevueltos:11250,
+pctDistrib:67.51, otif:54.74,
 motivos:[
-{motivo:"Sin Turno Total", kg:3955, pctPeso:30.51},
-{motivo:"Pedido Cancelado Total", kg:3847, pctPeso:29.68},
-{motivo:"No Pedido Total", kg:2970, pctPeso:22.91},
-{motivo:"Exceso Demora Total", kg:1712, pctPeso:13.21},
-{motivo:"Sin Cargar Parcial", kg:252, pctPeso:1.94},
-{motivo:"Fecha Corta Parcial", kg:130, pctPeso:1.00},
-{motivo:"No Pedido Parcial", kg:80, pctPeso:0.62},
-{motivo:"Inversión Parcial", kg:16, pctPeso:0.12}
+{motivo:"Sin Turno Total", kg:3955, pctPeso:35.16},
+{motivo:"Pedido Cancelado Total", kg:3847, pctPeso:34.20},
+{motivo:"No Pedido Total", kg:2970, pctPeso:26.40},
+{motivo:"Sin Cargar Parcial", kg:252, pctPeso:2.24},
+{motivo:"Fecha Corta Parcial", kg:130, pctPeso:1.16},
+{motivo:"No Pedido Parcial", kg:80, pctPeso:0.71},
+{motivo:"Inversión Parcial", kg:16, pctPeso:0.14}
 ]
 };
 var MONTH_DAILY = [
 {fecha:"02/11", pedidos:12, kgPedidos:21290.10, kgDespachados:9673.05, kgEntregados:9587.05, pctDistrib:99.11, otif:41.67, motivos:[{motivo:"Fecha Corta Parcial", kg:86, pctPeso:2.13},{motivo:"Sin Turno Total", kg:3955, pctPeso:97.87}]},
-{fecha:"03/11", pedidos:15, kgPedidos:31145.11, kgDespachados:30787.11, kgEntregados:29059.11, pctDistrib:94.39, otif:60.00, motivos:[{motivo:"Exceso Demora Total", kg:1712, pctPeso:99.07},{motivo:"Inversión Parcial", kg:16, pctPeso:0.93}]},
+{fecha:"03/11", pedidos:15, kgPedidos:31145.11, kgDespachados:29075.11, kgEntregados:29059.11, pctDistrib:99.94, otif:60.00, motivos:[{motivo:"Inversión Parcial", kg:16, pctPeso:100.0}]},
 {fecha:"04/11", pedidos:16, kgPedidos:29551.00, kgDespachados:29551.00, kgEntregados:29255.00, pctDistrib:99.00, otif:87.50, motivos:[{motivo:"Fecha Corta Parcial", kg:44, pctPeso:14.86},{motivo:"Sin Cargar Parcial", kg:252, pctPeso:85.14}]},
 {fecha:"05/11", pedidos:10, kgPedidos:26246.00, kgDespachados:25687.00, kgEntregados:8939.00, pctDistrib:34.80, otif:60.00, motivos:[{motivo:"No Pedido Parcial", kg:80, pctPeso:2.04},{motivo:"Pedido Cancelado Total", kg:3847, pctPeso:97.96}]},
 {fecha:"06/11", pedidos:2, kgPedidos:6501.00, kgDespachados:6501.00, kgEntregados:6501.00, pctDistrib:100.00, otif:100.00, motivos:[]},
@@ -507,6 +506,21 @@ var STOCK_HISTORY = [
 {fecha:"28/10", total:789},
 {fecha:"29/10", total:833},
 {fecha:"30/10", total:831},
+{fecha:"01/11", total:837},
+{fecha:"02/11", total:837},
+{fecha:"03/11", total:801},
+{fecha:"04/11", total:731},
+{fecha:"05/11", total:679},
+{fecha:"06/11", total:591},
+{fecha:"07/11", total:623},
+{fecha:"08/11", total:623},
+{fecha:"09/11", total:623},
+{fecha:"10/11", total:631},
+{fecha:"11/11", total:714},
+{fecha:"12/11", total:751},
+{fecha:"13/11", total:734},
+{fecha:"14/11", total:610},
+{fecha:"15/11", total:588},
 {fecha:"16/11", total:607}
 ];
 var STOCK_DETALLE = [
