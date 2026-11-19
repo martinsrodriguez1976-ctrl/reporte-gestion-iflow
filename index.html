@@ -76,7 +76,7 @@ tr:hover td{background:#1a2420;}
 <div class="eyebrow">Refinería del Centro · iFlow BI</div>
 <h1>Reporte de Gestión iFlow</h1>
 </div>
-<div class="meta">Cumplimiento: semana 11/11 al 17/11<br>Stock / Vida útil: corte 18/11/2026 07:40</div>
+<div class="meta">Cumplimiento: semana 12/11 al 18/11<br>Stock / Vida útil: corte 19/11/2026 07:40</div>
 </div>
 
 <nav class="tabs">
@@ -188,7 +188,7 @@ tr:hover td{background:#1a2420;}
 
 <div class="foot">
 <span>Refinería del Centro · iFlow BI · Dossier Performance / Dashboard Stock (MicroStrategy)</span>
-<span>Reporte unificado generado 18/11/2026</span>
+<span>Reporte unificado generado 19/11/2026</span>
 </div>
 </div>
 
@@ -212,7 +212,7 @@ document.head.appendChild(s1);
 /* Nombre y corte del mes en curso — únicas 2 variables a tocar cada corrida para los títulos dinámicos
 (reemplaza el esquema anterior de 3 strings hardcodeados por separado). */
 var MES_ACTUAL_LABEL = "noviembre 2026";
-var MES_ACTUAL_CORTE = "17/11";
+var MES_ACTUAL_CORTE = "18/11";
 /* WEEK_RANGE_LABEL/DAILY/WEEK_TOTALS quedaron DEPRECADOS (30/09/2026, a pedido del usuario: selector
 para elegir semana). Ahora la vista "Semana" se deriva 100% de MONTH_DAILY + MONTHLY_HISTORY vía
 getAllWeeks() más abajo (ventanas móviles de 7 días calendario terminando en el día más reciente
@@ -313,17 +313,17 @@ Stock / Vida útil NO se actualizaron: el Dashboard Stock volvió a fallar (terc
 "Necesita permiso" por URL directa y "La página no se puede cargar" desde el listado) — todas las
 constantes de Stock y Vida útil quedan intactas con su corte declarado del 30/10/2026 07:40. */
 var MONTH_TOTALS = {
-pedidos:130, kgPedidos:181818.23, kgDespachados:148283.03, kgEntregados:129055.00, kgDevueltos:12209,
-pctDistrib:87.03, otif:56.92,
+pedidos:146, kgPedidos:190839.03, kgDespachados:160109.98, kgEntregados:137864.13, kgDevueltos:12215,
+pctDistrib:86.11, otif:58.22,
 motivos:[
-{motivo:"Sin Turno Total", kg:3955, pctPeso:32.39},
-{motivo:"Pedido Cancelado Total", kg:3847, pctPeso:31.51},
-{motivo:"No Pedido Total", kg:3203, pctPeso:26.24},
-{motivo:"Exceso Demora Total", kg:485, pctPeso:3.97},
+{motivo:"Sin Turno Total", kg:3955, pctPeso:32.38},
+{motivo:"Pedido Cancelado Total", kg:3847, pctPeso:31.49},
+{motivo:"No Pedido Total", kg:3203, pctPeso:26.22},
+{motivo:"Sin Especificar Total", kg:485, pctPeso:3.97},
 {motivo:"Sin Cargar Parcial", kg:252, pctPeso:2.06},
 {motivo:"Mal Facturado Parcial", kg:220, pctPeso:1.80},
 {motivo:"Fecha Corta Parcial", kg:130, pctPeso:1.06},
-{motivo:"No Pedido Parcial", kg:80, pctPeso:0.66},
+{motivo:"No Pedido Parcial", kg:86, pctPeso:0.70},
 {motivo:"Inversión Parcial", kg:37, pctPeso:0.30}
 ]
 };
@@ -337,7 +337,8 @@ var MONTH_DAILY = [
 {fecha:"12/11", pedidos:17, kgPedidos:17159.35, kgDespachados:16873.35, kgEntregados:13903.35, pctDistrib:82.40, otif:70.59, motivos:[{motivo:"No Pedido Total", kg:2970, pctPeso:100.0}]},
 {fecha:"13/11", pedidos:18, kgPedidos:25096.10, kgDespachados:25084.10, kgEntregados:24379.10, pctDistrib:97.19, otif:77.78, motivos:[{motivo:"Exceso Demora Total", kg:485, pctPeso:68.79},{motivo:"Mal Facturado Parcial", kg:220, pctPeso:31.21}]},
 {fecha:"16/11", pedidos:10, kgPedidos:5330.70, kgDespachados:5300.70, kgEntregados:5046.70, pctDistrib:95.21, otif:70.00, motivos:[{motivo:"Inversión Parcial", kg:21, pctPeso:8.27},{motivo:"No Pedido Total", kg:233, pctPeso:91.73}]},
-{fecha:"17/11", pedidos:25, kgPedidos:17924.18, kgDespachados:11784.03, kgEntregados:810.00, pctDistrib:6.87, otif:4.00, motivos:[]}
+{fecha:"17/11", pedidos:25, kgPedidos:17924.18, kgDespachados:15886.18, kgEntregados:9619.13, pctDistrib:60.55, otif:48.00, motivos:[{motivo:"No Pedido Parcial", kg:6, pctPeso:100.0}]},
+{fecha:"18/11", pedidos:16, kgPedidos:9020.80, kgDespachados:7724.80, kgEntregados:0.00, pctDistrib:0.00, otif:0.00, motivos:[]}
 ];
 /* Histórico de meses YA CERRADOS. Shape por entrada: {mes:"2026-09", mesLabel:"Septiembre 2026",
 totals:{...shape de MONTH_TOTALS...}, daily:[...shape de MONTH_DAILY...]} */
@@ -461,23 +462,23 @@ mientras la grilla Detalle sí mostraba datos distintos) — por no confiar en u
 erróneo, NO se retro-completó el hueco de 17/10 y 18/10 en STOCK_HISTORY esta corrida; queda pendiente
 para una próxima corrida con más tiempo de verificación. */
 var PRODUCTS = [
-{producto:"Danica Soft Margarina Vegetal Pote 24x200g", posiciones:84},
+{producto:"Danica Soft Margarina Vegetal Pote 24x200g", posiciones:55},
 {producto:"Cremalda Crema Chantilly", posiciones:46},
-{producto:"Danica Dor Cremosa Marg Veg Pote 24x210g", posiciones:42},
-{producto:"Margadán Marg Vegetal Pan 30x200g", posiciones:30},
-{producto:"Danica Marg Vegetal Pan 30x200g", posiciones:24},
-{producto:"Cheddar Danica 24x220ml", posiciones:20},
-{producto:"Mayonesa D´Fiesta24x500ml", posiciones:19},
-{producto:"Mayonesa Danica 8x1000ml", posiciones:19},
-{producto:"Mayonesa D´Fiesta 24x250ml", posiciones:17},
-{producto:"Manty Pan 100 x 20", posiciones:17}
+{producto:"Margadán Marg Vegetal Pan 30x200g", posiciones:22},
+{producto:"Danica Dor Cremosa Marg Veg Pote 24x210g", posiciones:21},
+{producto:"Cheddar Danica 24x220ml", posiciones:18},
+{producto:"Manty Pan 100 x 20", posiciones:17},
+{producto:"Mayonesa Danica 8x1000ml", posiciones:16},
+{producto:"Danica Marg Vegetal Pan 30x200g", posiciones:15},
+{producto:"Salsa Barbacoa Danica 24x220g", posiciones:11},
+{producto:"Salsa Golf Danica 24x220ml", posiciones:11}
 ];
 var SECTORS = [
-{sector:"Ambiente", n:305}, {sector:"T. Controlada", n:193}, {sector:"PK Ambiente", n:45}, {sector:"Rotura", n:40}, {sector:"PK T. Controlada", n:8}, {sector:"Muelle", n:4}
+{sector:"Ambiente", n:207}, {sector:"T. Controlada", n:119}, {sector:"PK Ambiente", n:44}, {sector:"Rotura", n:41}, {sector:"PK T. Controlada", n:8}, {sector:"Muelle", n:4}
 ];
-var STATUS = [{estado:"Available", n:527}, {estado:"Rotura", n:38}, {estado:"Control de Calidad", n:21}, {estado:"Critico", n:5}, {estado:"Vencido", n:3}, {estado:"Bloqueado", n:1}];
-var TOTAL_SISTEMA = 595;
-var MUESTRA = {n:595, pct:100, productosDistintos:55, posicionesRotura:38, corte:"18/11/2026 07:40"};
+var STATUS = [{estado:"Available", n:354}, {estado:"Rotura", n:39}, {estado:"Control de Calidad", n:21}, {estado:"Critico", n:5}, {estado:"Vencido", n:3}, {estado:"Bloqueado", n:1}];
+var TOTAL_SISTEMA = 423;
+var MUESTRA = {n:423, pct:100, productosDistintos:54, posicionesRotura:39, corte:"19/11/2026 07:40"};
 /* Serie diaria de posiciones totales ocupadas (a pedido del usuario, 30/09/2026). Mantenimiento diario:
 hacer PUSH de {fecha:"dd/mm", total:TOTAL_SISTEMA} cada corrida (nunca reconstruir desde cero) y
 dedupe por fecha si la tarea corre 2 veces el mismo día (reemplazar la entrada existente de esa fecha
@@ -527,38 +528,45 @@ var STOCK_HISTORY = [
 {fecha:"15/11", total:588},
 {fecha:"16/11", total:607},
 {fecha:"17/11", total:573},
-{fecha:"18/11", total:595}
+{fecha:"18/11", total:595},
+{fecha:"19/11", total:423}
 ];
 var STOCK_DETALLE = [
-{producto:"Danica Soft Margarina Vegetal Pote 24x200g", posiciones:83, bultos:9221, unidades:9221, estado:"Available"},
-{producto:"Danica Dor Cremosa Marg Veg Pote 24x210g", posiciones:40, bultos:4410, unidades:4410, estado:"Available"},
-{producto:"Margadán Marg Vegetal Pan 30x200g", posiciones:28, bultos:4840, unidades:4840, estado:"Available"},
+{producto:"Danica Soft Margarina Vegetal Pote 24x200g", posiciones:54, bultos:5961, unidades:5961, estado:"Available"},
 {producto:"Cremalda Crema Chantilly", posiciones:22, bultos:1809, unidades:1809, estado:"Available"},
-{producto:"Danica Marg Vegetal Pan 30x200g", posiciones:21, bultos:3430, unidades:3430, estado:"Available"},
-{producto:"Mayonesa Danica 8x1000ml", posiciones:19, bultos:1973, unidades:1973, estado:"Available"}
+{producto:"Margadán Marg Vegetal Pan 30x200g", posiciones:20, bultos:3427, unidades:3427, estado:"Available"},
+{producto:"Danica Dor Cremosa Marg Veg Pote 24x210g", posiciones:19, bultos:2060, unidades:2060, estado:"Available"},
+{producto:"Manty Pan 100 x 20", posiciones:17, bultos:7524, unidades:7524, estado:"Available"},
+{producto:"Mayonesa Danica 8x1000ml", posiciones:16, bultos:1626, unidades:1626, estado:"Available"}
 ];
 /* Detalle por lote para las 5 categorías críticas — relevamiento COMPLETO (100%, no muestra),
 vía filtro Estado Posición + orden por columna en la grilla MicroStrategy. "Available" usa
 la muestra representativa de STOCK_DETALLE de arriba. */
 var STOCK_LOTS = {
-/* Corte 18/11/2026 07:40: censo 100% (595/595 posiciones) via scroll programático exhaustivo sobre
-la grilla Detalle. TOTAL_SISTEMA continúa la tendencia a la baja: 607(16/11)→573(17/11, snapshot
-retro-leído del combo Fecha Actualización, corrida del 17/11 abortada antes de censar detalle)→595(18/11).
-Los lotes Vencido/Critico avanzan exactamente los 2 días calendario transcurridos desde el corte del
-16/11 (ej. Doña Flora Ref. B: -929→-931), validando la continuidad del censo. HALLAZGO: Control de
-Calidad pasa de 0 a 21 posiciones (un único lote, Cremalda Crema Chantilly 26265, 1.785 bultos) —
-verificar con planta si corresponde a una retención de calidad nueva o a una reclasificación. */
+/* Corte 19/11/2026 07:40: censo 100% (423/423 posiciones) via scroll programático exhaustivo sobre
+la grilla Detalle. TOTAL_SISTEMA cae fuertemente: 595(18/11)→423(19/11), -172 posiciones en un solo día
+(continúa la tendencia a la baja observada en corridas previas, pero con una aceleración notable — ver
+nota de escalamiento en el comentario de STOCK_HISTORY/memoria). Los lotes Vencido/Critico avanzan
+exactamente 1 día calendario desde el corte del 18/11 (ej. Doña Flora Ref. B: -931→-932), validando la
+continuidad del censo. HALLAZGO: posible colisión/reutilización de código de lote — el lote 629600102
+aparece tanto en Vencido (pallet 445326, vencido desde 01/05/2024) como en Rotura (mismo producto "Doña
+Flora Ref. B 10x 1/2 Kg", posición nueva sin pallet/lote detallado en la grilla de Rotura) — se preserva
+tal cual viene de MicroStrategy, a validar con planta. HALLAZGO 2: 17 posiciones de "Manty Pan 100 x 20"
+traen Lote="0" y Vencimiento="0" (placeholder, no dato real) — excluidas de todos los cálculos de Vida
+Útil (BUCKETS/PRODUCT_MIN/SOON/VU_KPIS, que quedan en 406 de 423 lotes), pero SÍ incluidas en los
+totales de Stock (TOTAL_SISTEMA/STATUS/SECTORS/MUESTRA/PRODUCTS, 423/423). Control de Calidad estable
+en 21 posiciones (mismo lote Cremalda Crema Chantilly 26265, 1.785 bultos). */
 Vencido: [
-{producto:"Doña Flora Ref. B 10x 1/2 Kg", lote:"629600102", pallet:"445326", vencimiento:"01/05/2024", dias:-931, bultos:78},
-{producto:"Danica Dor Cremosa Marg Veg Pote 24x210g", lote:"633400401", pallet:"424443", vencimiento:"01/07/2026", dias:-140, bultos:112},
-{producto:"Doña Flora Masas y Batidos Sachet 12x1Kg", lote:"544500704", pallet:"424590", vencimiento:"01/08/2026", dias:-109, bultos:60}
+{producto:"Doña Flora Ref. B 10x 1/2 Kg", lote:"629600102", pallet:"445326", vencimiento:"01/05/2024", dias:-932, bultos:78},
+{producto:"Danica Dor Cremosa Marg Veg Pote 24x210g", lote:"633400401", pallet:"424443", vencimiento:"01/07/2026", dias:-141, bultos:112},
+{producto:"Doña Flora Masas y Batidos Sachet 12x1Kg", lote:"544500704", pallet:"424590", vencimiento:"01/08/2026", dias:-110, bultos:60}
 ],
 Critico: [
-{producto:"Mostaza Danica Nueva 4x3000g", lote:"545540703", pallet:"390125", vencimiento:"02/10/2026", dias:-47, bultos:90},
-{producto:"Crema Pastelera en Frío Cremalda x5Kg", lote:"6155426", pallet:"413325", vencimiento:"06/10/2026", dias:-43, bultos:7},
-{producto:"Salsa Golf Danica Nueva 4x2900cc", lote:"618240702", pallet:"415906", vencimiento:"24/10/2026", dias:-25, bultos:90},
-{producto:"Mayonesa Danica Equilibrio 24x500cc", lote:"610241501", pallet:"413336", vencimiento:"27/12/2026", dias:39, bultos:66},
-{producto:"Mayonesa Danica Equilibrio 24x500cc", lote:"610241503", pallet:"408441", vencimiento:"27/12/2026", dias:39, bultos:49}
+{producto:"Mostaza Danica Nueva 4x3000g", lote:"545540703", pallet:"390125", vencimiento:"02/10/2026", dias:-48, bultos:90},
+{producto:"Crema Pastelera en Frío Cremalda x5Kg", lote:"6155426", pallet:"413325", vencimiento:"06/10/2026", dias:-44, bultos:7},
+{producto:"Salsa Golf Danica Nueva 4x2900cc", lote:"618240702", pallet:"415906", vencimiento:"24/10/2026", dias:-26, bultos:90},
+{producto:"Mayonesa Danica Equilibrio 24x500cc", lote:"610241501", pallet:"413336", vencimiento:"27/12/2026", dias:38, bultos:66},
+{producto:"Mayonesa Danica Equilibrio 24x500cc", lote:"610241503", pallet:"408441", vencimiento:"27/12/2026", dias:38, bultos:49}
 ],
 "Control de Calidad": [
 {producto:"Cremalda Crema Chantilly", lote:"26265", posiciones:21, bultos:1785}
@@ -572,18 +580,19 @@ Rotura: [
 {producto:"Danica Marg Vegetal Pan 12x500g", posiciones:2, bultos:2},
 {producto:"Danica Marg Vegetal Pan 30x200g", posiciones:3, bultos:7},
 {producto:"Danica Soft Margarina Vegetal Pote 24x200g", posiciones:1, bultos:1},
+{producto:"Doña Flora Ref. B 10x 1/2 Kg", posiciones:1, bultos:1},
 {producto:"Ketchup Danica Nuevo 192x8g", posiciones:2, bultos:5},
 {producto:"Ketchup Danica Nuevo 4x3000g", posiciones:1, bultos:2},
 {producto:"Manty Pan Untar y Cocinar 30x200", posiciones:6, bultos:7},
 {producto:"Margadán Marg Vegetal Pan 12x500g", posiciones:1, bultos:1},
 {producto:"Margadán Marg Vegetal Pan 30x200g", posiciones:2, bultos:5},
 {producto:"Mayo Red Lip D´Fiesta 20x100cc", posiciones:1, bultos:1},
-{producto:"Mayonesa D´Fiesta 24x250ml", posiciones:1, bultos:7},
-{producto:"Mayonesa D´Fiesta 8x1000ml", posiciones:1, bultos:1},
-{producto:"Mayonesa D´Fiesta24x500ml", posiciones:1, bultos:1},
 {producto:"Mayonesa Danica 24x250ml", posiciones:1, bultos:15},
 {producto:"Mayonesa Danica 24x500ml", posiciones:1, bultos:12},
 {producto:"Mayonesa Danica Nueva 192x8cc", posiciones:2, bultos:4},
+{producto:"Mayonesa D´Fiesta 24x250ml", posiciones:1, bultos:7},
+{producto:"Mayonesa D´Fiesta 8x1000ml", posiciones:1, bultos:1},
+{producto:"Mayonesa D´Fiesta24x500ml", posiciones:1, bultos:1},
 {producto:"Mostaza Danica Nueva 192x8g", posiciones:1, bultos:1},
 {producto:"Mostaza Danica Nueva 24x60g", posiciones:2, bultos:2},
 {producto:"Salsa Barbacoa Danica 4x3000g", posiciones:1, bultos:2}
@@ -593,27 +602,74 @@ Bloqueado: [
 ]
 };
 var BUCKETS = [
-{rango:"<30 días", n:23}, {rango:"30-89 días", n:3}, {rango:"90-179 días", n:126}, {rango:"180-269 días", n:251}, {rango:"270+ días", n:192}
+{rango:"<30 días", n:6}, {rango:"30-89 días", n:3}, {rango:"90-179 días", n:94}, {rango:"180-269 días", n:182}, {rango:"270+ días", n:121}
 ];
 var PRODUCT_MIN = [
-{producto:"Doña Flora Ref. B 10x 1/2 Kg", dias:-931},
-{producto:"Danica Dor Cremosa Marg Veg Pote 24x210g", dias:-140},
-{producto:"Doña Flora Masas y Batidos Sachet 12x1Kg", dias:-109},
-{producto:"Mostaza Danica Nueva 4x3000g", dias:-47},
-{producto:"Crema Pastelera en Frío Cremalda x5Kg", dias:-43},
-{producto:"Salsa Golf Danica Nueva 4x2900cc", dias:-25},
-{producto:"Mayonesa Danica Equilibrio 24x500cc", dias:39}
+{producto:"Doña Flora Ref. B 10x 1/2 Kg", dias:-932},
+{producto:"Danica Dor Cremosa Marg Veg Pote 24x210g", dias:-141},
+{producto:"Doña Flora Masas y Batidos Sachet 12x1Kg", dias:-110},
+{producto:"Mostaza Danica Nueva 4x3000g", dias:-48},
+{producto:"Crema Pastelera en Frío Cremalda x5Kg", dias:-44},
+{producto:"Salsa Golf Danica Nueva 4x2900cc", dias:-26},
+{producto:"Mayonesa Danica Equilibrio 24x500cc", dias:38},
+{producto:"Mayonesa Danica Nueva 192x8cc", dias:68},
+{producto:"Salsa Barbacoa Danica 4x3000g", dias:91},
+{producto:"Cheddar Danica 24x220ml", dias:91},
+{producto:"Cheddar Danica 8x1000ml", dias:94},
+{producto:"Mayonesa Danica 24x500ml", dias:116},
+{producto:"Polvo Para Hornear Danafort x10.8Kg", dias:118},
+{producto:"Aditivo Gelante Danasweet x14Kg", dias:139},
+{producto:"Manty Pan Untar y Cocinar 30x200", dias:151},
+{producto:"Mayonesa D´Fiesta24x500ml", dias:153},
+{producto:"Salsa Golf Danica 24x220ml", dias:157},
+{producto:"Mostaza Danica Nueva 192x8g", dias:162},
+{producto:"Danica Soft Margarina Vegetal Pote 24x200g", dias:164},
+{producto:"Cremalda Crema Chantilly", dias:166},
+{producto:"Margadán Marg Vegetal Pan 12x500g", dias:166},
+{producto:"Danica Marg Vegetal Pan 30x200g", dias:171},
+{producto:"Danica Marg Vegetal Pan 12x500g", dias:171},
+{producto:"Margadán Marg Vegetal Pan 30x200g", dias:187},
+{producto:"Ketchup Danica Nuevo 4x3000g", dias:190},
+{producto:"Danica Equilibrio Marg Vegetal Pote 24x220g", dias:193},
+{producto:"Mayonesa Mayodán Nueva 24x250cc", dias:199},
+{producto:"Mayo Red Lip D´Fiesta 20x100cc", dias:202},
+{producto:"Mayonesa D´Fiesta 24x250ml", dias:207},
+{producto:"Mayonesa Danica 24x250ml", dias:210},
+{producto:"Barbacoa D’Fiesta 12x 220gr 9552", dias:219},
+{producto:"Mayo Red Cal Mayodán 4x2900cc", dias:223},
+{producto:"Mayonessa D Fiesta x 2900cc", dias:224},
+{producto:"Mostaza Americana Danica 24x475g", dias:224},
+{producto:"Mostaza Danica Nueva 24x60g", dias:232},
+{producto:"Mayonesa Mayodán Nueva 24x500cc", dias:234},
+{producto:"Mayonesa D´Fiesta 8x1000ml", dias:236},
+{producto:"Mostaza D’Fiesta 24x220gr", dias:254},
+{producto:"Mayonesa Mayodán Nueva 8x1000cc", dias:257},
+{producto:"Mayonesa Danica Nueva 20x100cc", dias:259},
+{producto:"Salsa Cheddar 20x100cc", dias:265},
+{producto:"Mayonesa Danica 8x1000ml", dias:278},
+{producto:"Mayonesa Danica Nueva 4x2900cc", dias:280},
+{producto:"Ketchup Danica 24x475g", dias:295},
+{producto:"Ketchup Danica Nuevo 192x8g", dias:299},
+{producto:"Ketchup Danica Nuevo 24x50g", dias:301},
+{producto:"Ketchup D’Fiesta 24x 220gr", dias:301},
+{producto:"Aditivo Mejorador Impuldán x10Kg", dias:313},
+{producto:"Pol Bizcochuelo Vainilla Danmix x10Kg", dias:321},
+{producto:"Mostaza Danica 24x220g 9202", dias:321},
+{producto:"Ketchup D’Fiesta 24x 220g", dias:321},
+{producto:"Emuls Desmol Emuldán Latas 3x10Kg", dias:328},
+{producto:"Salsa Barbacoa Danica 24x220g", dias:349}
 ];
-var VU_KPIS = {lotesMuestra:595, diasMasProximo:-931, lotesCriticos:5, productosDistintos:7, corte:"18/11/2026 07:40"};
+var VU_KPIS = {lotesMuestra:406, diasMasProximo:-932, lotesCriticos:5, productosDistintos:7, corte:"19/11/2026 07:40"};
 var SOON = [
-{producto:"Doña Flora Ref. B 10x 1/2 Kg", lote:"629600102", pallet:"445326", vencimiento:"01/05/2024", dias:-931, estado:"Vencido"},
-{producto:"Danica Dor Cremosa Marg Veg Pote 24x210g", lote:"633400401", pallet:"424443", vencimiento:"01/07/2026", dias:-140, estado:"Vencido"},
-{producto:"Doña Flora Masas y Batidos Sachet 12x1Kg", lote:"544500704", pallet:"424590", vencimiento:"01/08/2026", dias:-109, estado:"Vencido"},
-{producto:"Mostaza Danica Nueva 4x3000g", lote:"545540703", pallet:"390125", vencimiento:"02/10/2026", dias:-47, estado:"Critico"},
-{producto:"Crema Pastelera en Frío Cremalda x5Kg", lote:"6155426", pallet:"413325", vencimiento:"06/10/2026", dias:-43, estado:"Critico"},
-{producto:"Salsa Golf Danica Nueva 4x2900cc", lote:"618240702", pallet:"415906", vencimiento:"24/10/2026", dias:-25, estado:"Critico"},
-{producto:"Mayonesa Danica Equilibrio 24x500cc", lote:"610241501", pallet:"413336", vencimiento:"27/12/2026", dias:39, estado:"Critico"},
-{producto:"Mayonesa Danica Equilibrio 24x500cc", lote:"610241503", pallet:"408441", vencimiento:"27/12/2026", dias:39, estado:"Critico"}
+{producto:"Doña Flora Ref. B 10x 1/2 Kg", lote:"629600102", pallet:"445326", vencimiento:"01/05/2024", dias:-932, estado:"Vencido"},
+{producto:"Danica Dor Cremosa Marg Veg Pote 24x210g", lote:"633400401", pallet:"424443", vencimiento:"01/07/2026", dias:-141, estado:"Vencido"},
+{producto:"Doña Flora Masas y Batidos Sachet 12x1Kg", lote:"544500704", pallet:"424590", vencimiento:"01/08/2026", dias:-110, estado:"Vencido"},
+{producto:"Mostaza Danica Nueva 4x3000g", lote:"545540703", pallet:"390125", vencimiento:"02/10/2026", dias:-48, estado:"Critico"},
+{producto:"Crema Pastelera en Frío Cremalda x5Kg", lote:"6155426", pallet:"413325", vencimiento:"06/10/2026", dias:-44, estado:"Critico"},
+{producto:"Salsa Golf Danica Nueva 4x2900cc", lote:"618240702", pallet:"415906", vencimiento:"24/10/2026", dias:-26, estado:"Critico"},
+{producto:"Mayonesa Danica Equilibrio 24x500cc", lote:"610241501", pallet:"413336", vencimiento:"27/12/2026", dias:38, estado:"Critico"},
+{producto:"Mayonesa Danica Equilibrio 24x500cc", lote:"610241503", pallet:"408441", vencimiento:"27/12/2026", dias:38, estado:"Critico"},
+{producto:"Mayonesa Danica Nueva 192x8cc", lote:"614442401", pallet:"419064", vencimiento:"26/01/2027", dias:68, estado:"Rotura"}
 ];
 /* ================= HELPERS ================= */
 function fmt(n){ if(n===null||n===undefined) return '—'; return Math.round(n).toLocaleString('es-AR'); }
