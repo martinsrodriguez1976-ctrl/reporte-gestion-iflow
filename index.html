@@ -342,9 +342,23 @@ a Crema Pastelera en Frío Cremalda, Aditivo Mejorador Impuldán, Pol Bizcochuel
 Gelante Danasweet. También faltaba la tilde de "Margadán" en el diccionario de acentos (salió "Margadan"
 sin tilde en el censo crudo) — sumarlo junto a Mayodán/Impuldán/Emuldán/en Frío. Sin fallas de login ni
 de Dashboard Stock ni de publicación esta corrida. */
+/* Segunda corrida 26/11/2026 (misma tarde, sobre commit 735e6e4 de la primera pasada de hoy): al
+re-verificar MicroStrategy con datos frescos (cuadratura Total/MONTH_DAILY/Motivos validada
+programáticamente sin resto) se detectaron correcciones retroactivas en 2 días, motivos del mes sin
+cambios (17.846 kg, mismas 12 categorías e idéntico kg por categoría que la primera pasada). 17/11:
+kgDespachados 33.165,18→29.372,28 y kgEntregados 31.461,18→27.668,28 (misma brecha de 1.704 kg, motivos
+diarios sin cambios: No Pedido Parcial 84kg + Orden De Compra Cerrada Total 1620kg, reverificado
+aislando Desde=Hasta=17/11). 24/11: kgEntregados 12.521,00→13.385,00 (distrib. 80,49%→86,04%, OTIF
+58,82%→64,71%), motivo sin cambios (Orden De Compra Cerrada Total 880kg, reverificado aislando
+Desde=Hasta=24/11) — la brecha no explicada por motivo se redujo de 2.155 a 1.291 kg (pendiente de
+entrega, no devolución). Stock/Vida útil: Dashboard Stock mostró el mismo corte exacto de la mañana
+(26/11/2026 07:40:29, 407/407 registros, combo "Fecha Actualización" confirmado como el más reciente de
+la lista) — snapshot congelado, sin drift posible entre las dos lecturas del día, así que STATUS/
+STOCK_LOTS/BUCKETS/PRODUCT_MIN/SOON/PRODUCTS/SECTORS/STOCK_DETALLE/STOCK_HISTORY se reutilizaron sin
+re-censar. Sin fallas de login ni de publicación esta corrida. */
 var MONTH_TOTALS = {
-pedidos:201, kgPedidos:244644.77, kgDespachados:226925.72, kgEntregados:210338.34, kgDevueltos:17846,
-pctDistrib:92.69, otif:62.69,
+pedidos:201, kgPedidos:244644.77, kgDespachados:223132.82, kgEntregados:207409.44, kgDevueltos:17846,
+pctDistrib:92.95, otif:61.69,
 motivos:[
 {motivo:"No Pedido Total", kg:4193, pctPeso:23.49},
 {motivo:"Sin Turno Total", kg:3955, pctPeso:22.16},
@@ -370,11 +384,11 @@ var MONTH_DAILY = [
 {fecha:"12/11",pedidos:17,kgPedidos:17159.35,kgDespachados:16873.35,kgEntregados:13903.35,pctDistrib:82.4,otif:70.59,motivos:[{motivo:"No Pedido Total",kg:2970,pctPeso:100.0}]},
 {fecha:"13/11",pedidos:18,kgPedidos:25096.1,kgDespachados:25084.1,kgEntregados:24864.1,pctDistrib:99.12,otif:77.78,motivos:[{motivo:"Mal Facturado Parcial",kg:220,pctPeso:100.0}]},
 {fecha:"16/11",pedidos:10,kgPedidos:5330.7,kgDespachados:5300.7,kgEntregados:5046.7,pctDistrib:95.21,otif:70.0,motivos:[{motivo:"Inversión Parcial",kg:21,pctPeso:8.27},{motivo:"No Pedido Total",kg:233,pctPeso:91.73}]},
-{fecha:"17/11",pedidos:29,kgPedidos:33295.18,kgDespachados:33165.18,kgEntregados:31461.18,pctDistrib:94.86,otif:51.72,motivos:[{motivo:"No Pedido Parcial",kg:84,pctPeso:4.93},{motivo:"Orden De Compra Cerrada Total",kg:1620,pctPeso:95.07}]},
+{fecha:"17/11",pedidos:29,kgPedidos:33295.18,kgDespachados:29372.28,kgEntregados:27668.28,pctDistrib:94.2,otif:41.38,motivos:[{motivo:"No Pedido Parcial",kg:84,pctPeso:4.93},{motivo:"Orden De Compra Cerrada Total",kg:1620,pctPeso:95.07}]},
 {fecha:"18/11",pedidos:16,kgPedidos:9020.8,kgDespachados:7724.8,kgEntregados:7724.8,pctDistrib:100.0,otif:37.5,motivos:[]},
 {fecha:"19/11",pedidos:12,kgPedidos:6125.6,kgDespachados:6110.6,kgEntregados:5300.6,pctDistrib:86.74,otif:75.0,motivos:[{motivo:"Dirección Errónea Total",kg:810,pctPeso:98.18},{motivo:"Sin Especificar Total",kg:15,pctPeso:1.82}]},
 {fecha:"20/11",pedidos:14,kgPedidos:12805.14,kgDespachados:12781.14,kgEntregados:11779.76,pctDistrib:92.17,otif:85.71,motivos:[{motivo:"No Pedido Parcial",kg:11,pctPeso:1.1},{motivo:"No Pedido Total",kg:990,pctPeso:98.9}]},
-{fecha:"24/11",pedidos:17,kgPedidos:15628.0,kgDespachados:15556.0,kgEntregados:12521.0,pctDistrib:80.49,otif:58.82,motivos:[{motivo:"Orden De Compra Cerrada Total",kg:880,pctPeso:100.0}]},
+{fecha:"24/11",pedidos:17,kgPedidos:15628.0,kgDespachados:15556.0,kgEntregados:13385.0,pctDistrib:86.04,otif:64.71,motivos:[{motivo:"Orden De Compra Cerrada Total",kg:880,pctPeso:100.0}]},
 {fecha:"25/11",pedidos:8,kgPedidos:3876.0,kgDespachados:2268.0,kgEntregados:0.0,pctDistrib:0.0,otif:0.0,motivos:[]}
 ];
 /* Histórico de meses YA CERRADOS. Shape por entrada: {mes:"2026-09", mesLabel:"Septiembre 2026",
